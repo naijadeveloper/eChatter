@@ -1,6 +1,16 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import type { AppProps } from "next/app";
+import { Provider } from "react-redux";
+
+import GlobalLayout from "./global_layout";
+import store from "@/store";
+import "@/styles/globals.css";
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+    <Provider store={store}>
+      <GlobalLayout>
+        <Component {...pageProps} />
+      </GlobalLayout>
+    </Provider>
+  );
 }
