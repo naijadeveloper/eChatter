@@ -2,17 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface initialStateType {
-  value: string | (() => string)
+  value: string;
 }
 
 const initialState: initialStateType = {
-  // Get theme from localStorage if exist
-  value: () => {
-    let theme = localStorage.getItem("theme");
-    if(theme == null) return "dark";
-    
-    return theme;
-  }
+  value: ""
 }
 
 const themeSlice = createSlice({

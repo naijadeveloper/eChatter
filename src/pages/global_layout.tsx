@@ -1,6 +1,8 @@
 import { Readex_Pro } from "next/font/google";
+import { useEffect } from "react";
 
-import { useAppSelector } from "@/store/store_hooks";
+import { useAppSelector, useAppDispatch } from "@/store/store_hooks";
+import { changeTheme } from "@/store/theme_slice";
 
 // Global font
 const readex = Readex_Pro({
@@ -13,11 +15,23 @@ export default function GlobalLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Here, I don't need the type for the state.
-  const theme = useAppSelector((state) => state.theme.value);
+  let dispatch = useAppDispatch();
+
+  // Why did I use localStorage here? well, I tried using it in the store `theme_slice.ts` but that generates an error `Reference error: localStorage is not defined` because nextjs renders on the server first and localStorage doesn't exist there. That is the reason for this hack
+  useEffect(() => {
+    let themeStorage = localStorage.getItem("theme") ?? "dark";
+    dispatch(changeTheme(themeStorage));
+  }, []);
+
   return (
-    <div className={`${theme} ${readex.variable} font-readex`}>
-      <main className="min-h-screen">{children}</main>
+    <div
+      className={`${useAppSelector((state) => state.theme.value)} ${
+        readex.variable
+      } font-readex`}
+    >
+      <main className="min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+        {children}
+      </main>
     </div>
   );
 }

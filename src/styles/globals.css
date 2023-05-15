@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .addStroke {
+    -webkit-text-stroke: 1px black;
+  }
+}

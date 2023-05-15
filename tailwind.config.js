@@ -10,6 +10,9 @@ module.exports = {
       fontFamily: {
         readex: ["var(--global-font)"],
       },
+      colors: {
+        btngreen: "#00ED64",
+      },
     },
   },
   plugins: [],

@@ -1,0 +1,21 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+ <title>eChatter icon</title>
+
+ <g>
+  <title>Layer 1</title>
+  <g id="svg_10">
+   <g transform="rotate(-90 403 487.608)" id="svg_3">
+    <rect rx="15" id="svg_1" height="124" width="186" y="280.392" x="435.99977" stroke="#000" fill="#16a34a"/>
+    <path transform="rotate(180 529 441.825)" id="svg_2" d="m479.99976,482.82509l49,-81.99997l49,81.99997l-98,0z" stroke="#000" fill="#16a34a"/>
+   </g>
+   <g transform="rotate(90 400 246.608)" id="svg_6">
+    <rect transform="rotate(-90 360.784 246.608)" rx="15" id="svg_4" height="124" width="186" y="184.608" x="267.78377" stroke="#000" fill="#16a34a"/>
+    <path transform="rotate(90 460.217 246.608)" id="svg_5" d="m411.21686,287.60817l49,-81.99997l49,81.99997l-98,0z" stroke="#000" fill="#16a34a"/>
+   </g>
+   <g transform="rotate(90 503 361.608)" id="svg_9">
+    <rect rx="15" id="svg_7" height="124" width="186" y="260.392" x="409.99977" stroke="#000" fill="#16a34a"/>
+    <path transform="rotate(180 503 421.825)" id="svg_8" d="m453.99976,462.82509l49,-81.99997l49,81.99997l-98,0z" stroke="#000" fill="#16a34a"/>
+   </g>
+  </g>
+ </g>
+</svg>
