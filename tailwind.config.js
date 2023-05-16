@@ -11,7 +11,12 @@ module.exports = {
         readex: ["var(--global-font)"],
       },
       colors: {
-        btngreen: "#00ED64",
+        maingreen: {
+          100: "#a7ff83",
+          200: "#17b978",
+          300: "#086972",
+          400: "#071a52",
+        },
       },
     },
   },
