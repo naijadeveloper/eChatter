@@ -6,4 +6,8 @@
   .addStroke {
     -webkit-text-stroke: 1px black;
   }
+
+  .wel-footer-links {
+    @apply cursor-pointer underline decoration-2 underline-offset-2 hover:text-maingreen-300 dark:hover:text-maingreen-100;
+  }
 }
