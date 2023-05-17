@@ -71,7 +71,7 @@ export default function Home() {
 
           <div className="flex flex-col gap-2 p-1 pl-4 transition-all max-lg:items-center">
             <h2 className="addStroke flex flex-col text-6xl text-maingreen-200 max-lg:text-center">
-              <span>A book worm's </span>
+              <span>A book worm&apos;s </span>
               <span>heaven</span>
             </h2>
             <p className="w-[80%] max-lg:text-center">
@@ -141,7 +141,7 @@ export default function Home() {
                 activities, must-see sights, and tips for optimizing travel
                 logistics.
                 <span className="my-4 block text-sm uppercase text-gray-900">
-                  If your story relates to sarah's, eChatter is for you.
+                  If your story relates to sarah&apos;s, eChatter is for you.
                 </span>
               </p>
             </article>
@@ -161,7 +161,7 @@ export default function Home() {
                 quick meals to elaborate gourmet creations. He also wants to
                 write about various cooking techniques.
                 <span className="my-4 block text-sm uppercase text-gray-900">
-                  If your story relates to andrew's, eChatter is for you.
+                  If your story relates to andrew&apos;s, eChatter is for you.
                 </span>
               </p>
             </article>
@@ -181,7 +181,7 @@ export default function Home() {
                 your company and you want to share company news, product updates
                 and industry trends.
                 <span className="my-4 block text-sm uppercase text-gray-900">
-                  If your story relates to esther's, eChatter is for you.
+                  If your story relates to esther&apos;s, eChatter is for you.
                 </span>
               </p>
             </article>
