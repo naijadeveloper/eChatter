@@ -21,7 +21,7 @@ export default function GlobalLayout({
   useEffect(() => {
     let themeStorage = localStorage.getItem("theme") ?? "dark";
     dispatch(changeTheme(themeStorage));
-  }, []);
+  }, [dispatch]);
 
   return (
     <div
