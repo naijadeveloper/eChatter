@@ -32,6 +32,14 @@ export default function GlobalLayout({
       <main className="min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
         {children}
       </main>
+
+      {/* The tailwind `dark:` classes won't work on scrollbar, that's the reason for this hack */}
+      <style jsx>
+        {`
+          ${useAppSelector((state) => state.theme.value) == "dark" &&
+          `*::-webkit-scrollbar-track {background: #111827;} *::-webkit-scrollbar-thumb {border: 1px solid #111827; border-top-width: 3px; border-bottom-width: 3px;}`}
+        `}
+      </style>
     </div>
   );
 }
