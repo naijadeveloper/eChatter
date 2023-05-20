@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
+import { cookieStorage } from "@/utilities/cookie_storage";
+
 interface initialStateType {
   value: string;
 }
 
 const initialState: initialStateType = {
-  value: ""
+  value: "dark"
 }
 
 const themeSlice = createSlice({
@@ -15,9 +17,13 @@ const themeSlice = createSlice({
   reducers: {
     changeTheme(state, action: PayloadAction<string>) {
       state.value = action.payload;
-      // Save to localStorage
-      localStorage.setItem("theme", action.payload);
-      //set a cookie for the theme later
+      // Save to document.cookie when window is available
+      if(typeof window !== "undefined") {
+        const date = new Date();
+        date.setDate(date.getDate() + 30);
+
+        cookieStorage.setItem("theme", `${action.payload};expires=${date.toUTCString()}`);
+      }
     }
   }
 });

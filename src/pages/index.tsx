@@ -11,11 +11,14 @@ import { motion } from "framer-motion";
 import { useAppSelector, useAppDispatch } from "@/store/store_hooks";
 import { changeTheme } from "@/store/theme_slice";
 
+import Footer from "@/component/Footer";
+
 export default function Home() {
   const themeValue = useAppSelector((state) => state.theme.value);
   const dispatch = useAppDispatch();
 
   function handleThemeChange() {
+    console.log(themeValue);
     if (themeValue == "dark") {
       dispatch(changeTheme(""));
       return;
@@ -125,6 +128,7 @@ export default function Home() {
         >
           <div className="mt-8 w-fit overflow-hidden rounded-[89%_79%_88%_67%_/_66%_45%_22%_10%] border border-gray-800 bg-maingreen-200 max-[500px]:rounded-md">
             <Image
+              priority
               src="/svgs/readingman.svg"
               width={2624}
               height={2102}
@@ -212,31 +216,13 @@ export default function Home() {
         </section>
       </section>
 
-      <footer className="mx-auto mt-5 flex min-h-[100px] w-[80%] items-center marker:pt-3 max-lg:flex-col-reverse max-md:w-full">
-        <div className="flex h-[200px] w-[200px] shrink-0 flex-col items-center justify-center">
-          <Image
-            src="/logo/echatter3.svg"
-            width={800}
-            height={600}
-            alt="echatter-logo"
-          />
-          <span className="-mt-5 block text-sm font-semibold text-gray-500">
-            copyright &copy; 2023, eChatter
-          </span>
-        </div>
+      {/* <div></div> */}
 
-        <div className="relative flex w-full grow items-center max-lg:top-8">
-          <ul className="flex w-full flex-wrap justify-evenly gap-4 px-1 text-gray-500">
-            <li className="wel-footer-links">What is eChatter?</li>
-            <li className="wel-footer-links">Worktabs</li>
-            <li className="wel-footer-links">Tools</li>
-            <li className="wel-footer-links">Issues</li>
-            <li className="wel-footer-links">Terms</li>
-            <li className="wel-footer-links">Privacy Policy</li>
-            <li className="wel-footer-links">Cookie Policy</li>
-          </ul>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }
+
+// `getServerSideProps` won't work outside of a `page` i.e can't work in `components` and can't work also in the `_app.tsx` file
+// The `getServerSideProps` defined in the `global_layout.tsx` component has to be re-exported here for it to work
+export { getServerSideProps } from "./global_layout";

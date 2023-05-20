@@ -1,8 +1,12 @@
 import { Readex_Pro } from "next/font/google";
 import { useEffect } from "react";
 
+import { GetServerSideProps } from "next";
+
 import { useAppSelector, useAppDispatch } from "@/store/store_hooks";
 import { changeTheme } from "@/store/theme_slice";
+
+import { cookieStorage } from "@/utilities/cookie_storage";
 
 // Global font
 const readex = Readex_Pro({
@@ -11,23 +15,26 @@ const readex = Readex_Pro({
 });
 
 export default function GlobalLayout({
+  cookies,
   children,
 }: {
+  cookies: string;
   children: React.ReactNode;
 }) {
-  let dispatch = useAppDispatch();
-
-  // Why did I use localStorage here? well, I tried using it in the store `theme_slice.ts` but that generates an error `Reference error: localStorage is not defined` because nextjs renders on the server first and localStorage doesn't exist there. That is the reason for this hack
+  const dispatch = useAppDispatch();
+  let theme = cookieStorage.getFromString(cookies, "theme") ?? "dark";
+  // Save the `theme` from `cookie` to `redux` to make available to every `page and component`
   useEffect(() => {
-    let themeStorage = localStorage.getItem("theme") ?? "dark";
-    dispatch(changeTheme(themeStorage));
+    dispatch(changeTheme(theme));
   }, [dispatch]);
 
   return (
     <div
-      className={`${useAppSelector((state) => state.theme.value)} ${
-        readex.variable
-      } font-readex`}
+      className={`${
+        typeof window == "undefined"
+          ? theme
+          : useAppSelector((state) => state.theme.value)
+      } ${readex.variable} font-readex`}
     >
       <main className="min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
         {children}
@@ -37,12 +44,26 @@ export default function GlobalLayout({
       <style jsx>
         {`
           ${useAppSelector((state) => state.theme.value) == "dark" &&
-          `*::-webkit-scrollbar-track {background: #111827;} *::-webkit-scrollbar-thumb {border: 1px solid #111827; border-top-width: 3px; border-bottom-width: 3px;}`}
+          `
+           *::-webkit-scrollbar-track {background: #111827;}
+
+           *::-webkit-scrollbar-thumb {
+              border: 1px solid #111827; 
+              border-top-width: 3px; 
+              border-bottom-width: 3px;
+            }`}
         `}
       </style>
     </div>
   );
 }
 
-// call getServerSideProps and return req.header.cookie
-// get that as a prop above and check cookie for the theme if exist, so the dark class is added or removed before pages are sent to the browser
+// For server-side rendered sites, like Nextjs, you want to know the color preference / theme of a user upfront so you can avoid rendering the initial color mode / theme and then changing it during hydration (so-called flashing).
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: {
+      cookies: context?.req.headers.cookie ?? "",
+    },
+  };
+};
