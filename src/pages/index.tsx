@@ -1,9 +1,10 @@
 import { BsFillMoonFill } from "react-icons/bs";
-import { AiFillRead } from "react-icons/ai";
+import { AiFillRead, AiFillCloseCircle } from "react-icons/ai";
 import { MdCreate } from "react-icons/md";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { FaSun } from "react-icons/fa";
 
+import { useEffect } from "react";
 import Image from "next/image";
 
 import { motion } from "framer-motion";
@@ -13,12 +14,13 @@ import { changeTheme } from "@/store/theme_slice";
 
 import Footer from "@/component/Footer";
 
+import { cookieStorage } from "@/utilities/cookie_storage";
+
 export default function Home() {
   const themeValue = useAppSelector((state) => state.theme.value);
   const dispatch = useAppDispatch();
 
   function handleThemeChange() {
-    console.log(themeValue);
     if (themeValue == "dark") {
       dispatch(changeTheme(""));
       return;
@@ -26,6 +28,11 @@ export default function Home() {
 
     dispatch(changeTheme("dark"));
   }
+
+  let use_of_cookie_info_popup;
+  useEffect(() => {
+    use_of_cookie_info_popup = cookieStorage.getItem("use_of_cookie_info") ?? "false";
+  }, [])
 
   return (
     <>
@@ -216,13 +223,29 @@ export default function Home() {
         </section>
       </section>
 
-      {/* <div></div> */}
-
       <Footer />
+
+      {use_of_cookie_info_popup == "false" && (
+        <motion.div
+          initial={{ y: "200px" }}
+          animate={{ y: "0px" }}
+          transition={{ duration: 1.5 }}
+          className="fixed bottom-0 left-0 right-0 mx-auto flex min-h-[60px] w-[90%] items-center rounded-tl-md rounded-tr-md border border-gray-900 bg-gray-500 p-3 text-gray-100"
+        >
+          <div className="flex w-full items-center justify-between">
+            <p>
+              By continuing to use this website, you consent to the use of cookies
+              in accordance with our{" "}
+              <span className="cursor-pointer text-maingreen-100">
+                cookie policy
+              </span>
+            </p>
+            <button className="text-2xl" onClick={() => cookieStorage.setItem("use_of_cookie_info", "true")}>
+              <AiFillCloseCircle />
+            </button>
+          </div>
+        </motion.div>
+      )}
     </>
   );
 }
-
-// `getServerSideProps` won't work outside of a `page` i.e can't work in `components` and can't work also in the `_app.tsx` file
-// The `getServerSideProps` defined in the `global_layout.tsx` component has to be re-exported here for it to work
-export { getServerSideProps } from "./global_layout";

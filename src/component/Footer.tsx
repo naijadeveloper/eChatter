@@ -2,13 +2,13 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="mx-auto mt-5 flex min-h-[100px] w-[80%] items-center marker:pt-3 max-lg:flex-col-reverse max-md:w-full">
+    <footer className="mx-auto mt-5 flex min-h-[100px] w-[80%] items-center max-lg:flex-col-reverse max-md:w-full">
       <div className="flex h-[200px] w-[200px] shrink-0 flex-col items-center justify-center">
         <Image
-          src="/logo/echatter3.svg"
+          src="/logo/echatter_logo.svg"
           width={800}
           height={600}
-          alt="echatter-logo"
+          alt="echatter logo"
         />
         <span className="-mt-5 block text-sm font-semibold text-gray-500">
           copyright &copy; 2023, eChatter

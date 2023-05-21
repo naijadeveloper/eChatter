@@ -19,10 +19,7 @@ const themeSlice = createSlice({
       state.value = action.payload;
       // Save to document.cookie when window is available
       if(typeof window !== "undefined") {
-        const date = new Date();
-        date.setDate(date.getDate() + 30);
-
-        cookieStorage.setItem("theme", `${action.payload};expires=${date.toUTCString()}`);
+        cookieStorage.setItem("theme", action.payload);
       }
     }
   }
