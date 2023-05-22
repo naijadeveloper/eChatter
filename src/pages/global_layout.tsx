@@ -6,6 +6,8 @@ import { changeTheme } from "@/store/theme_slice";
 
 import { cookieStorage } from "@/utilities/cookie_storage";
 
+import Footer from "@/component/Footer";
+
 // Global font
 const readex = Readex_Pro({
   subsets: ["latin"],
@@ -32,6 +34,7 @@ export default function GlobalLayout({
     >
       <main className="min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
         {children}
+        <Footer />
       </main>
 
       {/* The tailwind `dark:` classes won't work on scrollbar, that's the reason for this hack */}

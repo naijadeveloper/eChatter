@@ -4,15 +4,13 @@ import { MdCreate } from "react-icons/md";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { FaSun } from "react-icons/fa";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { useAppSelector, useAppDispatch } from "@/store/store_hooks";
 import { changeTheme } from "@/store/theme_slice";
-
-import Footer from "@/component/Footer";
 
 import { cookieStorage } from "@/utilities/cookie_storage";
 
@@ -29,10 +27,17 @@ export default function Home() {
     dispatch(changeTheme("dark"));
   }
 
-  let use_of_cookie_info_popup;
+  const [use_of_cookie_info, set_use_of_cookie_info] = useState("true");
   useEffect(() => {
-    use_of_cookie_info_popup = cookieStorage.getItem("use_of_cookie_info") ?? "false";
-  }, [])
+    set_use_of_cookie_info(
+      () => cookieStorage.getItem("use_of_cookie_info") ?? "false"
+    );
+  }, []);
+
+  function use_of_cookie_info_function() {
+    cookieStorage.setItem("use_of_cookie_info", "true");
+    set_use_of_cookie_info(() => "true");
+  }
 
   return (
     <>
@@ -94,7 +99,11 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col gap-2 p-1 pl-4 transition-all max-lg:items-center max-lg:pl-1">
-            <h2 className="addStroke flex flex-col text-6xl text-maingreen-200 max-lg:text-center max-[448px]:text-5xl">
+            <h2
+              className={`${
+                themeValue !== "dark" && "add-stroke"
+              } flex flex-col font-sans text-6xl font-semibold text-maingreen-200 max-lg:text-center max-[448px]:text-5xl`}
+            >
               <span>A book worm&apos;s </span>
               <span>heaven</span>
             </h2>
@@ -223,29 +232,33 @@ export default function Home() {
         </section>
       </section>
 
-      <Footer />
-
-      {use_of_cookie_info_popup == "false" && (
-        <motion.div
-          initial={{ y: "200px" }}
-          animate={{ y: "0px" }}
-          transition={{ duration: 1.5 }}
-          className="fixed bottom-0 left-0 right-0 mx-auto flex min-h-[60px] w-[90%] items-center rounded-tl-md rounded-tr-md border border-gray-900 bg-gray-500 p-3 text-gray-100"
-        >
-          <div className="flex w-full items-center justify-between">
-            <p>
-              By continuing to use this website, you consent to the use of cookies
-              in accordance with our{" "}
-              <span className="cursor-pointer text-maingreen-100">
-                cookie policy
-              </span>
-            </p>
-            <button className="text-2xl" onClick={() => cookieStorage.setItem("use_of_cookie_info", "true")}>
-              <AiFillCloseCircle />
-            </button>
-          </div>
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {use_of_cookie_info == "false" && (
+          <motion.div
+            initial={{ y: "200px" }}
+            animate={{ y: "0px" }}
+            exit={{ y: "200px" }}
+            transition={{ duration: 1.5 }}
+            className="fixed bottom-0 left-0 right-0 mx-auto flex min-h-[60px] w-[90%] items-center rounded-tl-md rounded-tr-md border border-gray-900 bg-gray-500 p-3 text-gray-100"
+          >
+            <div className="flex w-full items-center justify-between">
+              <p>
+                By continuing to use this website, you consent to the use of
+                cookies in accordance with our{" "}
+                <span className="cursor-pointer text-maingreen-100">
+                  cookie policy
+                </span>
+              </p>
+              <button
+                className="text-2xl"
+                onClick={use_of_cookie_info_function}
+              >
+                <AiFillCloseCircle />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

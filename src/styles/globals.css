@@ -20,7 +20,7 @@
 @tailwind utilities;
 
 @layer components {
-  .addStroke {
+  .add-stroke {
     -webkit-text-stroke: 1px black;
   }
 
