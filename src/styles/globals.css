@@ -25,6 +25,6 @@
   }
 
   .wel-footer-links {
-    @apply cursor-pointer underline decoration-2 underline-offset-2 hover:text-maingreen-300 dark:hover:text-maingreen-100;
+    @apply cursor-pointer underline decoration-2 underline-offset-2 hover:text-maingreen-400 dark:hover:text-maingreen-100;
   }
 }

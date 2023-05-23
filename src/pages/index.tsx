@@ -1,33 +1,24 @@
-import { BsFillMoonFill } from "react-icons/bs";
 import { AiFillRead, AiFillCloseCircle } from "react-icons/ai";
 import { MdCreate } from "react-icons/md";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { FaSun } from "react-icons/fa";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 import { motion, AnimatePresence } from "framer-motion";
 
-import { useAppSelector, useAppDispatch } from "@/store/store_hooks";
-import { changeTheme } from "@/store/theme_slice";
+import { useAppSelector } from "@/store/store_hooks";
+
+import ThemeSwitch from "@/components/ThemeSwitch";
 
 import { cookieStorage } from "@/utilities/cookie_storage";
 
+////////////////////////////////////////////////////////////////////
 export default function Home() {
   const themeValue = useAppSelector((state) => state.theme.value);
-  const dispatch = useAppDispatch();
-
-  function handleThemeChange() {
-    if (themeValue == "dark") {
-      dispatch(changeTheme(""));
-      return;
-    }
-
-    dispatch(changeTheme("dark"));
-  }
-
   const [use_of_cookie_info, set_use_of_cookie_info] = useState("true");
+
   useEffect(() => {
     set_use_of_cookie_info(
       () => cookieStorage.getItem("use_of_cookie_info") ?? "false"
@@ -46,17 +37,10 @@ export default function Home() {
           <h1 className="rounded bg-gray-800 p-1 text-xl text-gray-100 dark:bg-gray-100 dark:text-gray-800">
             eChatter
           </h1>
-          <button
-            title={`${
-              themeValue == "dark"
-                ? "change the theme from dark to light"
-                : "change the theme from light to dark"
-            }`}
-            className="hidden items-center justify-center rounded-md border border-gray-800 bg-maingreen-300 p-3  text-gray-100 dark:text-maingreen-100 max-sm:flex"
-            onClick={handleThemeChange}
-          >
-            {themeValue == "dark" ? <FaSun /> : <BsFillMoonFill />}
-          </button>
+
+          <div className="hidden max-sm:flex">
+            <ThemeSwitch />
+          </div>
         </div>
 
         <div className="flex items-center justify-evenly gap-8 transition-all max-sm:w-full sm:justify-center">
@@ -76,19 +60,12 @@ export default function Home() {
             className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-200 p-3 text-lg text-gray-800 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base"
           >
             <MdCreate />
-            <span>Start Creating</span>
+            <Link href="/account/signup">Start Creating</Link>
           </motion.button>
-          <button
-            title={`${
-              themeValue == "dark"
-                ? "change the theme from dark to light"
-                : "change the theme from light to dark"
-            }`}
-            className="flex items-center justify-center rounded-md border border-gray-800 bg-maingreen-300 p-3 text-gray-100 dark:text-maingreen-100 max-sm:hidden"
-            onClick={handleThemeChange}
-          >
-            {themeValue == "dark" ? <FaSun /> : <BsFillMoonFill />}
-          </button>
+
+          <div className="max-sm:hidden">
+            <ThemeSwitch />
+          </div>
         </div>
       </header>
 
@@ -120,7 +97,7 @@ export default function Home() {
                 className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-200 p-3 text-lg text-gray-800 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base"
               >
                 <MdCreate />
-                <span>Sign up & Create</span>
+                <Link href="/account/signup">Sign up & Create</Link>
               </motion.button>
 
               <motion.button
@@ -194,7 +171,7 @@ export default function Home() {
                   alt="illustration of a man's face"
                 />
               </div>
-              <h4 className="my-4 text-2xl">This is Jon Bellion</h4>
+              <h4 className="my-4 text-2xl">This is Jon</h4>
               <p className="text-lg">
                 Jon loves to cook and he wants to write about his favorite
                 dishes, provide step-by-step instructions, ingredient lists, and

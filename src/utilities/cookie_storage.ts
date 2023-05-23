@@ -11,6 +11,6 @@ export const cookieStorage = {
   setItem(key: string, value: string) {
     const date = new Date();
     date.setDate(date.getDate() + 30);
-    document.cookie = `${key}=${value};expires=${date.toUTCString()}`
+    document.cookie = `${key}=${value};expires=${date.toUTCString()};path=/`;
   }
 }
