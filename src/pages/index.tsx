@@ -196,10 +196,10 @@ export default function Home() {
               <h4 className="my-4 text-2xl text-gray-900">This is Esther</h4>
               <p className="text-lg text-gray-900">
                 Esther covers the rest of us. Whether you are a professional in
-                finance, technology, marketing, or healthcare, or it's about
-                organic gardening, sustainable fashion, or DIY crafts, or about
-                your company and you want to share company news, product updates
-                and industry trends.
+                finance, technology, marketing, journalism or healthcare, or
+                it's about organic gardening, sustainable fashion, or DIY
+                crafts, or about your company and you want to share company news
+                and product or you just like to gossip.
                 <span className="my-4 block text-sm uppercase text-gray-900">
                   If your story relates to esther&apos;s, eChatter is for you.
                 </span>
