@@ -33,7 +33,7 @@ export default function Signup() {
           </header>
 
           <form className="mt-7" onSubmit={handleSubmit}>
-            <div className="mt-5 h-12 w-full">
+            <div className="mt-5 h-14 w-full">
               <input
                 type="email"
                 placeholder="Email"
@@ -41,7 +41,7 @@ export default function Signup() {
               />
             </div>
 
-            <div className="relative mt-5 h-12 w-full">
+            <div className="relative mt-5 h-14 w-full">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Create password"
@@ -58,7 +58,7 @@ export default function Signup() {
               </button>
             </div>
 
-            <div className="relative mt-5 h-12 w-full">
+            <div className="relative mt-5 h-14 w-full">
               <input
                 type={showPass ? "text" : "password"}
                 placeholder="Confirm password"
@@ -75,7 +75,7 @@ export default function Signup() {
               </button>
             </div>
 
-            <div className="mt-5 h-12 w-full">
+            <div className="mt-5 h-14 w-full">
               <button className="h-full w-full rounded-md bg-maingreen-200 text-gray-800 hover:opacity-95 dark:border dark:border-gray-800">
                 Sign Up
               </button>
@@ -96,7 +96,7 @@ export default function Signup() {
 
           <div className="relative mt-9 h-[1px] w-full bg-gray-500 before:absolute before:left-2/4 before:top-2/4 before:-translate-x-2/4 before:-translate-y-2/4 before:bg-gray-900 before:px-2 before:text-gray-500 before:content-['OR'] dark:before:bg-gray-100"></div>
 
-          <div className="mt-5 h-12 w-full">
+          <div className="mt-5 h-14 w-full">
             <a
               href="#"
               className="flex h-full w-full items-center rounded-md bg-blue-700 px-2 text-gray-100 hover:opacity-95 dark:border dark:border-gray-800"
@@ -110,7 +110,7 @@ export default function Signup() {
             </a>
           </div>
 
-          <div className="mt-5 h-12 w-full">
+          <div className="mt-5 h-14 w-full">
             <a
               href="#"
               className="flex h-full w-full items-center rounded-md bg-gray-100 px-2 text-gray-800 hover:opacity-95 dark:border dark:border-gray-800"

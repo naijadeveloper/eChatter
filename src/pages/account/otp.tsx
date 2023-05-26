@@ -1,19 +1,38 @@
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import ThemeSwitch from "@/components/ThemeSwitch";
 
+let currentOtpIndex: number = 0;
+
 export default function Otp() {
-  const [otp1, setOtp1] = useState<number>(0);
+  const [otp, setOtp] = useState<string[]>(new Array(8).fill(""));
+  const [activeOtpIndex, setActiveOtpIndex] = useState<number>(0);
 
-  function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
-    let value = Number(event.target.value);
+  const indexRef = useRef<HTMLInputElement>(null);
 
-    setOtp1((prev) => {
-      prev = value;
-      return prev;
-    });
+  function handleChange({ target }: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = target;
+    const newOtp: string[] = [...otp];
+    newOtp[currentOtpIndex] = value.substring(value.length - 1);
+
+    if (!value) {
+      setActiveOtpIndex(currentOtpIndex - 1);
+    } else setActiveOtpIndex(currentOtpIndex + 1);
+    setOtp(newOtp);
   }
+
+  function handlekeyDown(
+    { key }: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) {
+    currentOtpIndex = index;
+    if (key == "Backspace") setActiveOtpIndex(currentOtpIndex - 1);
+  }
+
+  useEffect(() => {
+    indexRef.current?.focus();
+  }, [activeOtpIndex]);
 
   return (
     <section className="relative flex min-h-[500px] w-full items-center justify-center pt-16">
@@ -35,21 +54,21 @@ export default function Otp() {
             </p>
           </header>
 
-          <div className="mt-8 flex w-full flex-wrap gap-3">
-            <input
-              type="number"
-              placeholder="0"
-              value={otp1}
-              min={0}
-              max={9}
-              maxLength={1}
-              required
-              onChange={(e) => handleInput(e)}
-              className="remove-default h-[70px] w-[70px] rounded-md border-2 border-gray-500 bg-gray-100 text-center text-4xl font-normal text-gray-800 outline-none dark:bg-gray-800 dark:text-gray-100"
-            />
+          <div className="mt-8 flex w-full flex-wrap items-center justify-center gap-3">
+            {otp.map((_, index) => (
+              <input
+                ref={index === activeOtpIndex ? indexRef : null}
+                key={index}
+                type="number"
+                className="remove-default h-[60px] w-[60px] rounded-md bg-gray-100 text-center text-4xl font-semibold text-gray-800 outline-none dark:bg-gray-800 dark:text-gray-100"
+                onChange={handleChange}
+                onKeyDown={(e) => handlekeyDown(e, index)}
+                value={otp[index]}
+              />
+            ))}
           </div>
 
-          <div className="mt-8 h-12 w-full">
+          <div className="mt-8 h-14 w-full">
             <button className="h-full w-full rounded-md bg-maingreen-200 text-gray-800 hover:opacity-95 dark:border dark:border-gray-800">
               Verify
             </button>

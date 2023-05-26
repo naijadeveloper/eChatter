@@ -21,7 +21,7 @@ export default function Login() {
           <header className="text-center text-3xl font-semibold">Log In</header>
 
           <form className="mt-7">
-            <div className="mt-5 h-12 w-full">
+            <div className="mt-5 h-14 w-full">
               <input
                 type="email"
                 placeholder="Email"
@@ -29,7 +29,7 @@ export default function Login() {
               />
             </div>
 
-            <div className="relative mt-5 h-12 w-full">
+            <div className="relative mt-5 h-14 w-full">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
@@ -55,7 +55,7 @@ export default function Login() {
               </Link>
             </div>
 
-            <div className="mt-5 h-12 w-full">
+            <div className="mt-5 h-14 w-full">
               <button className="h-full w-full rounded-md bg-maingreen-200 text-gray-800 hover:opacity-95 dark:border dark:border-gray-800">
                 Log In
               </button>
@@ -76,7 +76,7 @@ export default function Login() {
 
           <div className="relative mt-9 h-[1px] w-full bg-gray-500 before:absolute before:left-2/4 before:top-2/4 before:-translate-x-2/4 before:-translate-y-2/4 before:bg-gray-900 before:px-2 before:text-gray-500 before:content-['OR'] dark:before:bg-gray-100"></div>
 
-          <div className="mt-5 h-12 w-full">
+          <div className="mt-5 h-14 w-full">
             <a
               href="#"
               className="flex h-full w-full items-center rounded-md bg-blue-700 px-2 text-gray-100 hover:opacity-95 dark:border dark:border-gray-800"
@@ -90,7 +90,7 @@ export default function Login() {
             </a>
           </div>
 
-          <div className="mt-5 h-12 w-full">
+          <div className="mt-5 h-14 w-full">
             <a
               href="#"
               className="flex h-full w-full items-center rounded-md bg-gray-100 px-2 text-gray-800 hover:opacity-95 dark:border dark:border-gray-800"
