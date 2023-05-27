@@ -1,28 +1,31 @@
 @tailwind base;
-
-*::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-*::-webkit-scrollbar-track {
-  @apply bg-gray-100 py-1;
-}
-
-*::-webkit-scrollbar-thumb {
-  @apply rounded-md bg-gray-500;
-  border: 1px solid #f3f4f6;
-  border-top-width: 3px;
-  border-bottom-width: 3px;
-}
-
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  .remove-default::-webkit-outer-spin-button,
-  .remove-default::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    @apply bg-gray-100 py-1;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    @apply rounded-md bg-gray-500;
+    border: 1px solid #f3f4f6;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+  }
+
+  *::-moz-selection {
+    /* Code for Firefox */
+    @apply bg-maingreen-200 text-gray-800;
+  }
+
+  *::selection {
+    @apply bg-maingreen-200 text-gray-800;
   }
 }
 
