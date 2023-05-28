@@ -6,6 +6,9 @@ import OtpInput from "@/components/OtpInput";
 
 export default function Otp() {
   const [otp, setOtp] = useState("");
+  const [error, setError] = useState<string>("");
+
+  const onError = (message: string) => setError(message);
   const onChange = (value: string) => setOtp(value);
 
   const otpLen = useMemo(
@@ -29,15 +32,20 @@ export default function Otp() {
           <header className="flex flex-col gap-3 text-center font-semibold">
             <h2 className="text-3xl">Verify Your Account</h2>
             <p className="flex flex-col gap-1 text-sm text-gray-400 dark:text-gray-600">
-              <span>Eight digits code has been sent to your email.</span>
               <span>
-                Enter / Copy & paste the code into the inputs below to verify
-                your account.
+                A one-time-password has been sent to your email address. Please
+                enter / copy & paste the password into the input boxes below.
               </span>
             </p>
           </header>
 
-          <OtpInput {...{ value: otp, valueLength: 8, onChange }} />
+          <OtpInput {...{ value: otp, valueLength: 8, onChange, onError }} />
+
+          {error && (
+            <span className="mt-5 flex w-full items-center justify-center text-sm text-red-700">
+              {error}
+            </span>
+          )}
 
           <div className="mt-8 h-14 w-full">
             <button

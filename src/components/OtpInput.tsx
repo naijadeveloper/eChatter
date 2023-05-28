@@ -1,16 +1,20 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { RE_DIGIT } from "@/utilities/digits_only";
 
-type Props = {
+export type Props = {
   value: string;
   valueLength: number;
   onChange: (value: string) => void;
+  onError: (message: string) => void;
 };
 
 //////////////////////////////////////////////////////////////////////////////
-export default function OtpInput({ value, valueLength, onChange }: Props) {
-  const [error, setError] = useState(false);
-
+export default function OtpInput({
+  value,
+  valueLength,
+  onChange,
+  onError,
+}: Props) {
   const valueItems = useMemo(() => {
     // Construct array from value
     // Array should have length equal to valueLength
@@ -57,7 +61,7 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
     targetValue = isTargetValueDigit ? targetValue : " ";
 
     if (targetValue.length === 1) {
-      setError(false);
+      onError("");
 
       const newValue =
         value.substring(0, index) + targetValue + value.substring(index + 1);
@@ -70,9 +74,9 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
     } else {
       // handle pasting of value more than 1 digits
       if (targetValue.length !== valueLength) {
-        setError(true);
+        onError(`What you pasted isn't ${valueLength} digits long`);
       } else if (targetValue.length === valueLength) {
-        setError(false);
+        onError("");
 
         onChange(targetValue);
 
@@ -126,11 +130,6 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
           className="h-[60px] w-[60px] rounded-md bg-gray-100 text-center text-4xl font-semibold text-gray-800 outline-none dark:bg-gray-800 dark:text-gray-100"
         />
       ))}
-      {error && (
-        <span className="mt-5 flex w-full items-center justify-center text-sm text-red-700">
-          What you pasted isn't {valueLength} digits long
-        </span>
-      )}
     </div>
   );
 }
