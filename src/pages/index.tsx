@@ -163,7 +163,7 @@ export default function Home() {
             </article>
 
             <article className="flex flex-col items-center rounded-md border border-gray-800 bg-maingreen-200 p-3 text-center">
-              <div className="w-[70px]">
+              <div className="w-[68px]">
                 <Image
                   width={350}
                   height={400}

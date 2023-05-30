@@ -63,9 +63,24 @@ export default function OtpInput({
     if (targetValue.length === 1) {
       onError("");
 
-      const newValue =
+      // when the page starts or after a refresh, when the user tries to type in one of the middle boxes, user shouldn't be able to, only the first box is allowed
+      if (!value && index !== 0) return;
+
+      let newValue =
         value.substring(0, index) + targetValue + value.substring(index + 1);
-      // Set new value
+
+      // But after the user types in the `first box`, if user tries to type in any `middle box`, there's an error, the `focus` jumps to the `second box` instead, and what the user typed is inputed there, instead of the middle box, where the user intended to type in. So to prevent that error this `for loop` is necessary
+      let arry = [];
+      for (let i = 0; i < valueLength; i++) {
+        if (newValue[i]) {
+          arry.push(newValue[i]);
+        } else {
+          arry.push(" ");
+        }
+      }
+
+      // Set a new value
+      newValue = arry.join("");
       onChange(newValue);
       // No need to focus to next input, when target value is empty string i.e when we are deleting
       if (!isTargetValueDigit) return;
@@ -73,9 +88,9 @@ export default function OtpInput({
       focusToNextElem(target);
     } else {
       // handle pasting of value more than 1 digits
-      if (targetValue.length !== valueLength) {
+      if (targetValue.length < valueLength) {
         onError(`What you pasted isn't ${valueLength} digits long`);
-      } else if (targetValue.length === valueLength) {
+      } else {
         onError("");
 
         onChange(targetValue);
