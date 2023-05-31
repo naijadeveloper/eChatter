@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+
+import { z, ZodType } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useForm } from "react-hook-form";
 
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FaFacebookF } from "react-icons/fa";
@@ -8,16 +13,56 @@ import { FcGoogle } from "react-icons/fc";
 
 import ThemeSwitch from "@/components/ThemeSwitch";
 
+//////////////////////////////////////////////////////////////
 export default function Signup() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showPass, setShowPass] = useState(false);
+  const [text, setText] = useState<string>("");
 
-  const router = useRouter();
+  type formData = {
+    email: string;
+    password: string;
+    confirmPassword: string;
+  };
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  const schema: ZodType<formData> = z
+    .object({
+      email: z.string().email("Email is not valid"),
+      password: z
+        .string()
+        .min(8, { message: "Password should be at least 8 characters long" })
+        .max(20, {
+          message: "Password cannot be more than 20 characters long",
+        }),
+      confirmPassword: z.string().min(8).max(20),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords do not match",
+      path: ["password", "confirmPassword"],
+    });
 
-    router.push("/account/otp");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<formData>({
+    resolver: zodResolver(schema),
+  });
+
+  const allerrors = useMemo(() => {
+    if (errors.email || errors.password || errors.confirmPassword) {
+      return true;
+    }
+    return false;
+  }, [text]);
+
+  function submitForm(data: formData) {
+    // check database if email already exist
+    console.table(data);
+
+    // Generate `otp` send `otp` to email and push to the otp route
+    // router.push("/account/otp");
   }
 
   return (
@@ -32,23 +77,33 @@ export default function Signup() {
             Sign Up
           </header>
 
-          <form className="mt-7" onSubmit={handleSubmit}>
-            <div className="mt-5 h-14 w-full">
+          <form className="mt-7" onSubmit={handleSubmit(submitForm)}>
+            <div className="min-h-14 mt-5 w-full">
               <input
                 type="email"
                 placeholder="Email"
-                className="h-full w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
+                {...register("email")}
+                onChange={() => setText(" ")}
+                className="h-14 w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
               />
+
+              {errors.email && (
+                <span className="mt-1 flex w-full items-center text-sm text-red-700">
+                  {errors.email.message}
+                </span>
+              )}
             </div>
 
-            <div className="relative mt-5 h-14 w-full">
+            <div className="min-h-14 relative mt-5 w-full">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Create password"
-                className="h-full w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
+                {...register("password")}
+                onChange={() => setText(" ")}
+                className="h-14 w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
               />
               <button
-                className="absolute right-0 top-2/4 h-[80%] w-[35px] -translate-y-2/4 cursor-pointer rounded-br-md rounded-tr-md bg-gray-100 text-lg text-gray-500 dark:bg-gray-800"
+                className="absolute right-0 top-1 h-12 w-[35px] cursor-pointer rounded-br-md rounded-tr-md bg-gray-100 text-lg text-gray-500 dark:bg-gray-800"
                 onClick={(e) => {
                   e.preventDefault();
                   setShowPassword((prev) => !prev);
@@ -56,16 +111,24 @@ export default function Signup() {
               >
                 {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
               </button>
+
+              {errors.password && (
+                <span className="mt-1 flex w-full items-center text-sm text-red-700">
+                  {errors.password.message}
+                </span>
+              )}
             </div>
 
-            <div className="relative mt-5 h-14 w-full">
+            <div className="min-h-14 relative mt-5 w-full">
               <input
                 type={showPass ? "text" : "password"}
                 placeholder="Confirm password"
-                className="h-full w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
+                {...register("confirmPassword")}
+                onChange={() => setText(" ")}
+                className="h-14 w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
               />
               <button
-                className="absolute right-0 top-2/4 h-[80%] w-[35px] -translate-y-2/4 cursor-pointer rounded-br-md rounded-tr-md bg-gray-100 text-lg text-gray-500 dark:bg-gray-800"
+                className="absolute right-0 top-1 h-12 w-[35px] cursor-pointer rounded-br-md rounded-tr-md bg-gray-100 text-lg text-gray-500 dark:bg-gray-800"
                 onClick={(e) => {
                   e.preventDefault();
                   setShowPass((prev) => !prev);
@@ -73,10 +136,24 @@ export default function Signup() {
               >
                 {showPass ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
               </button>
+
+              {errors.confirmPassword && (
+                <span className="mt-1 flex w-full items-center text-sm text-red-700">
+                  {errors.confirmPassword.message}
+                </span>
+              )}
             </div>
 
+            {allerrors ? (
+              <span>Error about</span>
+            ) : (
+              <span>NO worries, you safe</span>
+            )}
+
             <div className="mt-5 h-14 w-full">
-              <button className="h-full w-full rounded-md bg-maingreen-200 text-gray-800 hover:opacity-95 dark:border dark:border-gray-800">
+              <button
+                className={`h-full w-full rounded-md bg-maingreen-200 text-gray-800 hover:opacity-95 dark:border dark:border-gray-800`}
+              >
                 Sign Up
               </button>
             </div>
