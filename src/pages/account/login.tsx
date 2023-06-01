@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+
+import { z, ZodType } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useForm } from "react-hook-form";
 
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FaFacebookF } from "react-icons/fa";
@@ -7,8 +12,44 @@ import { FcGoogle } from "react-icons/fc";
 
 import ThemeSwitch from "@/components/ThemeSwitch";
 
+type formData = {
+  email: string;
+  password: string;
+};
+
+const schema: ZodType<formData> = z.object({
+  email: z.string().email("Email is not valid"),
+  password: z
+    .string()
+    .min(8, { message: "Password should be at least 8 characters long" })
+    .max(20, {
+      message: "Password cannot be more than 20 characters long",
+    }),
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [dbError, setDbError] = useState<string>("");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<formData>({
+    resolver: zodResolver(schema),
+  });
+
+  // `watch` is called on every input's onChange trigger
+  let data = watch();
+  const signupValues = useMemo(() => {
+    // `safeParse` would determine if the inputs values are correct according to the validation rules
+    return schema.safeParse(data);
+  }, [data]);
+
+  function submitForm(data: formData) {
+    // check database if email exist and if password is valid under said email
+  }
 
   return (
     <section className="relative flex min-h-[500px] w-full items-center justify-center pt-16">
@@ -20,23 +61,36 @@ export default function Login() {
         <div>
           <header className="text-center text-3xl font-semibold">Log In</header>
 
-          <form className="mt-7">
-            <div className="mt-5 h-14 w-full">
+          {dbError && (
+            <span className="mt-1 flex w-full items-center justify-center text-sm text-red-700">
+              Either the email or the password is incorrect
+            </span>
+          )}
+          <form className="mt-7" onSubmit={handleSubmit(submitForm)}>
+            <div className="min-h-14 mt-5 w-full">
               <input
                 type="email"
                 placeholder="Email"
-                className="h-full w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
+                {...register("email")}
+                className="h-14 w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
               />
+
+              {errors.email && (
+                <span className="mt-1 flex w-full items-center text-sm text-red-700">
+                  {errors.email.message}
+                </span>
+              )}
             </div>
 
-            <div className="relative mt-5 h-14 w-full">
+            <div className="min-h-14 relative mt-5 w-full">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="h-full w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
+                {...register("password")}
+                className="h-14 w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
               />
               <button
-                className="absolute right-0 top-2/4 h-[80%] w-[35px] -translate-y-2/4 cursor-pointer rounded-br-md rounded-tr-md bg-gray-100 text-lg text-gray-500 dark:bg-gray-800"
+                className="absolute right-0 top-1 h-12 w-[35px] cursor-pointer rounded-br-md rounded-tr-md bg-gray-100 text-lg text-gray-500 dark:bg-gray-800"
                 onClick={(e) => {
                   e.preventDefault();
                   setShowPassword((prev) => !prev);
@@ -44,6 +98,12 @@ export default function Login() {
               >
                 {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
               </button>
+
+              {errors.password && (
+                <span className="mt-1 flex w-full items-center text-sm text-red-700">
+                  {errors.password.message}
+                </span>
+              )}
             </div>
 
             <div className="mt-2 text-center">
@@ -56,7 +116,14 @@ export default function Login() {
             </div>
 
             <div className="mt-5 h-14 w-full">
-              <button className="h-full w-full rounded-md bg-maingreen-200 text-gray-800 hover:opacity-95 dark:border dark:border-gray-800">
+              <button
+                disabled={!signupValues.success}
+                className={`h-full w-full rounded-md ${
+                  signupValues.success
+                    ? "bg-maingreen-200"
+                    : "cursor-not-allowed bg-gray-500"
+                } text-gray-800 hover:opacity-95 dark:border dark:border-gray-800`}
+              >
                 Log In
               </button>
             </div>

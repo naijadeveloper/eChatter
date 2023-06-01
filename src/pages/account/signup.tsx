@@ -13,56 +13,61 @@ import { FcGoogle } from "react-icons/fc";
 
 import ThemeSwitch from "@/components/ThemeSwitch";
 
-//////////////////////////////////////////////////////////////
+type formData = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+const schema: ZodType<formData> = z
+  .object({
+    email: z.string().email("Email is not valid"),
+    password: z
+      .string()
+      .min(8, { message: "Password should be at least 8 characters long" })
+      .max(20, {
+        message: "Password cannot be more than 20 characters long",
+      }),
+    confirmPassword: z
+      .string()
+      .min(8, { message: "Password should be at least 8 characters long" })
+      .max(20, {
+        message: "Password cannot be more than 20 characters long",
+      }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+/////////////////////////////////////////////////////////////////////////////////////////
 export default function Signup() {
   const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showPass, setShowPass] = useState(false);
-  const [text, setText] = useState<string>("");
-
-  type formData = {
-    email: string;
-    password: string;
-    confirmPassword: string;
-  };
-
-  const schema: ZodType<formData> = z
-    .object({
-      email: z.string().email("Email is not valid"),
-      password: z
-        .string()
-        .min(8, { message: "Password should be at least 8 characters long" })
-        .max(20, {
-          message: "Password cannot be more than 20 characters long",
-        }),
-      confirmPassword: z.string().min(8).max(20),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords do not match",
-      path: ["password", "confirmPassword"],
-    });
-
+  const [dbError, setDbError] = useState<string>("");
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<formData>({
     resolver: zodResolver(schema),
   });
 
-  const allerrors = useMemo(() => {
-    if (errors.email || errors.password || errors.confirmPassword) {
-      return true;
-    }
-    return false;
-  }, [text]);
+  // `watch` is called on every input's onChange trigger
+  let data = watch();
+  const signupValues = useMemo(() => {
+    // `safeParse` would determine if the inputs values are correct according to the validation rules
+    return schema.safeParse(data);
+  }, [data]);
 
   function submitForm(data: formData) {
     // check database if email already exist
-    console.table(data);
 
     // Generate `otp` send `otp` to email and push to the otp route
-    // router.push("/account/otp");
+    router.push("/account/otp");
   }
 
   return (
@@ -77,13 +82,18 @@ export default function Signup() {
             Sign Up
           </header>
 
+          {dbError && (
+            <span className="mt-1 flex w-full items-center justify-center text-sm text-red-700">
+              A user with the same email already exists
+            </span>
+          )}
+
           <form className="mt-7" onSubmit={handleSubmit(submitForm)}>
             <div className="min-h-14 mt-5 w-full">
               <input
                 type="email"
                 placeholder="Email"
                 {...register("email")}
-                onChange={() => setText(" ")}
                 className="h-14 w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
               />
 
@@ -97,9 +107,8 @@ export default function Signup() {
             <div className="min-h-14 relative mt-5 w-full">
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="Create password"
+                placeholder="Password(at least 8, at most 20)"
                 {...register("password")}
-                onChange={() => setText(" ")}
                 className="h-14 w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
               />
               <button
@@ -124,7 +133,6 @@ export default function Signup() {
                 type={showPass ? "text" : "password"}
                 placeholder="Confirm password"
                 {...register("confirmPassword")}
-                onChange={() => setText(" ")}
                 className="h-14 w-full rounded-md bg-gray-100 px-3 text-gray-800 outline-none focus:border-b-4 focus:border-b-gray-500 dark:bg-gray-800 dark:text-gray-100"
               />
               <button
@@ -144,15 +152,14 @@ export default function Signup() {
               )}
             </div>
 
-            {allerrors ? (
-              <span>Error about</span>
-            ) : (
-              <span>NO worries, you safe</span>
-            )}
-
             <div className="mt-5 h-14 w-full">
               <button
-                className={`h-full w-full rounded-md bg-maingreen-200 text-gray-800 hover:opacity-95 dark:border dark:border-gray-800`}
+                disabled={!signupValues.success}
+                className={`h-full w-full rounded-md ${
+                  signupValues.success
+                    ? "bg-maingreen-200"
+                    : "cursor-not-allowed bg-gray-500"
+                } text-gray-800 hover:opacity-95 dark:border dark:border-gray-800`}
               >
                 Sign Up
               </button>

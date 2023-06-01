@@ -21,6 +21,10 @@ export default function Otp() {
     [otp]
   );
 
+  function handleOtpSubmit() {
+    // Validate otp from database
+  }
+
   return (
     <section className="relative flex min-h-[500px] w-full items-center justify-center pt-16">
       <div className="absolute right-3 top-3">
@@ -49,6 +53,8 @@ export default function Otp() {
 
           <div className="mt-8 h-14 w-full">
             <button
+              disabled={!(otpLen === 8)}
+              onClick={handleOtpSubmit}
               className={`h-full w-full rounded-md ${
                 otpLen === 8
                   ? "bg-maingreen-200"
