@@ -11,6 +11,7 @@ import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
 import ThemeSwitch from "@/components/ThemeSwitch";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 type formData = {
   email: string;
@@ -31,6 +32,7 @@ const schema: ZodType<formData> = z.object({
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [dbError, setDbError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -49,6 +51,11 @@ export default function Login() {
 
   function submitForm(data: formData) {
     // check database if email exist and if password is valid under said email
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
   }
 
   return (
@@ -172,6 +179,8 @@ export default function Login() {
           </div>
         </div>
       </div>
+
+      {loading && <LoadingSpinner />}
     </section>
   );
 }

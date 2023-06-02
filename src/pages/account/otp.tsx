@@ -3,10 +3,12 @@ import { useState, useMemo } from "react";
 
 import ThemeSwitch from "@/components/ThemeSwitch";
 import OtpInput from "@/components/OtpInput";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function Otp() {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onError = (message: string) => setError(message);
   const onChange = (value: string) => setOtp(value);
@@ -23,6 +25,10 @@ export default function Otp() {
 
   function handleOtpSubmit() {
     // Validate otp from database
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
   }
 
   return (
@@ -76,6 +82,8 @@ export default function Otp() {
           </small>
         </div>
       </div>
+
+      {loading && <LoadingSpinner />}
     </section>
   );
 }

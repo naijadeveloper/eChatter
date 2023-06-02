@@ -221,7 +221,7 @@ export default function Home() {
             <div className="flex w-full items-center justify-between">
               <p>
                 By continuing to use this website, you consent to the use of
-                cookies in accordance with our{" "}
+                cookies in accordance with the{" "}
                 <span className="cursor-pointer text-maingreen-100">
                   cookie policy
                 </span>

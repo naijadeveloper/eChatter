@@ -14,6 +14,9 @@ export default function Footer() {
         <span className="-mt-5 block text-sm font-semibold text-gray-500">
           copyright &copy; 2023, eChatter
         </span>
+        <span className="mt-1 text-sm font-bold text-gray-500">
+          ❤️ from Nigeria
+        </span>
       </div>
 
       <div className="relative flex w-full grow items-center max-lg:top-8">

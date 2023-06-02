@@ -12,6 +12,7 @@ import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
 import ThemeSwitch from "@/components/ThemeSwitch";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 type formData = {
   email: string;
@@ -47,6 +48,7 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [dbError, setDbError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -65,9 +67,13 @@ export default function Signup() {
 
   function submitForm(data: formData) {
     // check database if email already exist
+    setLoading(true);
 
     // Generate `otp` send `otp` to email and push to the otp route
-    router.push("/account/otp");
+    setTimeout(() => {
+      setLoading(false);
+      router.push("/account/otp");
+    }, 2000);
   }
 
   return (
@@ -209,6 +215,8 @@ export default function Signup() {
           </div>
         </div>
       </div>
+
+      {loading && <LoadingSpinner />}
     </section>
   );
 }
