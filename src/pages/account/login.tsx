@@ -10,7 +10,10 @@ import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
-import ThemeSwitch from "@/components/ThemeSwitch";
+import dynamic from "next/dynamic";
+const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
+  ssr: false,
+});
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 type formData = {

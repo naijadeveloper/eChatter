@@ -1,8 +1,8 @@
+import { GetServerSidePropsContext } from "next";
 import { Readex_Pro } from "next/font/google";
-import { useEffect } from "react";
 
-import { useAppSelector, useAppDispatch } from "@/store/store_hooks";
-import { changeTheme } from "@/store/theme_slice";
+import { ThemeProvider } from "next-themes";
+import { useTheme } from "next-themes";
 
 import { cookieStorage } from "@/utilities/cookie_storage";
 
@@ -15,33 +15,31 @@ const readex = Readex_Pro({
 });
 
 export default function GlobalLayout({
+  cookies,
   children,
 }: {
+  cookies: string;
   children: React.ReactNode;
 }) {
-  const dispatch = useAppDispatch();
-  // Save the `theme` from `cookie` to `redux` to make available to every `page and component`
-  useEffect(() => {
-    const theme = cookieStorage.getItem("theme") ?? "dark";
-    dispatch(changeTheme(theme));
-  }, [dispatch]);
+  const { resolvedTheme } = useTheme();
+  const globalTheme: string =
+    cookieStorage.getFromString(cookies, "theme") ?? "dark";
 
   return (
-    <div
-      className={`${useAppSelector((state) => state.theme.value)} ${
-        readex.variable
-      } font-readex`}
-    >
-      <main className="min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
-        {children}
-        <Footer />
-      </main>
+    <ThemeProvider enableSystem={true} defaultTheme={globalTheme}>
+      <div>
+        <main
+          className={`min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 ${readex.variable} font-readex`}
+        >
+          {children}
+          <Footer />
+        </main>
 
-      {/* The tailwind `dark:` classes won't work on scrollbar, that's the reason for this hack */}
-      <style jsx>
-        {`
-          ${useAppSelector((state) => state.theme.value) == "dark" &&
-          `
+        {/* The tailwind `dark:` classes won't work on scrollbar, that's the reason for this hack */}
+        <style jsx>
+          {`
+            ${resolvedTheme == "dark" &&
+            `
            *::-webkit-scrollbar-track {background: #111827;}
 
            *::-webkit-scrollbar-thumb {
@@ -49,8 +47,20 @@ export default function GlobalLayout({
               border-top-width: 3px; 
               border-bottom-width: 3px;
             }`}
-        `}
-      </style>
-    </div>
+          `}
+        </style>
+      </div>
+    </ThemeProvider>
   );
+}
+
+// also export a reusable function getServerSideProps
+export async function getServerSideProps({ req }: GetServerSidePropsContext) {
+  return {
+    props: {
+      // first time users will not have any cookies
+      // undefined here, hence ?? is necessary
+      cookies: req.headers.cookie ?? "dark",
+    },
+  };
 }

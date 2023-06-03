@@ -1,33 +1,35 @@
 import { BsFillMoonFill } from "react-icons/bs";
 import { FaSun } from "react-icons/fa";
 
-import { useAppSelector, useAppDispatch } from "@/store/store_hooks";
-import { changeTheme } from "@/store/theme_slice";
+import { useTheme } from "next-themes";
+
+import { cookieStorage } from "@/utilities/cookie_storage";
 
 export default function ThemeSwitch() {
-  const themeValue = useAppSelector((state) => state.theme.value);
-  const dispatch = useAppDispatch();
+  const { resolvedTheme, setTheme } = useTheme();
 
   function handleThemeChange() {
-    if (themeValue == "dark") {
-      dispatch(changeTheme(""));
+    if (resolvedTheme == "dark") {
+      setTheme("light");
+      cookieStorage.setItem("theme", "light");
       return;
     }
 
-    dispatch(changeTheme("dark"));
+    setTheme("dark");
+    cookieStorage.setItem("theme", "dark");
   }
 
   return (
     <button
       title={`${
-        themeValue == "dark"
+        resolvedTheme == "dark"
           ? "change the theme from dark to light"
           : "change the theme from light to dark"
       }`}
       className="flex items-center justify-center rounded-md border border-gray-800 bg-maingreen-300 p-3 text-gray-100 dark:text-maingreen-100"
       onClick={handleThemeChange}
     >
-      {themeValue == "dark" ? <FaSun /> : <BsFillMoonFill />}
+      {resolvedTheme == "dark" ? <FaSun /> : <BsFillMoonFill />}
     </button>
   );
 }

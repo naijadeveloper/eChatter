@@ -6,17 +6,16 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { motion, AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
 
-import { useAppSelector } from "@/store/store_hooks";
-
-import ThemeSwitch from "@/components/ThemeSwitch";
+const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
+  ssr: false,
+});
 
 import { cookieStorage } from "@/utilities/cookie_storage";
 
 ////////////////////////////////////////////////////////////////////
 export default function Home() {
-  const themeValue = useAppSelector((state) => state.theme.value);
   const [use_of_cookie_info, set_use_of_cookie_info] = useState("true");
 
   useEffect(() => {
@@ -44,24 +43,15 @@ export default function Home() {
         </div>
 
         <div className="flex items-center justify-evenly gap-8 transition-all max-sm:w-full sm:justify-center">
-          <motion.button
-            initial={{ x: "-20px", opacity: 0 }}
-            animate={{ x: "0px", opacity: 1 }}
-            transition={{ duration: 1 }}
-            className="flex w-fit items-center justify-center gap-1 rounded-md p-3 text-lg font-light underline decoration-2 underline-offset-8 hover:text-gray-600 dark:hover:text-gray-300 max-[420px]:p-2 max-[420px]:text-base max-[420px]:font-normal"
-          >
+          <button className="flex w-fit items-center justify-center gap-1 rounded-md p-3 text-lg font-light underline decoration-2 underline-offset-8 hover:text-gray-600 dark:hover:text-gray-300 max-[420px]:p-2 max-[420px]:text-base max-[420px]:font-normal">
             <AiFillRead />
             <span>Start Reading</span>
-          </motion.button>
-          <motion.button
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 1 }}
-            className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-200 p-3 text-lg text-gray-800 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base"
-          >
+          </button>
+
+          <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-200 p-3 text-lg text-gray-800 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base">
             <MdCreate />
             <Link href="/account/signup">Start Creating</Link>
-          </motion.button>
+          </button>
 
           <div className="max-sm:hidden">
             <ThemeSwitch />
@@ -77,9 +67,7 @@ export default function Home() {
 
           <div className="flex flex-col gap-2 p-1 pl-4 transition-all max-lg:items-center max-lg:pl-1">
             <h2
-              className={`${
-                themeValue !== "dark" && "add-stroke"
-              } flex flex-col font-sans text-6xl font-semibold text-maingreen-200 max-lg:text-center max-[448px]:text-5xl`}
+              className={`add-stroke flex flex-col font-sans text-6xl font-semibold text-maingreen-200 max-lg:text-center max-[448px]:text-5xl`}
             >
               <span>A book worm&apos;s </span>
               <span>heaven</span>
@@ -90,35 +78,20 @@ export default function Home() {
             </p>
 
             <div className="mt-3 flex gap-8 max-lg:mt-5">
-              <motion.button
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 1 }}
-                className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-200 p-3 text-lg text-gray-800 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base"
-              >
+              <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-200 p-3 text-lg text-gray-800 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base">
                 <MdCreate />
                 <Link href="/account/signup">Sign up & Create</Link>
-              </motion.button>
+              </button>
 
-              <motion.button
-                initial={{ x: "-20px", opacity: 0 }}
-                animate={{ x: "0px", opacity: 1 }}
-                transition={{ duration: 1 }}
-                className="flex w-fit items-center justify-center gap-1 rounded-md p-3 text-lg font-light underline decoration-2 underline-offset-8 hover:text-gray-600 dark:hover:text-gray-300 max-[420px]:p-2 max-[420px]:text-base max-[420px]:font-normal"
-              >
+              <button className="flex w-fit items-center justify-center gap-1 rounded-md p-3 text-lg font-light underline decoration-2 underline-offset-8 hover:text-gray-600 dark:hover:text-gray-300 max-[420px]:p-2 max-[420px]:text-base max-[420px]:font-normal">
                 <span>Read only</span>
                 <HiOutlineArrowNarrowRight className="text-4xl" />
-              </motion.button>
+              </button>
             </div>
           </div>
         </div>
 
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1 }}
-          className="flex items-start justify-center max-lg:mt-5 max-[420px]:mx-auto max-[420px]:w-[98%]"
-        >
+        <div className="flex items-start justify-center max-lg:mt-5 max-[420px]:mx-auto max-[420px]:w-[98%]">
           <div className="mt-8 w-fit overflow-hidden rounded-[89%_79%_88%_67%_/_66%_45%_22%_10%] border border-gray-800 bg-maingreen-200 max-[500px]:rounded-md">
             <Image
               priority
@@ -129,7 +102,7 @@ export default function Home() {
               alt="Illustration of man reading"
             />
           </div>
-        </motion.div>
+        </div>
       </section>
 
       <section className="relative mt-28">
@@ -209,33 +182,28 @@ export default function Home() {
         </section>
       </section>
 
-      <AnimatePresence>
-        {use_of_cookie_info == "false" && (
-          <motion.div
-            initial={{ y: "200px" }}
-            animate={{ y: "0px" }}
-            exit={{ y: "200px" }}
-            transition={{ duration: 1.5 }}
-            className="fixed bottom-0 left-0 right-0 mx-auto flex min-h-[60px] w-[90%] items-center rounded-tl-md rounded-tr-md border border-gray-900 bg-gray-500 p-3 text-gray-100"
-          >
-            <div className="flex w-full items-center justify-between">
-              <p>
-                By continuing to use this website, you consent to the use of
-                cookies in accordance with the{" "}
-                <span className="cursor-pointer text-maingreen-100">
-                  cookie policy
-                </span>
-              </p>
-              <button
-                className="text-2xl"
-                onClick={use_of_cookie_info_function}
-              >
-                <AiFillCloseCircle />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {use_of_cookie_info == "false" && (
+        <div className="fixed bottom-0 left-0 right-0 mx-auto flex min-h-[60px] w-[90%] items-center rounded-tl-md rounded-tr-md border border-gray-900 bg-gray-500 p-3 text-gray-100">
+          <div className="flex w-full items-center justify-between">
+            <p>
+              By continuing to use this website, you consent to the use of
+              cookies in accordance with the{" "}
+              <span className="cursor-pointer text-maingreen-100">
+                cookie policy
+              </span>
+            </p>
+            <button
+              className="ml-4 text-3xl"
+              onClick={use_of_cookie_info_function}
+            >
+              <AiFillCloseCircle />
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
+
+// re-export the reusable `getServerSideProps` function
+export { getServerSideProps } from "./global_layout";

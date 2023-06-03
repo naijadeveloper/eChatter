@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { useState, useMemo } from "react";
 
-import ThemeSwitch from "@/components/ThemeSwitch";
+import dynamic from "next/dynamic";
+const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
+  ssr: false,
+});
 import OtpInput from "@/components/OtpInput";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
