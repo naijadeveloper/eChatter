@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { useState, useMemo } from "react";
-
+import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
 });
@@ -9,6 +10,7 @@ import OtpInput from "@/components/OtpInput";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function Otp() {
+  const router = useRouter();
   const [otp, setOtp] = useState("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -31,6 +33,7 @@ export default function Otp() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
+      router.push("/feed");
     }, 2000);
   }
 

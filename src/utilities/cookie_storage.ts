@@ -1,6 +1,6 @@
 export const cookieStorage = {
   getFromString(str: string, key: string) {
-    if(typeof str == "undefined") return "dark";
+    if(typeof str == "undefined") return undefined;
     const cookies = str 
       .split(";")
       .map(cookie => cookie.split("="))

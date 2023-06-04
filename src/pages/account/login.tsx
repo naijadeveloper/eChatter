@@ -1,16 +1,19 @@
-import Link from "next/link";
 import { useState, useMemo } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+
+import { useForm } from "react-hook-form";
 
 import { z, ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useForm } from "react-hook-form";
 
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
-import dynamic from "next/dynamic";
+
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
 });
@@ -33,6 +36,7 @@ const schema: ZodType<formData> = z.object({
 
 /////////////////////////////////////////////////////////////////////////////////////////
 export default function Login() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [dbError, setDbError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -53,11 +57,13 @@ export default function Login() {
   }, [data]);
 
   function submitForm(data: formData) {
+    if(signupValues.success == false) return;
     // check database if email exist and if password is valid under said email
     setLoading(true);
 
     setTimeout(() => {
       setLoading(false);
+      router.push("/feed");
     }, 2000);
   }
 
@@ -127,7 +133,6 @@ export default function Login() {
 
             <div className="mt-5 h-14 w-full">
               <button
-                disabled={!signupValues.success}
                 className={`h-full w-full rounded-md ${
                   signupValues.success
                     ? "bg-maingreen-200"

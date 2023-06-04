@@ -45,7 +45,7 @@ export default function Home() {
         <div className="flex items-center justify-evenly gap-8 transition-all max-sm:w-full sm:justify-center">
           <button className="flex w-fit items-center justify-center gap-1 rounded-md p-3 text-lg font-light underline decoration-2 underline-offset-8 hover:text-gray-600 dark:hover:text-gray-300 max-[420px]:p-2 max-[420px]:text-base max-[420px]:font-normal">
             <AiFillRead />
-            <span>Start Reading</span>
+            <Link href="/feed/readonly">Start Reading</Link>
           </button>
 
           <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-200 p-3 text-lg text-gray-800 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base">
@@ -84,7 +84,7 @@ export default function Home() {
               </button>
 
               <button className="flex w-fit items-center justify-center gap-1 rounded-md p-3 text-lg font-light underline decoration-2 underline-offset-8 hover:text-gray-600 dark:hover:text-gray-300 max-[420px]:p-2 max-[420px]:text-base max-[420px]:font-normal">
-                <span>Read only</span>
+                <Link href="/feed/readonly">Read only</Link>
                 <HiOutlineArrowNarrowRight className="text-4xl" />
               </button>
             </div>

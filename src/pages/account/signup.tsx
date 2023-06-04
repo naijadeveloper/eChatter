@@ -69,6 +69,7 @@ export default function Signup() {
   }, [data]);
 
   function submitForm(data: formData) {
+    if(signupValues.success == false) return;
     // check database if email already exist
     setLoading(true);
 
@@ -163,7 +164,6 @@ export default function Signup() {
 
             <div className="mt-5 h-14 w-full">
               <button
-                disabled={!signupValues.success}
                 className={`h-full w-full rounded-md ${
                   signupValues.success
                     ? "bg-maingreen-200"
