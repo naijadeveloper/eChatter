@@ -67,7 +67,7 @@ export default function Home() {
 
           <div className="flex flex-col gap-2 p-1 pl-4 transition-all max-lg:items-center max-lg:pl-1">
             <h2
-              className={`add-stroke flex flex-col font-sans text-6xl font-semibold text-maingreen-200 max-lg:text-center max-[448px]:text-5xl`}
+              className={`flex flex-col text-6xl text-maingreen-300 dark:text-maingreen-200 max-lg:text-center max-[448px]:text-5xl`}
             >
               <span>A book worm&apos;s </span>
               <span>heaven</span>
@@ -92,7 +92,7 @@ export default function Home() {
         </div>
 
         <div className="flex items-start justify-center max-lg:mt-5 max-[420px]:mx-auto max-[420px]:w-[98%]">
-          <div className="mt-8 w-fit overflow-hidden rounded-[89%_79%_88%_67%_/_66%_45%_22%_10%] border border-gray-800 bg-maingreen-200 max-[500px]:rounded-md">
+          <div className="mt-8 w-fit overflow-hidden rounded-[89%_79%_88%_67%_/_66%_45%_22%_10%] bg-gray-200 dark:bg-gray-800 max-[500px]:rounded-md">
             <Image
               priority
               src="/svgs/readingman.svg"
