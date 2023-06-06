@@ -26,7 +26,7 @@ export default function ThemeSwitch() {
           ? "change the theme from dark to light"
           : "change the theme from light to dark"
       }`}
-      className="flex items-center justify-center rounded-md border border-gray-800 bg-maingreen-300 p-3 text-gray-100 dark:text-maingreen-100"
+      className="flex items-center justify-center rounded-md border border-gray-800 bg-maingreen-300 p-3 text-gray-100 dark:bg-maingreen-200 dark:text-maingreen-100"
       onClick={handleThemeChange}
     >
       {resolvedTheme == "dark" ? <FaSun /> : <BsFillMoonFill />}

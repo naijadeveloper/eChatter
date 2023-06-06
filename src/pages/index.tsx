@@ -48,7 +48,7 @@ export default function Home() {
             <Link href="/feed/readonly">Start Reading</Link>
           </button>
 
-          <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-200 p-3 text-lg text-gray-800 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base">
+          <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-300 dark:bg-maingreen-200 p-3 text-lg dark:text-gray-800 text-gray-100 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base">
             <MdCreate />
             <Link href="/account/signup">Start Creating</Link>
           </button>
@@ -67,7 +67,7 @@ export default function Home() {
 
           <div className="flex flex-col gap-2 p-1 pl-4 transition-all max-lg:items-center max-lg:pl-1">
             <h2
-              className={`flex flex-col text-6xl text-maingreen-300 dark:text-maingreen-200 max-lg:text-center max-[448px]:text-5xl`}
+              className={`flex flex-col text-6xl font-sans font-semibold text-maingreen-300 dark:text-maingreen-200 max-lg:text-center max-[448px]:text-5xl`}
             >
               <span>A book worm&apos;s </span>
               <span>heaven</span>
@@ -78,7 +78,7 @@ export default function Home() {
             </p>
 
             <div className="mt-3 flex gap-8 max-lg:mt-5">
-              <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-200 p-3 text-lg text-gray-800 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base">
+              <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-300 dark:bg-maingreen-200 p-3 text-lg dark:text-gray-800 text-gray-100 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base">
                 <MdCreate />
                 <Link href="/account/signup">Sign up & Create</Link>
               </button>
