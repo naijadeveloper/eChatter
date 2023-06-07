@@ -69,7 +69,7 @@ export default function Otp() {
               onClick={handleOtpSubmit}
               className={`h-full w-full rounded-md ${
                 otpLen === 8
-                  ? "bg-maingreen-200"
+                  ? "bg-maingreen-300 text-gray-100 dark:bg-maingreen-200"
                   : "cursor-not-allowed bg-gray-500"
               } text-gray-800 hover:opacity-95 dark:border dark:border-gray-800`}
             >

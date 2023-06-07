@@ -69,7 +69,7 @@ export default function Signup() {
   }, [data]);
 
   function submitForm(data: formData) {
-    if(signupValues.success == false) return;
+    if (signupValues.success == false) return;
     // check database if email already exist
     setLoading(true);
 
@@ -166,7 +166,7 @@ export default function Signup() {
               <button
                 className={`h-full w-full rounded-md ${
                   signupValues.success
-                    ? "bg-maingreen-200"
+                    ? "bg-maingreen-300 text-gray-100 dark:bg-maingreen-200"
                     : "cursor-not-allowed bg-gray-500"
                 } text-gray-800 hover:opacity-95 dark:border dark:border-gray-800`}
               >

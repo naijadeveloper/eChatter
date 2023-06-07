@@ -8,11 +8,9 @@ import { useForm } from "react-hook-form";
 import { z, ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-
 
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
@@ -57,7 +55,7 @@ export default function Login() {
   }, [data]);
 
   function submitForm(data: formData) {
-    if(signupValues.success == false) return;
+    if (signupValues.success == false) return;
     // check database if email exist and if password is valid under said email
     setLoading(true);
 
@@ -135,7 +133,7 @@ export default function Login() {
               <button
                 className={`h-full w-full rounded-md ${
                   signupValues.success
-                    ? "bg-maingreen-200"
+                    ? "bg-maingreen-300 text-gray-100 dark:bg-maingreen-200"
                     : "cursor-not-allowed bg-gray-500"
                 } text-gray-800 hover:opacity-95 dark:border dark:border-gray-800`}
               >
