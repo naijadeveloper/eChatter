@@ -48,7 +48,7 @@ export default function Home() {
             <Link href="/feed/readonly">Start Reading</Link>
           </button>
 
-          <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-300 dark:bg-maingreen-200 p-3 text-lg dark:text-gray-800 text-gray-100 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base">
+          <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-300 p-3 text-lg text-gray-100 hover:rounded-3xl dark:bg-maingreen-200 dark:text-gray-800 max-[420px]:p-2 max-[420px]:text-base">
             <MdCreate />
             <Link href="/account/signup">Start Creating</Link>
           </button>
@@ -67,7 +67,7 @@ export default function Home() {
 
           <div className="flex flex-col gap-2 p-1 pl-4 transition-all max-lg:items-center max-lg:pl-1">
             <h2
-              className={`flex flex-col text-6xl font-sans font-semibold text-maingreen-300 dark:text-maingreen-200 max-lg:text-center max-[448px]:text-5xl`}
+              className={`flex flex-col font-sans text-6xl font-semibold text-maingreen-300 dark:text-maingreen-200 max-lg:text-center max-[448px]:text-5xl`}
             >
               <span>A book worm&apos;s </span>
               <span>heaven</span>
@@ -78,7 +78,7 @@ export default function Home() {
             </p>
 
             <div className="mt-3 flex gap-8 max-lg:mt-5">
-              <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-300 dark:bg-maingreen-200 p-3 text-lg dark:text-gray-800 text-gray-100 hover:rounded-3xl max-[420px]:p-2 max-[420px]:text-base">
+              <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-300 p-3 text-lg text-gray-100 hover:rounded-3xl dark:bg-maingreen-200 dark:text-gray-800 max-[420px]:p-2 max-[420px]:text-base">
                 <MdCreate />
                 <Link href="/account/signup">Sign up & Create</Link>
               </button>
@@ -112,7 +112,7 @@ export default function Home() {
           </h3>
 
           <div className="mt-10 grid grid-cols-[repeat(auto-fit,_minmax(350px,_1fr))] gap-6 px-4 text-gray-800 max-[420px]:mx-auto max-[420px]:w-[98%] max-[420px]:px-0 max-[375px]:flex max-[375px]:flex-col">
-            <article className="flex flex-col items-center rounded-md border border-gray-800 bg-maingreen-300 p-3 text-center">
+            <article className="flex flex-col items-center rounded-md border border-gray-800 bg-maingreen-300 p-3 text-center text-gray-950">
               <div className="w-[80px]">
                 <Image
                   width={400}
@@ -121,21 +121,21 @@ export default function Home() {
                   alt="illustration of a woman's face"
                 />
               </div>
-              <h4 className="my-4 text-2xl text-gray-900">This is Sarah</h4>
-              <p className="text-lg text-gray-900">
+              <h4 className="my-4 text-2xl">This is Sarah</h4>
+              <p className="text-lg">
                 Sarah loves to travel, and sometimes she would love to share
                 detailed guides about the places she has visited, including
                 popular attractions, local culture, best restaurants,
                 accommodation options, tips for getting around, recommended
                 activities, must-see sights, and tips for optimizing travel
                 logistics.
-                <span className="my-4 block text-sm uppercase text-gray-900">
-                  If your story relates to sarah&apos;s, eChatter is for you.
+                <span className="my-4 block text-sm uppercase">
+                  If your story relates to sarah's, eChatter is for you.
                 </span>
               </p>
             </article>
 
-            <article className="flex flex-col items-center rounded-md border border-gray-800 bg-maingreen-200 p-3 text-center">
+            <article className="flex flex-col items-center rounded-md border border-gray-800 bg-maingreen-200 p-3 text-center text-gray-950">
               <div className="w-[68px]">
                 <Image
                   width={350}
@@ -151,13 +151,13 @@ export default function Home() {
                 cooking techniques. His recipes range from simple and quick
                 meals to elaborate gourmet creations. He also wants to write
                 about various cooking utensils.
-                <span className="my-4 block text-sm uppercase text-gray-900">
-                  If your story relates to jon&apos;s, eChatter is for you.
+                <span className="my-4 block text-sm uppercase">
+                  If your story relates to jon's, eChatter is for you.
                 </span>
               </p>
             </article>
 
-            <article className="flex flex-col items-center rounded-md border border-gray-800 bg-maingreen-300 p-3 text-center">
+            <article className="flex flex-col items-center rounded-md border border-gray-800 bg-maingreen-300 p-3 text-center text-gray-950">
               <div className="w-[80px]">
                 <Image
                   width={400}
@@ -166,15 +166,15 @@ export default function Home() {
                   alt="illustration of a woman's face"
                 />
               </div>
-              <h4 className="my-4 text-2xl text-gray-900">This is Esther</h4>
-              <p className="text-lg text-gray-900">
+              <h4 className="my-4 text-2xl">This is Esther</h4>
+              <p className="text-lg">
                 Esther covers the rest of us. Whether you are a professional in
                 finance, technology, marketing, journalism or healthcare, or
                 it's about organic gardening, sustainable fashion, or DIY
                 crafts, or about your company and you want to share company news
                 and product or you just like to gossip.
-                <span className="my-4 block text-sm uppercase text-gray-900">
-                  If your story relates to esther&apos;s, eChatter is for you.
+                <span className="my-4 block text-sm uppercase">
+                  If your story relates to esther's, eChatter is for you.
                 </span>
               </p>
             </article>
