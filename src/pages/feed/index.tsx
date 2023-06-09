@@ -19,6 +19,9 @@ export default function userFeeds() {
   const [openSearchDropDown, setOpenSearchDropDown] = useState<boolean>(false);
   const [searchDropDown, setSearchDropDown] = useState<string>("eChat");
 
+  const [openDashboardDropDown, setOpenDashboardDropDown] =
+    useState<boolean>(false);
+
   function handleSetSearchDropDown(value: string) {
     setSearchDropDown(value);
     setOpenSearchDropDown(false);
@@ -47,7 +50,7 @@ export default function userFeeds() {
             <div className="absolute left-1 top-[6px] peer-focus:top-[5px]">
               <p
                 onClick={() => setOpenSearchDropDown(!openSearchDropDown)}
-                className="flex w-fit cursor-pointer items-center justify-between rounded bg-gray-400 p-1 dark:bg-gray-700"
+                className="flex w-fit cursor-pointer items-center gap-[2px] rounded bg-gray-400 p-1 dark:bg-gray-700"
               >
                 {searchDropDown}
                 {openSearchDropDown ? <MdArrowDropUp /> : <MdArrowDropDown />}
@@ -80,7 +83,7 @@ export default function userFeeds() {
           </form>
         </div>
 
-        <div className="flex w-[90%] items-center justify-around px-4 py-3 text-2xl">
+        <div className="flex w-[90%] items-center justify-around py-3 pl-4 pr-0 text-2xl">
           <div className="group relative flex cursor-pointer flex-col items-center gap-1 text-maingreen-300 dark:text-maingreen-100">
             <HiHome />
             <span className="rounded p-1 text-xs">Home</span>
@@ -111,9 +114,66 @@ export default function userFeeds() {
             Create eChat
           </div>
 
-          <div className="h-10 w-10 cursor-pointer rounded-[100%] border-2 border-transparent bg-gray-300 dark:bg-gray-800"></div>
+          <div className="relative">
+            {/* conversations, logout, signed in as mmejuenoch-gmail, dashboard, settings, admin, sponsorship,  */}
+            <div
+              onClick={() => setOpenDashboardDropDown(!openDashboardDropDown)}
+              className="flex items-center justify-center text-gray-500"
+            >
+              <div className="h-10 w-10 cursor-pointer rounded-[100%] border-2 border-transparent bg-gray-300 hover:border-gray-500 dark:bg-gray-800"></div>
+
+              {openDashboardDropDown ? <MdArrowDropUp /> : <MdArrowDropDown />}
+            </div>
+
+            <div
+              className={`${
+                !openDashboardDropDown && "hidden"
+              } absolute -right-5 top-9 w-52 rounded bg-gray-300 p-2 text-base drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]`}
+            >
+              <div className="mb-2 flex flex-col items-start justify-center border-b border-gray-500 p-2">
+                <span>Logged in as</span>
+                <span className="text-maingreen-300 dark:text-maingreen-100">
+                  mmejuenoch-gmail
+                </span>
+              </div>
+
+              <p
+                className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
+              >
+                Dashboard
+              </p>
+
+              <p className={`cursor-pointer rounded p-1 px-2 text-gray-500`}>
+                Admin<span className="text-[10px]"> (coming soon)</span>
+              </p>
+
+              <p className={`cursor-pointer rounded p-1 px-2 text-gray-500`}>
+                Convos<span className="text-[10px]"> (coming soon)</span>
+              </p>
+
+              <p className={`cursor-pointer rounded p-1 px-2 text-gray-500`}>
+                Communities<span className="text-[10px]"> (coming soon)</span>
+              </p>
+
+              <p className={`cursor-pointer rounded p-1 px-2 text-gray-500`}>
+                Sponsorship<span className="text-[10px]"> (coming soon)</span>
+              </p>
+
+              <p
+                className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
+              >
+                Settings
+              </p>
+
+              <div className="mt-2 border-t border-gray-500">
+                <p className="my-2 cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700">
+                  Log out
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <ThemeSwitch />
+        {/* <ThemeSwitch /> */}
       </header>
 
       <section className="my-5 mt-14"></section>
