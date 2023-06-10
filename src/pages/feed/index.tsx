@@ -6,8 +6,10 @@ import {
   MdArrowDropUp,
   MdNotifications,
   MdTravelExplore,
+  MdAddBox,
 } from "react-icons/md";
 import { HiHome } from "react-icons/hi";
+import { SiAddthis } from "react-icons/si";
 
 import dynamic from "next/dynamic";
 
@@ -29,14 +31,23 @@ export default function userFeeds() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 mx-auto flex items-center justify-center overflow-visible bg-gray-100 dark:bg-gray-900">
-        <div className="flex w-full items-center gap-3 px-4 py-3">
-          <GiHamburgerMenu className="hidden text-xl" />
-          <h1 className="rounded bg-gray-800 p-1 text-xl text-gray-100 dark:bg-gray-100 dark:text-gray-800">
-            eChatter
-          </h1>
+      <header
+        onClick={() => {
+          setOpenSearchDropDown(false);
+          setOpenDashboardDropDown(false);
+        }}
+        className="sticky top-0 z-50 mx-auto flex items-center justify-center overflow-visible bg-gray-100 dark:bg-gray-900 max-[1000px]:flex-col max-[1000px]:gap-3"
+      >
+        <div className="flex w-full items-center gap-3 px-4 py-3 max-[1050px]:px-2 max-[600px]:flex-col max-[600px]:gap-6 max-[600px]:px-4">
+          <div className="flex w-full items-center justify-between">
+            <GiHamburgerMenu className="text-xl min-[601px]:hidden" />
+            <h1 className="rounded bg-gray-800 p-1 text-xl text-gray-100 dark:bg-gray-100 dark:text-gray-800">
+              eChatter
+            </h1>
+            <SiAddthis className="text-xl min-[601px]:hidden" />
+          </div>
 
-          <form className="relative h-11 grow-[2]">
+          <form className="relative h-11 grow-[2] max-[600px]:w-full">
             <input
               type="text"
               placeholder={
@@ -47,9 +58,14 @@ export default function userFeeds() {
               } outline-none focus:border-b-[3px] focus:border-b-gray-500 dark:bg-gray-800 dark:focus:border-b-[#030712]`}
             />
 
-            <div className="absolute left-1 top-[6px] peer-focus:top-[5px]">
+            <div className="absolute left-1 top-[6px] z-10 peer-focus:top-[5px]">
               <p
-                onClick={() => setOpenSearchDropDown(!openSearchDropDown)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenDashboardDropDown(false);
+                  //
+                  setOpenSearchDropDown(!openSearchDropDown);
+                }}
                 className="flex w-fit cursor-pointer items-center gap-[2px] rounded bg-gray-400 p-1 dark:bg-gray-700"
               >
                 {searchDropDown}
@@ -61,7 +77,10 @@ export default function userFeeds() {
                 } rounded bg-gray-300 p-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]`}
               >
                 <p
-                  onClick={() => handleSetSearchDropDown("eChatter")}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSetSearchDropDown("eChatter");
+                  }}
                   className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
                     searchDropDown == "eChatter" &&
                     "text-maingreen-300 dark:text-maingreen-100"
@@ -70,7 +89,10 @@ export default function userFeeds() {
                   Search for an eChatter
                 </p>
                 <p
-                  onClick={() => handleSetSearchDropDown("eChat")}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSetSearchDropDown("eChat");
+                  }}
                   className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
                     searchDropDown == "eChat" &&
                     "text-maingreen-300 dark:text-maingreen-100"
@@ -83,7 +105,7 @@ export default function userFeeds() {
           </form>
         </div>
 
-        <div className="flex w-[90%] items-center justify-around py-3 pl-4 pr-0 text-2xl">
+        <div className="flex w-[90%] items-center justify-around py-3 pl-4 pr-0 text-2xl max-[1050px]:pl-2 max-[1000px]:justify-evenly max-[1000px]:pl-0 max-[750px]:justify-between max-[600px]:hidden">
           <div className="group relative flex cursor-pointer flex-col items-center gap-1 text-maingreen-300 dark:text-maingreen-100">
             <HiHome />
             <span className="rounded p-1 text-xs">Home</span>
@@ -117,7 +139,12 @@ export default function userFeeds() {
           <div className="relative">
             {/* conversations, logout, signed in as mmejuenoch-gmail, dashboard, settings, admin, sponsorship,  */}
             <div
-              onClick={() => setOpenDashboardDropDown(!openDashboardDropDown)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpenSearchDropDown(false);
+                //
+                setOpenDashboardDropDown(!openDashboardDropDown);
+              }}
               className="flex items-center justify-center text-gray-500"
             >
               <div className="h-10 w-10 cursor-pointer rounded-[100%] border-2 border-transparent bg-gray-300 hover:border-gray-500 dark:bg-gray-800"></div>
@@ -126,9 +153,12 @@ export default function userFeeds() {
             </div>
 
             <div
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
               className={`${
                 !openDashboardDropDown && "hidden"
-              } absolute -right-5 top-9 w-52 rounded bg-gray-300 p-2 text-base drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]`}
+              } absolute -right-5 top-9 w-52 rounded bg-gray-300 p-2 text-base drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712] max-[1200px]:-right-2 max-[1000px]:-right-4`}
             >
               <div className="mb-2 flex flex-col items-start justify-center border-b border-gray-500 p-2">
                 <span>Logged in as</span>
@@ -159,6 +189,10 @@ export default function userFeeds() {
                 Sponsorship<span className="text-[10px]"> (coming soon)</span>
               </p>
 
+              <p className={`cursor-pointer rounded p-1 px-2 text-gray-500`}>
+                Promote Ads<span className="text-[10px]"> (coming soon)</span>
+              </p>
+
               <p
                 className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
               >
@@ -176,7 +210,13 @@ export default function userFeeds() {
         {/* <ThemeSwitch /> */}
       </header>
 
-      <section className="my-5 mt-14"></section>
+      <section
+        onClick={() => {
+          setOpenSearchDropDown(false);
+          setOpenDashboardDropDown(false);
+        }}
+        className="min-h-[500px] py-5"
+      ></section>
     </>
   );
 }
