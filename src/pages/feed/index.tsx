@@ -6,7 +6,7 @@ import {
   MdArrowDropUp,
   MdNotifications,
   MdTravelExplore,
-  MdAddBox,
+  MdClose,
 } from "react-icons/md";
 import { HiHome } from "react-icons/hi";
 import { SiAddthis } from "react-icons/si";
@@ -24,6 +24,8 @@ export default function userFeeds() {
   const [openDashboardDropDown, setOpenDashboardDropDown] =
     useState<boolean>(false);
 
+  const [openMobileMenu, setOpenMobileMenu] = useState<boolean>(false);
+
   function handleSetSearchDropDown(value: string) {
     setSearchDropDown(value);
     setOpenSearchDropDown(false);
@@ -35,34 +37,57 @@ export default function userFeeds() {
         onClick={() => {
           setOpenSearchDropDown(false);
           setOpenDashboardDropDown(false);
+          setOpenMobileMenu(false);
         }}
-        className="sticky top-0 z-50 mx-auto flex items-center justify-center overflow-visible bg-gray-100 dark:bg-gray-900 max-[1000px]:flex-col max-[1000px]:gap-3"
+        className="sticky top-0 z-50 mx-auto flex items-center justify-center overflow-visible bg-gray-100 dark:bg-gray-900 max-[1000px]:flex-col max-[1000px]:gap-3 max-[600px]:gap-0"
       >
-        <div className="flex w-full items-center gap-3 px-4 py-3 max-[1050px]:px-2 max-[600px]:flex-col max-[600px]:gap-6 max-[600px]:px-4">
-          <div className="flex w-full items-center justify-between">
-            <GiHamburgerMenu className="text-xl min-[601px]:hidden" />
+        <div
+          className={`flex w-full items-center gap-3 px-3 py-3 max-[1050px]:w-[85%] max-[1050px]:px-1 max-[1000px]:w-full max-[600px]:flex-col max-[600px]:gap-6 max-[600px]:px-4 ${
+            openMobileMenu && "pb-0"
+          }`}
+        >
+          <div className="flex items-center justify-between max-[600px]:w-full">
+            {!openMobileMenu ? (
+              <GiHamburgerMenu
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenMobileMenu(!openMobileMenu);
+                }}
+                className="cursor-pointer text-xl min-[601px]:hidden"
+              />
+            ) : (
+              <MdClose
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenMobileMenu(!openMobileMenu);
+                }}
+                className="cursor-pointer text-xl min-[601px]:hidden"
+              />
+            )}
+
             <h1 className="rounded bg-gray-800 p-1 text-xl text-gray-100 dark:bg-gray-100 dark:text-gray-800">
               eChatter
             </h1>
-            <SiAddthis className="text-xl min-[601px]:hidden" />
+            <SiAddthis className="cursor-pointer text-xl min-[601px]:hidden" />
           </div>
 
-          <form className="relative h-11 grow-[2] max-[600px]:w-full">
+          <form className="relative h-11 w-full grow-[2] max-[600px]:h-12">
             <input
               type="text"
               placeholder={
                 searchDropDown == "eChat" ? "Search by topic" : "Search by name"
               }
-              className={`peer h-11 w-full rounded-md bg-gray-300 px-2 ${
+              className={`peer h-full w-full rounded-md bg-gray-300 px-2 ${
                 searchDropDown == "eChat" ? "pl-[78px]" : "pl-[100px]"
               } outline-none focus:border-b-[3px] focus:border-b-gray-500 dark:bg-gray-800 dark:focus:border-b-[#030712]`}
             />
 
-            <div className="absolute left-1 top-[6px] z-10 peer-focus:top-[5px]">
+            <div className="absolute left-1 top-[6px] z-10 peer-focus:top-[5px] max-[600px]:top-[8px] max-[600px]:peer-focus:top-[6px]">
               <p
                 onClick={(e) => {
                   e.stopPropagation();
                   setOpenDashboardDropDown(false);
+                  setOpenMobileMenu(false);
                   //
                   setOpenSearchDropDown(!openSearchDropDown);
                 }}
@@ -105,7 +130,7 @@ export default function userFeeds() {
           </form>
         </div>
 
-        <div className="flex w-[90%] items-center justify-around py-3 pl-4 pr-0 text-2xl max-[1050px]:pl-2 max-[1000px]:justify-evenly max-[1000px]:pl-0 max-[750px]:justify-between max-[600px]:hidden">
+        <div className="flex w-full items-center justify-around py-3 pl-3 pr-0 text-2xl max-[1050px]:pl-2 max-[1000px]:w-[97%] max-[1000px]:justify-evenly max-[1000px]:pl-0 max-[750px]:w-[95%] max-[750px]:justify-between max-[600px]:hidden">
           <div className="group relative flex cursor-pointer flex-col items-center gap-1 text-maingreen-300 dark:text-maingreen-100">
             <HiHome />
             <span className="rounded p-1 text-xs">Home</span>
@@ -158,13 +183,13 @@ export default function userFeeds() {
               }}
               className={`${
                 !openDashboardDropDown && "hidden"
-              } absolute -right-5 top-9 w-52 rounded bg-gray-300 p-2 text-base drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712] max-[1200px]:-right-2 max-[1000px]:-right-4`}
+              } absolute -right-4 top-9 w-[213px] rounded bg-gray-300 p-1 text-base drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712] max-[1200px]:-right-1 max-[1000px]:-right-3`}
             >
               <div className="mb-2 flex flex-col items-start justify-center border-b border-gray-500 p-2">
-                <span>Logged in as</span>
-                <span className="text-maingreen-300 dark:text-maingreen-100">
+                <p>Logged in as</p>
+                <p className="text-maingreen-300 dark:text-maingreen-100">
                   mmejuenoch-gmail
-                </span>
+                </p>
               </div>
 
               <p
@@ -178,11 +203,15 @@ export default function userFeeds() {
               </p>
 
               <p className={`cursor-pointer rounded p-1 px-2 text-gray-500`}>
-                Convos<span className="text-[10px]"> (coming soon)</span>
+                eConvos<span className="text-[10px]"> (coming soon)</span>
               </p>
 
               <p className={`cursor-pointer rounded p-1 px-2 text-gray-500`}>
-                Communities<span className="text-[10px]"> (coming soon)</span>
+                eMeetings<span className="text-[10px]"> (coming soon)</span>
+              </p>
+
+              <p className={`cursor-pointer rounded p-1 px-2 text-gray-500`}>
+                eCommunities<span className="text-[10px]"> (coming soon)</span>
               </p>
 
               <p className={`cursor-pointer rounded p-1 px-2 text-gray-500`}>
@@ -207,6 +236,100 @@ export default function userFeeds() {
             </div>
           </div>
         </div>
+
+        {/* Mobile menu dropDown */}
+        {openMobileMenu && (
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="min-h-20 max-h-[400px] w-full overflow-auto p-2 min-[601px]:hidden"
+          >
+            <div>
+              <p className="cursor-pointer rounded px-1 py-2 text-maingreen-300 dark:text-maingreen-100">
+                Home
+              </p>
+            </div>
+
+            <div>
+              <p className="cursor-pointer rounded px-1 py-2 hover:bg-gray-400 dark:hover:bg-gray-700">
+                Explore
+              </p>
+            </div>
+
+            <div>
+              <p className="cursor-pointer rounded px-1 py-2 hover:bg-gray-400 dark:hover:bg-gray-700">
+                Notifications
+              </p>
+            </div>
+
+            <div className="mt-2">
+              <div
+                onClick={() => setOpenDashboardDropDown(!openDashboardDropDown)}
+                className="flex cursor-pointer items-center justify-between rounded bg-gray-400 px-1 py-2 dark:bg-gray-700"
+              >
+                <p className="flex flex-col items-start justify-center">
+                  <span>Logged in as</span>
+                  <span className="text-maingreen-300 dark:text-maingreen-100">
+                    mmejuenoch-gmail
+                  </span>
+                </p>
+                {openDashboardDropDown ? (
+                  <MdArrowDropUp />
+                ) : (
+                  <MdArrowDropDown />
+                )}
+              </div>
+              {/* profile dropDown options */}
+              <div
+                className={`${!openDashboardDropDown && "hidden"} mt-2 px-2`}
+              >
+                <p
+                  className={`cursor-pointer rounded p-1 py-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
+                >
+                  Dashboard
+                </p>
+
+                <p className={`cursor-pointer rounded p-1 py-2 text-gray-500`}>
+                  Admin<span className="text-[10px]"> (coming soon)</span>
+                </p>
+
+                <p className={`cursor-pointer rounded p-1 py-2 text-gray-500`}>
+                  eConvos<span className="text-[10px]"> (coming soon)</span>
+                </p>
+
+                <p className={`cursor-pointer rounded p-1 py-2 text-gray-500`}>
+                  eMeetings<span className="text-[10px]"> (coming soon)</span>
+                </p>
+
+                <p className={`cursor-pointer rounded p-1 py-2 text-gray-500`}>
+                  eCommunities
+                  <span className="text-[10px]"> (coming soon)</span>
+                </p>
+
+                <p className={`cursor-pointer rounded p-1 py-2 text-gray-500`}>
+                  Sponsorship<span className="text-[10px]"> (coming soon)</span>
+                </p>
+
+                <p className={`cursor-pointer rounded p-1 py-2 text-gray-500`}>
+                  Promote Ads<span className="text-[10px]"> (coming soon)</span>
+                </p>
+
+                <p
+                  className={`cursor-pointer rounded p-1 py-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
+                >
+                  Settings
+                </p>
+
+                <p
+                  className={`cursor-pointer rounded p-1 py-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
+                >
+                  Log out
+                </p>
+              </div>
+            </div>
+
+            {/* end of mobile dropDown div */}
+          </div>
+        )}
         {/* <ThemeSwitch /> */}
       </header>
 
@@ -214,6 +337,7 @@ export default function userFeeds() {
         onClick={() => {
           setOpenSearchDropDown(false);
           setOpenDashboardDropDown(false);
+          setOpenMobileMenu(false);
         }}
         className="min-h-[500px] py-5"
       ></section>
