@@ -11,13 +11,20 @@ import {
 import { HiHome } from "react-icons/hi";
 import { SiAddthis } from "react-icons/si";
 
-import dynamic from "next/dynamic";
+type headerProps = {
+  page: string;
 
-const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
-  ssr: false,
-});
+  openSearchDD?: boolean;
+  setOpenSearchDD?: (val: boolean) => void;
+  searchDD?: string;
+  setSearchDD?: (val: string) => void;
 
-export default function userFeeds() {
+  openDashboardDD: boolean;
+  setOpenDashboardDD: (val: boolean) => void;
+}
+
+
+export default function Header({page, openSearchDD, setOpenSearchDD, searchDD, setSearchDD, openDashboardDD, setOpenDashboardDD}: headerProps) {
   const [openSearchDropDown, setOpenSearchDropDown] = useState<boolean>(false);
   const [searchDropDown, setSearchDropDown] = useState<string>("eChat");
 
@@ -31,14 +38,15 @@ export default function userFeeds() {
     setOpenSearchDropDown(false);
   }
 
+  function handleCloseAll() {
+    setOpenSearchDD?.(false);
+    setOpenDashboardDD(false);
+    setOpenMobileMenu(false);
+  }
+
   return (
-    <>
       <header
-        onClick={() => {
-          setOpenSearchDropDown(false);
-          setOpenDashboardDropDown(false);
-          setOpenMobileMenu(false);
-        }}
+        onClick={handleCloseAll}
         className="sticky top-0 z-50 mx-auto flex items-center justify-center overflow-visible bg-gray-100 dark:bg-gray-900 max-[1000px]:flex-col max-[1000px]:gap-3 max-[600px]:gap-0"
       >
         <div
@@ -46,14 +54,14 @@ export default function userFeeds() {
             openMobileMenu && "pb-0"
           }`}
         >
-          <div className="flex items-center justify-between max-[600px]:w-full">
+          <div className="flex items-center justify-between text-xl max-[600px]:w-full">
             {!openMobileMenu ? (
               <GiHamburgerMenu
                 onClick={(e) => {
                   e.stopPropagation();
                   setOpenMobileMenu(!openMobileMenu);
                 }}
-                className="cursor-pointer text-xl min-[601px]:hidden"
+                className="cursor-pointer min-[601px]:hidden"
               />
             ) : (
               <MdClose
@@ -61,21 +69,21 @@ export default function userFeeds() {
                   e.stopPropagation();
                   setOpenMobileMenu(!openMobileMenu);
                 }}
-                className="cursor-pointer text-xl min-[601px]:hidden"
+                className="cursor-pointer min-[601px]:hidden"
               />
             )}
 
-            <h1 className="rounded bg-gray-800 p-1 text-xl text-gray-100 dark:bg-gray-100 dark:text-gray-800">
+            <h1 className="rounded bg-gray-800 p-1 text-gray-100 dark:bg-gray-100 dark:text-gray-800">
               eChatter
             </h1>
-            <SiAddthis className="cursor-pointer text-xl min-[601px]:hidden" />
+            <SiAddthis className="cursor-pointer min-[601px]:hidden" />
           </div>
 
           <form className="relative h-11 w-full grow-[2] max-[600px]:h-12">
             <input
               type="text"
               placeholder={
-                searchDropDown == "eChat" ? "Search by topic" : "Search by name"
+                searchDD == "eChat" ? "Search by topic" : "Search by name"
               }
               className={`peer h-full w-full rounded-md bg-gray-300 px-2 ${
                 searchDropDown == "eChat" ? "pl-[78px]" : "pl-[100px]"
@@ -330,17 +338,6 @@ export default function userFeeds() {
             {/* end of mobile dropDown div */}
           </div>
         )}
-        {/* <ThemeSwitch /> */}
       </header>
-
-      <section
-        onClick={() => {
-          setOpenSearchDropDown(false);
-          setOpenDashboardDropDown(false);
-          // setOpenMobileMenu(false);
-        }}
-        className="min-h-[500px] py-5"
-      ></section>
-    </>
   );
 }
