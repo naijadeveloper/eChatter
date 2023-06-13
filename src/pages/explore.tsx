@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import Header from "@/components/Header";
 
-export default function userFeeds() {
+export default function explorePage() {
   const [openSearchDropDown, setOpenSearchDropDown] = useState<boolean>(false);
   const [searchDropDown, setSearchDropDown] = useState<string>("eChat");
 
@@ -12,7 +12,7 @@ export default function userFeeds() {
     useState<boolean>(false);
 
   const headerProps = {
-    page: "Home",
+    page: "Explore",
 
     openSearchDD: openSearchDropDown,
     setOpenSearchDD: (val: boolean) => {
@@ -37,6 +37,7 @@ export default function userFeeds() {
   return (
     <>
       <Header {...headerProps} />
+
       <section
         onClick={() => {
           setOpenSearchDropDown(false);
@@ -44,7 +45,7 @@ export default function userFeeds() {
         }}
         className="min-h-[500px] py-5"
       >
-        welcome to your {!searchedPhrase ? "feeds" : searchedPhrase}
+        Welcome to {!searchedPhrase ? "explore" : searchedPhrase}
       </section>
     </>
   );

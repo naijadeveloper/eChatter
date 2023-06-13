@@ -206,4 +206,4 @@ export default function Home() {
 }
 
 // re-export the reusable `getServerSideProps` function
-export { getServerSideProps } from "./global_layout";
+export { getServerSideProps } from "@/components/global_layout";
