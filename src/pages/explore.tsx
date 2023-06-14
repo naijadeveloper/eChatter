@@ -43,7 +43,7 @@ export default function explorePage() {
           setOpenSearchDropDown(false);
           setOpenDashboardDropDown(false);
         }}
-        className="min-h-[500px] py-5"
+        className="min-h-[500px] py-5 px-2"
       >
         Welcome to {!searchedPhrase ? "explore" : searchedPhrase}
       </section>

@@ -30,7 +30,7 @@ export default function notificationsPage() {
         onClick={() => {
           setOpenDashboardDropDown(false);
         }}
-        className="min-h-[500px] py-5"
+        className="min-h-[500px] py-5 px-2"
       >
         Welcome to {!searchedPhrase ? "notifications" : searchedPhrase}
       </section>

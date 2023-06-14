@@ -54,7 +54,7 @@ export default function Header({
       className="sticky top-0 z-50 mx-auto flex items-center justify-center overflow-visible bg-gray-100 dark:bg-gray-900 max-[1000px]:flex-col max-[1000px]:gap-3 max-[600px]:gap-0"
     >
       <div
-        className={`flex w-full items-center gap-3 px-3 py-3 max-[1050px]:w-[85%] max-[1050px]:px-1 max-[1000px]:w-full max-[600px]:flex-col max-[600px]:gap-6 max-[600px]:px-4 ${
+        className={`flex w-full items-center gap-3 px-3 py-3 max-[1050px]:w-[85%] max-[1050px]:px-2 max-[1000px]:w-full max-[600px]:flex-col max-[600px]:gap-6 max-[600px]:px-4 ${
           openMobileMenu && "pb-0"
         }`}
       >
@@ -170,7 +170,8 @@ export default function Header({
       </div>
 
       <div className="flex w-full items-center justify-around py-3 pl-3 pr-0 text-2xl max-[1050px]:pl-2 max-[1000px]:w-[97%] max-[1000px]:justify-evenly max-[1000px]:pl-0 max-[750px]:w-[95%] max-[750px]:justify-between max-[600px]:hidden">
-        <div
+        <Link
+          href="/feed"
           className={`group relative flex cursor-pointer flex-col items-center gap-1 ${
             page === "Home"
               ? "text-maingreen-300 dark:text-maingreen-100"
@@ -191,9 +192,10 @@ export default function Header({
               Active
             </span>
           )}
-        </div>
+        </Link>
 
-        <div
+        <Link
+          href="/explore"
           className={`group relative flex cursor-pointer flex-col items-center gap-1 ${
             page === "Explore"
               ? "text-maingreen-300 dark:text-maingreen-100"
@@ -210,13 +212,14 @@ export default function Header({
             Explore
           </span>
           {page === "Explore" && (
-            <span className="absolute -bottom-5 left-0 hidden w-fit items-center justify-center rounded bg-gray-400 p-1 text-xs text-gray-800 after:absolute after:left-[50%] after:top-[-15px] after:-ml-[8px] after:border-[8px] after:border-transparent after:border-b-gray-400 after:content-['_'] group-hover:flex dark:bg-[#030712] dark:text-gray-100 dark:after:border-b-[#030712]">
+            <span className="absolute -bottom-5 left-1 hidden w-fit items-center justify-center rounded bg-gray-400 p-1 text-xs text-gray-800 after:absolute after:left-[50%] after:top-[-15px] after:-ml-[8px] after:border-[8px] after:border-transparent after:border-b-gray-400 after:content-['_'] group-hover:flex dark:bg-[#030712] dark:text-gray-100 dark:after:border-b-[#030712]">
               Active
             </span>
           )}
-        </div>
+        </Link>
 
-        <div
+        <Link
+          href="/notifications"
           className={`group relative flex cursor-pointer flex-col items-center gap-1 ${
             page === "Notifications"
               ? "text-maingreen-300 dark:text-maingreen-100"
@@ -247,11 +250,11 @@ export default function Header({
           )}
 
           {page == "Notifications" && (
-            <span className="absolute -bottom-5 left-0 hidden w-fit items-center justify-center rounded bg-gray-400 p-1 text-xs text-gray-800 after:absolute after:left-[50%] after:top-[-15px] after:-ml-[8px] after:border-[8px] after:border-transparent after:border-b-gray-400 after:content-['_'] group-hover:flex dark:bg-[#030712] dark:text-gray-100 dark:after:border-b-[#030712]">
+            <span className="absolute -bottom-5 left-5 hidden w-fit items-center justify-center rounded bg-gray-400 p-1 text-xs text-gray-800 after:absolute after:left-[50%] after:top-[-15px] after:-ml-[8px] after:border-[8px] after:border-transparent after:border-b-gray-400 after:content-['_'] group-hover:flex dark:bg-[#030712] dark:text-gray-100 dark:after:border-b-[#030712]">
               Active
             </span>
           )}
-        </div>
+        </Link>
 
         <div className="flex cursor-pointer items-center justify-center rounded bg-maingreen-300 p-2 py-3 text-base text-gray-100 hover:opacity-90 dark:bg-maingreen-200 dark:text-gray-800">
           Create eChat
@@ -289,15 +292,16 @@ export default function Header({
               </p>
             </div>
 
-            <p
-              className={`cursor-pointer rounded p-1 px-2 ${
+            <Link
+              href="/dashboard"
+              className={`flex cursor-pointer rounded p-1 px-2 ${
                 page === "Dashboard"
-                  ? "text-maingreen-300 dark:text-maingreen-100 underline"
+                  ? "text-maingreen-300 underline dark:text-maingreen-100"
                   : "hover:bg-gray-400 dark:hover:bg-gray-700"
               }`}
             >
               Dashboard
-            </p>
+            </Link>
 
             <p className={`cursor-pointer rounded p-1 px-2 text-gray-500`}>
               Admin<span className="text-[10px]"> (coming soon)</span>
@@ -330,7 +334,7 @@ export default function Header({
             </p>
 
             <div className="mt-2 border-t border-gray-500">
-              <p className="my-2 cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700">
+              <p className="my-2 flex cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700">
                 Log out
               </p>
             </div>
@@ -345,39 +349,42 @@ export default function Header({
           className="min-h-20 max-h-[500px] w-full overflow-auto border-b-2 border-gray-500 p-2 min-[601px]:hidden"
         >
           <div>
-            <p
-              className={`cursor-pointer rounded px-1 py-2 ${
+            <Link
+              href="/feed"
+              className={`flex cursor-pointer rounded px-1 py-2 ${
                 page === "Home"
                   ? "text-maingreen-300 underline dark:text-maingreen-100"
                   : "hover:bg-gray-400 dark:hover:bg-gray-700"
               }`}
             >
               Home
-            </p>
+            </Link>
           </div>
 
           <div>
-            <p
-              className={`cursor-pointer rounded px-1 py-2 ${
+            <Link
+              href="/explore"
+              className={`flex cursor-pointer rounded px-1 py-2 ${
                 page === "Explore"
                   ? "text-maingreen-300 underline dark:text-maingreen-100"
                   : "hover:bg-gray-400 dark:hover:bg-gray-700"
               }`}
             >
               Explore
-            </p>
+            </Link>
           </div>
 
           <div>
-            <p
-              className={`cursor-pointer rounded px-1 py-2 ${
+            <Link
+              href="notifications"
+              className={`flex cursor-pointer rounded px-1 py-2 ${
                 page === "Notifications"
                   ? "text-maingreen-300 underline dark:text-maingreen-100"
                   : "hover:bg-gray-400 dark:hover:bg-gray-700"
               }`}
             >
               Notifications
-            </p>
+            </Link>
           </div>
 
           <div className="mt-2">
@@ -395,15 +402,16 @@ export default function Header({
             </div>
             {/* profile dropDown options */}
             <div className={`${!openDashboardDD && "hidden"} mt-2 px-2`}>
-              <p
-                className={`cursor-pointer rounded px-1 py-2 ${
+              <Link
+                href="/dashboard"
+                className={`flex cursor-pointer rounded px-1 py-2 ${
                   page === "Dashboard"
                     ? "text-maingreen-300 underline dark:text-maingreen-100"
                     : "hover:bg-gray-400 dark:hover:bg-gray-700"
                 }`}
               >
                 Dashboard
-              </p>
+              </Link>
 
               <p className={`cursor-pointer rounded p-1 py-2 text-gray-500`}>
                 Admin<span className="text-[10px]"> (coming soon)</span>

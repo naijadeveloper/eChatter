@@ -37,12 +37,13 @@ export default function userFeeds() {
   return (
     <>
       <Header {...headerProps} />
+
       <section
         onClick={() => {
           setOpenSearchDropDown(false);
           setOpenDashboardDropDown(false);
         }}
-        className="min-h-[500px] py-5"
+        className="min-h-[500px] px-2 py-5"
       >
         welcome to your {!searchedPhrase ? "feeds" : searchedPhrase}
       </section>

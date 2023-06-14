@@ -30,7 +30,7 @@ export default function dashboardPage() {
         onClick={() => {
           setOpenDashboardDropDown(false);
         }}
-        className="min-h-[500px] py-5"
+        className="min-h-[500px] px-2 py-5"
       >
         Welcome to {!searchedPhrase ? "Dashboard" : searchedPhrase}
       </section>
