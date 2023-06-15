@@ -80,7 +80,9 @@ export default function Header({
           <h1 className="rounded bg-gray-800 p-1 text-gray-100 dark:bg-gray-100 dark:text-gray-800">
             eChatter
           </h1>
-          <SiAddthis className="cursor-pointer min-[601px]:hidden" />
+          <Link href="/create">
+            <SiAddthis className="cursor-pointer min-[601px]:hidden" />
+          </Link>
         </div>
 
         <form className="relative h-11 w-full grow-[2] max-[600px]:h-12">
@@ -256,9 +258,12 @@ export default function Header({
           )}
         </Link>
 
-        <div className="flex cursor-pointer items-center justify-center rounded bg-maingreen-300 p-2 py-3 text-base text-gray-100 hover:opacity-90 dark:bg-maingreen-200 dark:text-gray-800">
+        <Link
+          href="/create"
+          className="flex cursor-pointer items-center justify-center rounded bg-maingreen-300 p-2 py-3 text-base text-gray-100 hover:opacity-90 dark:bg-maingreen-200 dark:text-gray-800"
+        >
           Create eChat
-        </div>
+        </Link>
 
         <div className="relative">
           {/* conversations, logout, signed in as `e.g mmejuenoch-gmail`, dashboard, settings, admin, sponsorship,  */}
