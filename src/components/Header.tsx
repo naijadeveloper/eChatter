@@ -301,7 +301,7 @@ export default function Header({
               href="/dashboard"
               className={`flex cursor-pointer rounded p-1 px-2 ${
                 page === "Dashboard"
-                  ? "text-maingreen-300 underline dark:text-maingreen-100"
+                  ? "text-maingreen-300 underline underline-offset-2 dark:text-maingreen-100"
                   : "hover:bg-gray-400 dark:hover:bg-gray-700"
               }`}
             >
@@ -358,7 +358,7 @@ export default function Header({
               href="/feed"
               className={`flex cursor-pointer rounded px-1 py-2 ${
                 page === "Home"
-                  ? "text-maingreen-300 underline dark:text-maingreen-100"
+                  ? "text-maingreen-300 underline underline-offset-2 dark:text-maingreen-100"
                   : "hover:bg-gray-400 dark:hover:bg-gray-700"
               }`}
             >
@@ -371,7 +371,7 @@ export default function Header({
               href="/explore"
               className={`flex cursor-pointer rounded px-1 py-2 ${
                 page === "Explore"
-                  ? "text-maingreen-300 underline dark:text-maingreen-100"
+                  ? "text-maingreen-300 underline underline-offset-2 dark:text-maingreen-100"
                   : "hover:bg-gray-400 dark:hover:bg-gray-700"
               }`}
             >
@@ -384,7 +384,7 @@ export default function Header({
               href="notifications"
               className={`flex cursor-pointer rounded px-1 py-2 ${
                 page === "Notifications"
-                  ? "text-maingreen-300 underline dark:text-maingreen-100"
+                  ? "text-maingreen-300 underline underline-offset-2 dark:text-maingreen-100"
                   : "hover:bg-gray-400 dark:hover:bg-gray-700"
               }`}
             >
@@ -411,7 +411,7 @@ export default function Header({
                 href="/dashboard"
                 className={`flex cursor-pointer rounded px-1 py-2 ${
                   page === "Dashboard"
-                    ? "text-maingreen-300 underline dark:text-maingreen-100"
+                    ? "text-maingreen-300 underline underline-offset-2 dark:text-maingreen-100"
                     : "hover:bg-gray-400 dark:hover:bg-gray-700"
                 }`}
               >
