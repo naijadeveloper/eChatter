@@ -2,7 +2,12 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { HiOutlineArrowNarrowLeft } from "react-icons/hi";
-import { MdArrowDropDown, MdArrowDropUp, MdClose } from "react-icons/md";
+import {
+  MdArrowDropDown,
+  MdArrowDropUp,
+  MdClose,
+  MdCheck,
+} from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
 
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -10,16 +15,20 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 export default function createPage() {
   const router = useRouter();
 
-  const [contributeDropDown, setContributeDropDown] = useState<boolean>(false);
-
   const enum visibilityOptions {
     ALL = "Visible to everyone on the internet",
     PRIV1 = "Visible to only eChatters",
     PRIV2 = "Visible to only eChatters following me",
   }
+
+  const [contributeDropDown, setContributeDropDown] = useState<boolean>(false);
   const [visiblityChoice, setVisibilityChoice] = useState<string>(
     visibilityOptions.ALL
   );
+
+  const [openCategoryDropDown, setOpenCategoryDropDown] =
+    useState<boolean>(false);
+  const [category, setCategory] = useState<string>("News");
 
   function handleVisibilitySetup(choice: string) {
     setVisibilityChoice(choice);
@@ -224,10 +233,183 @@ export default function createPage() {
 
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="absolute bottom-6 right-8 z-[2] flex min-h-[120px] w-72 items-center justify-center rounded bg-gray-300 p-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
+                    className="absolute bottom-6 z-[2] flex min-h-[120px] min-w-[100px] flex-col gap-y-[2px] rounded bg-gray-300 p-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
                   >
                     {/* <LoadingSpinner position="absolute" size="text-6xl" /> */}
-                    <span className="text-gray-500">coming soon</span>
+                    <p
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCategory("News");
+                      }}
+                      className={`flex cursor-pointer items-center gap-1 rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "News" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      {category == "News" && <MdCheck />}
+                      News
+                    </p>
+
+                    <p
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCategory("Sports");
+                      }}
+                      className={`flex cursor-pointer items-center gap-1 rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "Sports" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      {category == "News" && <MdCheck />}
+                      News
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "Music" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Music
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "Movie" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Movie
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "Science" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Science
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "Art" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Art
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "Fashion" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Fashion
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "Health" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Health
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "Lifestyle" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Lifestyle
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "Travel" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Travel
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "f-n-c" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Food & Cooking
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "b-n-f" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Business & Finance
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "Education" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Education
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "Politics" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Politics
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
+                        category == "Environment" &&
+                        "bg-maingreen-300 underline underline-offset-2 dark:bg-maingreen-100"
+                      }`}
+                    >
+                      Environment
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
+                    >
+                      Relationship
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
+                    >
+                      Personal Development
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
+                    >
+                      Career
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
+                    >
+                      DIY & Crafts
+                    </p>
+
+                    <p
+                      className={`cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
+                    >
+                      Religion
+                    </p>
                   </div>
                 </div>
               </div>
