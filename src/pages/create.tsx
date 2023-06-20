@@ -1,19 +1,19 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { HiOutlineArrowNarrowLeft } from "react-icons/hi";
+import { HiOutlineArrowNarrowLeft, HiUser, HiUserGroup } from "react-icons/hi";
 import {
   MdArrowDropDown,
   MdArrowDropUp,
   MdClose,
   MdCheck,
   MdVisibility,
+  MdCreate,
 } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
-import { FaUsers, FaUser } from "react-icons/fa";
-import { BsFillChatSquareFill, BsImage } from "react-icons/bs";
-import { AiFillTags } from "react-icons/ai";
-import { BiCategory } from "react-icons/bi";
+import { FaLayerGroup } from "react-icons/fa";
+import { BsImage, BsLayersFill } from "react-icons/bs";
+import { AiFillTags, AiFillCloseCircle } from "react-icons/ai";
 
 import LoadingSpinner from "@/components/LoadingSpinner";
 
@@ -32,6 +32,7 @@ export default function createPage() {
     "Music",
     "Movie",
     "Science",
+    "Technology",
     "Art",
     "Fashion",
     "Health",
@@ -52,13 +53,38 @@ export default function createPage() {
   const [visiblityChoice, setVisibilityChoice] = useState<string>(
     visibilityOptions.ALL
   );
-
   const [openCategoryDropDown, setOpenCategoryDropDown] =
     useState<boolean>(false);
   const [category, setCategory] = useState<string>(categories[0]);
+  const [eChatTags, seteChatTags] = useState<string[]>([]);
+  const [coverImage, setCoverImage] = useState<File | null>(null);
 
   function handleVisibilitySetup(choice: string) {
     setVisibilityChoice(choice);
+  }
+
+  function handleTagsAddition(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" && eChatTags.length < 8) {
+      let tags: string[] = [...eChatTags];
+      let tag = e.currentTarget.value.replace(/\s+/g, " "); // remove unwanted spaces
+      // Not an empty value entered
+      if (tag.length > 1) {
+        tag.split(",").forEach((tag) => {
+          // tag isn't already in eChatTags
+          if (!tags.includes(tag) && tags.length < 8) {
+            tags.push(tag);
+          }
+        });
+      }
+      seteChatTags([...tags]);
+      e.currentTarget.value = "";
+    }
+  }
+
+  function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files) {
+      setCoverImage(e.target.files[0]);
+    }
   }
 
   return (
@@ -114,11 +140,11 @@ export default function createPage() {
                 Important fields are marked with an asterisk(*)
               </p>
 
-              <div className="mt-2 flex items-center justify-between">
+              <div className="mt-3 flex items-center justify-between">
                 <div className="z-[1] flex max-w-[50%] flex-col overflow-visible pb-2">
                   <p className="flex items-center gap-1">
                     <span>
-                      <FaUser />
+                      <HiUser />
                     </span>
                     <span>Owner</span>
                   </p>
@@ -130,7 +156,7 @@ export default function createPage() {
                 <div className="relative flex flex-col pb-2">
                   <p className="flex items-center gap-1">
                     <span>
-                      <FaUsers />
+                      <HiUserGroup />
                     </span>
                     <span>Contributors</span>
                   </p>
@@ -161,10 +187,10 @@ export default function createPage() {
                 </div>
               </div>
 
-              <div className="mt-2">
+              <div className="mt-3">
                 <p className="flex items-center gap-1">
                   <span>
-                    <BsFillChatSquareFill />
+                    <MdCreate />
                   </span>
                   <span>eChat Title*</span>
                 </p>
@@ -182,18 +208,33 @@ export default function createPage() {
                   </span>
                 </p>
 
-                <button className="mt-2 flex items-center gap-1 rounded bg-gray-400/80 p-1 text-sm font-semibold hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-700/80">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  id="cover-image"
+                  className="hidden"
+                />
+                <label
+                  htmlFor="cover-image"
+                  className="mt-3 flex w-fit cursor-pointer items-center gap-1 rounded bg-gray-400/80 p-1 text-sm font-semibold hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-700/80"
+                >
                   <span>
                     <BsImage />
                   </span>
                   <span>Add cover image</span>
-                </button>
-                <p className="flex flex-wrap items-center gap-1 text-sm text-gray-700 dark:text-gray-300">
-                  <span className="truncate">image_of_a_wanted_man.jpg</span>
-                  <button className="text-base">
-                    <MdClose />
-                  </button>
-                </p>
+                </label>
+                {coverImage && (
+                  <p className="mt-1 flex flex-wrap items-center gap-1 text-sm text-gray-700 dark:text-gray-300">
+                    <span className="truncate">{coverImage?.name}</span>
+                    <button
+                      onClick={() => setCoverImage(null)}
+                      className="text-base"
+                    >
+                      <MdClose />
+                    </button>
+                  </p>
+                )}
               </div>
 
               <div className="mt-4 border-t border-gray-500 py-2">
@@ -204,46 +245,61 @@ export default function createPage() {
                     </span>
                     <span>Tags*</span>
                   </p>
-                  <p>
-                    Press enter or add a comma after each tag then press enter
+                  <p className="text-sm">
+                    Press enter or add a comma after each tag then enter
+                    {eChatTags}
                   </p>
 
-                  <div>
-                    <ul className="flex border-2 border-maingreen-300/30 p-2 dark:border-maingreen-100/30">
-                      <li className="m-1 flex items-center gap-2 rounded bg-gray-400/50 p-1 px-2 dark:bg-gray-700/50">
-                        <span>html</span>
-                        <button>
-                          <MdClose />
-                        </button>
-                      </li>
-                      <li className="m-1 flex items-center gap-2 rounded bg-gray-400/50 p-1 px-2 dark:bg-gray-700/50">
-                        <span>css</span>
-                        <button>
-                          <MdClose />
-                        </button>
-                      </li>
+                  <div className="mt-1">
+                    <ul className="flex w-full flex-wrap items-center gap-[5px] gap-y-2 rounded border-2 border-maingreen-300/30 p-2 dark:border-maingreen-100/30">
+                      {eChatTags.map((tag, index) => (
+                        <li
+                          key={index}
+                          className="flex items-center gap-2 rounded bg-gray-400/50 p-1 px-2 dark:bg-gray-700/50"
+                        >
+                          <span>{tag}</span>
+                          <button
+                            onClick={() => {
+                              // handle Removal of tags
+                              let tags = [...eChatTags];
+                              tags.splice(index, 1);
+                              seteChatTags([...tags]);
+                            }}
+                          >
+                            <AiFillCloseCircle />
+                          </button>
+                        </li>
+                      ))}
                       <input
                         type="text"
-                        className="flex-1 border-0 p-1 outline-none"
+                        placeholder="Add a tag"
+                        onKeyUp={handleTagsAddition}
+                        className="flex flex-1 border-0 bg-gray-100 p-1 outline-none dark:bg-gray-900"
                       />
                     </ul>
                   </div>
 
-                  <div className="flex items-center justify-between">
+                  <div className="mt-2 flex items-center justify-between">
                     <p>
-                      <span>5</span> tags are remaining
+                      <span>{8 - eChatTags.length}</span> tag
+                      {8 - eChatTags.length == 1 ? "" : "s"} remaining
                     </p>
-                    <button className="rounded bg-gray-400/80 p-1 px-2 hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-700/80">
+                    <button
+                      onClick={() => {
+                        seteChatTags([]);
+                      }}
+                      className="rounded bg-gray-400/80 p-1 px-2 hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-700/80"
+                    >
                       Remove all
                     </button>
                   </div>
                 </div>
                 {/* tags div */}
 
-                <div className="mt-2">
+                <div className="mt-3">
                   <p className="flex items-center gap-1">
                     <span>
-                      <BiCategory />
+                      <BsLayersFill />
                     </span>
                     <span>Select the category this eChat belongs to*</span>
                   </p>
@@ -261,7 +317,7 @@ export default function createPage() {
                     {openCategoryDropDown && (
                       <div
                         onClick={(e) => e.stopPropagation()}
-                        className="dropdown-scroll absolute bottom-6 z-[2] flex max-h-[250px] min-h-[120px] min-w-[260px] flex-col gap-y-[2px] overflow-auto rounded bg-gray-300 p-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
+                        className="dropdown-scroll absolute bottom-6 z-[2] flex max-h-[240px] min-h-[120px] min-w-[260px] flex-col gap-y-[2px] overflow-auto rounded bg-gray-300 p-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
                       >
                         {/* <LoadingSpinner position="absolute" size="text-6xl" /> */}
                         {categories.map((cat, index) => (
