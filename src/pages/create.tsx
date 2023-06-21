@@ -11,7 +11,6 @@ import {
   MdCreate,
 } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
-import { FaLayerGroup } from "react-icons/fa";
 import { BsImage, BsLayersFill } from "react-icons/bs";
 import { AiFillTags, AiFillCloseCircle } from "react-icons/ai";
 
@@ -49,15 +48,17 @@ export default function createPage() {
     "Religion",
   ];
 
+  const [importDraftPopup, setImportDraftPopup] = useState<boolean>(false);
+  const [draftSearchLoading, setDraftSearchLoading] = useState<boolean>(false);
   const [contributeDropDown, setContributeDropDown] = useState<boolean>(false);
   const [visiblityChoice, setVisibilityChoice] = useState<string>(
     visibilityOptions.ALL
   );
+  const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [eChatTags, seteChatTags] = useState<string[]>([]);
   const [openCategoryDropDown, setOpenCategoryDropDown] =
     useState<boolean>(false);
   const [category, setCategory] = useState<string>(categories[0]);
-  const [eChatTags, seteChatTags] = useState<string[]>([]);
-  const [coverImage, setCoverImage] = useState<File | null>(null);
 
   function handleVisibilitySetup(choice: string) {
     setVisibilityChoice(choice);
@@ -85,6 +86,19 @@ export default function createPage() {
     if (e.target.files) {
       setCoverImage(e.target.files[0]);
     }
+  }
+
+  function handleImportDraftPopup() {
+    setImportDraftPopup(true);
+    // call function to get all drafts from storage
+    setDraftSearchLoading(true);
+    handleGetAllDrafts().then(() => {
+      setDraftSearchLoading(false);
+    });
+  }
+
+  async function handleGetAllDrafts() {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
   }
 
   return (
@@ -123,14 +137,21 @@ export default function createPage() {
         className="flex min-h-[500px] py-5"
       >
         {/* Aside bar for eChat options */}
-        <aside className="relative max-h-[536px] min-h-[100px] w-[30%] overflow-y-auto overflow-x-hidden">
+        <aside
+          className={`relative max-h-[536px] min-h-[100px] w-[30%] ${
+            importDraftPopup ? "overflow-y-hidden" : "overflow-y-auto"
+          } overflow-x-hidden`}
+        >
           <div className="px-3">
             <div className="border-b border-gray-500 pb-2">
               <h2 className="text-center text-xl">Create a new eChat</h2>
               <p className="text-gray-700 dark:text-gray-300">
                 You have a drafted eChat and would like to continue editing?
               </p>
-              <button className="text-maingreen-300 underline-offset-2 hover:underline dark:text-maingreen-100">
+              <button
+                onClick={handleImportDraftPopup}
+                className="text-maingreen-300 underline-offset-2 hover:underline dark:text-maingreen-100"
+              >
                 Import draft from storage
               </button>
             </div>
@@ -164,6 +185,8 @@ export default function createPage() {
                     onClick={(e) => {
                       e.stopPropagation();
                       setContributeDropDown(!contributeDropDown);
+                      //
+                      setOpenCategoryDropDown(false);
                     }}
                     className="flex items-center justify-between rounded bg-gray-400/80 p-1 px-2 text-sm font-semibold hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-700/80"
                   >
@@ -178,7 +201,7 @@ export default function createPage() {
                   {contributeDropDown && (
                     <div
                       onClick={(e) => e.stopPropagation()}
-                      className="absolute -right-2 top-12 z-[2] flex min-h-[120px] w-72 items-center justify-center rounded bg-gray-300 p-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
+                      className="dropdown-scroll absolute -right-2 top-12 z-[2] flex max-h-[240px] min-h-[120px] min-w-[270px] max-w-[300px] flex-col items-center justify-center gap-y-[2px] overflow-auto rounded bg-gray-300 p-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
                     >
                       {/* <LoadingSpinner position="absolute" size="text-6xl" /> */}
                       <span className="text-gray-500">coming soon</span>
@@ -196,7 +219,7 @@ export default function createPage() {
                 </p>
                 <textarea
                   maxLength={100}
-                  className="min-h-[100px] w-full resize-none rounded border-2 border-transparent bg-gray-300 px-2 text-lg focus:border-maingreen-300/30 focus:outline-none dark:bg-gray-800 dark:focus:border-maingreen-100/30"
+                  className="dropdown-scroll min-h-[100px] w-full resize-none rounded border-2 border-transparent bg-gray-300 px-2 text-lg focus:border-maingreen-300/30 focus:outline-none dark:bg-gray-800 dark:focus:border-maingreen-100/30"
                 ></textarea>
                 <p className="flex flex-col text-sm text-gray-700 dark:text-gray-300">
                   <span>
@@ -247,7 +270,6 @@ export default function createPage() {
                   </p>
                   <p className="text-sm">
                     Press enter or add a comma after each tag then enter
-                    {eChatTags}
                   </p>
 
                   <div className="mt-1">
@@ -308,6 +330,8 @@ export default function createPage() {
                       onClick={(e) => {
                         e.stopPropagation();
                         setOpenCategoryDropDown(!openCategoryDropDown);
+                        //
+                        setContributeDropDown(false);
                       }}
                       className="flex w-full items-center justify-evenly rounded bg-gray-400/80 p-1 px-2 font-semibold hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-700/80"
                     >
@@ -426,6 +450,43 @@ export default function createPage() {
               Save as draft
             </button>
           </div>
+
+          {importDraftPopup && (
+            <div
+              onClick={() => setImportDraftPopup(false)}
+              className="sticky bottom-0 left-0 right-0 top-0 z-[5] flex h-full w-full items-center justify-center bg-gray-100/70 dark:bg-gray-900/70"
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="dropdown-scroll flex max-h-[300px] min-h-[150px] w-4/5 flex-col gap-y-2 overflow-auto rounded bg-gray-300 px-2 pb-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
+              >
+                <div className="sticky left-0 top-0 flex w-full flex-col gap-y-2 bg-gray-300 pb-1 pt-1 dark:bg-gray-800">
+                  <p className="mt-1 flex items-center justify-end">
+                    <button
+                      onClick={() => setImportDraftPopup(false)}
+                      className="text-lg"
+                    >
+                      <MdClose />
+                    </button>
+                  </p>
+                  <input
+                    type="text"
+                    placeholder="Search for the draft"
+                    className="flex flex-1 rounded border-0 bg-gray-100 p-1 outline-none dark:bg-gray-900"
+                  />
+                </div>
+                <div className="relative h-full">
+                  <p className="p-1 text-center">Recent drafts</p>
+                  {draftSearchLoading && (
+                    <LoadingSpinner position="absolute" size="text-6xl" />
+                  )}
+                  {/* <p className="flex cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700">
+                    
+                  </p> */}
+                </div>
+              </div>
+            </div>
+          )}
         </aside>
 
         {/* Section for text editor */}
