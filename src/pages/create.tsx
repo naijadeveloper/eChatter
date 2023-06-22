@@ -13,6 +13,7 @@ import {
 import { IoIosArrowForward } from "react-icons/io";
 import { BsImage, BsLayersFill } from "react-icons/bs";
 import { AiFillTags, AiFillCloseCircle } from "react-icons/ai";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 import LoadingSpinner from "@/components/LoadingSpinner";
 
@@ -51,14 +52,16 @@ export default function createPage() {
   const [importDraftPopup, setImportDraftPopup] = useState<boolean>(false);
   const [draftSearchLoading, setDraftSearchLoading] = useState<boolean>(false);
   const [contributeDropDown, setContributeDropDown] = useState<boolean>(false);
-  const [visiblityChoice, setVisibilityChoice] = useState<string>(
-    visibilityOptions.ALL
-  );
+  const [eChatTitle, seteChatTitle] = useState<string>("");
   const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [coverImageError, setCoverImageError] = useState<string>("");
   const [eChatTags, seteChatTags] = useState<string[]>([]);
   const [openCategoryDropDown, setOpenCategoryDropDown] =
     useState<boolean>(false);
   const [category, setCategory] = useState<string>(categories[0]);
+  const [visiblityChoice, setVisibilityChoice] = useState<string>(
+    visibilityOptions.ALL
+  );
 
   function handleVisibilitySetup(choice: string) {
     setVisibilityChoice(choice);
@@ -82,8 +85,25 @@ export default function createPage() {
     }
   }
 
-  function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleImageVerification(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
+      // put a check here, so if the file.size is 1 million or more, deny and if the
+      // file.type doesnt include "image/" deny as well
+      let file = e.target.files[0];
+
+      if (!file.type.includes("image/")) {
+        setCoverImage(null);
+        setCoverImageError("Error: That's not even an Image!");
+        return;
+      }
+
+      if (file.size >= 1000000) {
+        setCoverImage(null);
+        setCoverImageError("Error: Image is more than 1mb!");
+        return;
+      }
+      // Everything checks right
+      setCoverImageError("");
       setCoverImage(e.target.files[0]);
     }
   }
@@ -110,8 +130,8 @@ export default function createPage() {
         }}
         className="sticky top-0 z-20 mx-auto flex items-center bg-gray-100 px-2 py-4 dark:bg-gray-900"
       >
-        <div className="flex w-full">
-          <div className="flex w-1/5 justify-start">
+        <div className="max-[1050px]:justify-between flex w-full items-center">
+          <div className="min-[1051px]:w-1/5 min-[1051px]:justify-start flex items-center justify-center">
             <button
               onClick={() => router.back()}
               className="flex items-center justify-center gap-2 rounded p-1 text-xl hover:bg-gray-500/30"
@@ -121,11 +141,15 @@ export default function createPage() {
             </button>
           </div>
 
-          <div className="flex w-4/5 justify-center">
+          <div className="min-[1051px]:w-4/5 flex items-center justify-center">
             <h1 className="rounded bg-gray-800 p-1 text-xl text-gray-100 dark:bg-gray-100 dark:text-gray-800">
               eChatter
             </h1>
           </div>
+
+          <p className="min-[1051px]:hidden flex items-center justify-center">
+            <GiHamburgerMenu />
+          </p>
         </div>
       </header>
 
@@ -134,13 +158,13 @@ export default function createPage() {
           setContributeDropDown(false);
           setOpenCategoryDropDown(false);
         }}
-        className="flex min-h-[500px] py-5"
+        className="max-[1050px]:h-screen flex min-h-[500px] py-5"
       >
         {/* Aside bar for eChat options */}
         <aside
-          className={`relative max-h-[536px] min-h-[100px] w-[30%] ${
+          className={`relative h-screen min-h-[100px] w-[30%] overflow-x-hidden ${
             importDraftPopup ? "overflow-y-hidden" : "overflow-y-auto"
-          } overflow-x-hidden`}
+          } max-[1254px]:w-[33%] max-[1140px]:w-[35%] max-[1050px]:fixed max-[1050px]:top-0 max-[1050px]:right-0 max-[1050px]:h-full max-[1050px]:max-h-full max-[1050px]:z-30 max-[1050px]:bg-gray-100 max-[1050px]:bg-gray-900`}
         >
           <div className="px-3">
             <div className="border-b border-gray-500 pb-2">
@@ -219,6 +243,8 @@ export default function createPage() {
                 </p>
                 <textarea
                   maxLength={100}
+                  onChange={(e) => seteChatTitle(e.target.value)}
+                  value={eChatTitle}
                   className="dropdown-scroll min-h-[100px] w-full resize-none rounded border-2 border-transparent bg-gray-300 px-2 text-lg focus:border-maingreen-300/30 focus:outline-none dark:bg-gray-800 dark:focus:border-maingreen-100/30"
                 ></textarea>
                 <p className="flex flex-col text-sm text-gray-700 dark:text-gray-300">
@@ -234,7 +260,7 @@ export default function createPage() {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={handleImageUpload}
+                  onChange={handleImageVerification}
                   id="cover-image"
                   className="hidden"
                 />
@@ -247,6 +273,16 @@ export default function createPage() {
                   </span>
                   <span>Add cover image</span>
                 </label>
+                {!coverImage && !coverImageError && (
+                  <p className="mt-1 flex flex-wrap items-center text-sm text-gray-700 dark:text-gray-300">
+                    Image must be less than 1mb
+                  </p>
+                )}
+                {coverImageError && (
+                  <p className="mt-1 flex flex-wrap items-center gap-1 text-sm text-red-700">
+                    {coverImageError}
+                  </p>
+                )}
                 {coverImage && (
                   <p className="mt-1 flex flex-wrap items-center gap-1 text-sm text-gray-700 dark:text-gray-300">
                     <span className="truncate">{coverImage?.name}</span>
@@ -323,7 +359,7 @@ export default function createPage() {
                     <span>
                       <BsLayersFill />
                     </span>
-                    <span>Select the category this eChat belongs to*</span>
+                    <span>Pick a category for this eChat*</span>
                   </p>
                   <div className="relative mt-2 flex flex-col items-center">
                     <button
@@ -442,13 +478,21 @@ export default function createPage() {
               {/* end of visibility settings div */}
             </div>
           </div>
-          <div className="sticky bottom-0 left-0 z-[3] mt-2 flex w-full items-center justify-center gap-6 border-gray-500 bg-gray-300 py-2 dark:bg-gray-800">
-            <div className="relative flex w-[90px] cursor-pointer items-center justify-center rounded bg-maingreen-300 p-1 px-3 font-semibold text-gray-100 dark:bg-maingreen-200 dark:text-gray-800">
-              <p>Post</p>
+          <div className="sticky bottom-0 left-0 z-[3] mt-2 border-gray-500 bg-gray-300 py-2 dark:bg-gray-800">
+            <div className="flex w-full items-center justify-center gap-6">
+              <p
+                className={`relative flex w-[90px] cursor-not-allowed items-center justify-center rounded bg-gray-500 p-1 px-3 font-semibold text-gray-100 dark:text-gray-800 ${
+                  eChatTitle &&
+                  eChatTags.length > 0 &&
+                  "cursor-pointer bg-maingreen-300 dark:bg-maingreen-200"
+                }`}
+              >
+                Post
+              </p>
+              <button className="hover:underline hover:underline-offset-2">
+                Save as draft
+              </button>
             </div>
-            <button className="hover:underline hover:underline-offset-2">
-              Save as draft
-            </button>
           </div>
 
           {importDraftPopup && (
@@ -458,7 +502,7 @@ export default function createPage() {
             >
               <div
                 onClick={(e) => e.stopPropagation()}
-                className="dropdown-scroll flex max-h-[300px] min-h-[150px] w-4/5 flex-col gap-y-2 overflow-auto rounded bg-gray-300 px-2 pb-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
+                className="dropdown-scroll relative flex max-h-[300px] min-h-[150px] w-4/5 flex-col gap-y-2 overflow-auto rounded bg-gray-300 px-2 pb-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
               >
                 <div className="sticky left-0 top-0 flex w-full flex-col gap-y-2 bg-gray-300 pb-1 pt-1 dark:bg-gray-800">
                   <p className="mt-1 flex items-center justify-end">
@@ -475,22 +519,23 @@ export default function createPage() {
                     className="flex flex-1 rounded border-0 bg-gray-100 p-1 outline-none dark:bg-gray-900"
                   />
                 </div>
-                <div className="relative h-full">
+                <div>
                   <p className="p-1 text-center">Recent drafts</p>
-                  {draftSearchLoading && (
-                    <LoadingSpinner position="absolute" size="text-6xl" />
-                  )}
                   {/* <p className="flex cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700">
                     
                   </p> */}
                 </div>
+
+                {draftSearchLoading && (
+                  <LoadingSpinner position="absolute" size="text-6xl" />
+                )}
               </div>
             </div>
           )}
         </aside>
 
         {/* Section for text editor */}
-        <section className="min-h-[100px] w-[70%]"></section>
+        <section className="max-[1254px]:w-[67%] max-[1140px]:w-[65%] max-[1050px]:w-full max-[1050px]:h-full h-screen min-h-[100px] w-[70%] border"></section>
       </section>
     </>
   );
