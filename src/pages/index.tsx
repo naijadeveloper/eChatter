@@ -11,6 +11,7 @@ import dynamic from "next/dynamic";
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
 });
+import Footer from "@/components/Footer";
 
 import { cookieStorage } from "@/utilities/cookie_storage";
 
@@ -43,12 +44,12 @@ export default function Home() {
         </div>
 
         <div className="flex items-center justify-evenly gap-8 transition-all max-sm:w-full sm:justify-center">
-          <button className="flex w-fit items-center justify-center gap-1 rounded-md p-3 text-lg font-light underline decoration-2 underline-offset-8 hover:text-gray-600 dark:hover:text-gray-300 max-[420px]:p-2 max-[420px]:text-base max-[420px]:font-normal">
+          <button className="max-[420px]:p-2 max-[420px]:text-base max-[420px]:font-normal flex w-fit items-center justify-center gap-1 rounded-md p-3 text-lg font-light underline decoration-2 underline-offset-8 hover:text-gray-600 dark:hover:text-gray-300">
             <AiFillRead />
             <Link href="/feed/readonly">Start Reading</Link>
           </button>
 
-          <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-300 p-3 text-lg text-gray-100 hover:rounded-3xl dark:bg-maingreen-200 dark:text-gray-800 max-[420px]:p-2 max-[420px]:text-base">
+          <button className="max-[420px]:p-2 max-[420px]:text-base flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-300 p-3 text-lg text-gray-100 hover:rounded-3xl dark:bg-maingreen-200 dark:text-gray-800">
             <MdCreate />
             <Link href="/account/signup">Start Creating</Link>
           </button>
@@ -67,7 +68,7 @@ export default function Home() {
 
           <div className="flex flex-col gap-2 p-1 pl-4 transition-all max-lg:items-center max-lg:pl-1">
             <h2
-              className={`flex flex-col font-sans text-6xl font-semibold text-maingreen-300 dark:text-maingreen-200 max-lg:text-center max-[448px]:text-5xl`}
+              className={`max-[448px]:text-5xl flex flex-col font-sans text-6xl font-semibold text-maingreen-300 dark:text-maingreen-200 max-lg:text-center`}
             >
               <span>A book worm&apos;s </span>
               <span>heaven</span>
@@ -78,12 +79,12 @@ export default function Home() {
             </p>
 
             <div className="mt-3 flex gap-8 max-lg:mt-5">
-              <button className="flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-300 p-3 text-lg text-gray-100 hover:rounded-3xl dark:bg-maingreen-200 dark:text-gray-800 max-[420px]:p-2 max-[420px]:text-base">
+              <button className="max-[420px]:p-2 max-[420px]:text-base flex w-fit items-center justify-center gap-1 rounded-md border border-gray-800 bg-maingreen-300 p-3 text-lg text-gray-100 hover:rounded-3xl dark:bg-maingreen-200 dark:text-gray-800">
                 <MdCreate />
                 <Link href="/account/signup">Sign up & Create</Link>
               </button>
 
-              <button className="flex w-fit items-center justify-center gap-1 rounded-md p-3 text-lg font-light underline decoration-2 underline-offset-8 hover:text-gray-600 dark:hover:text-gray-300 max-[420px]:p-2 max-[420px]:text-base max-[420px]:font-normal">
+              <button className="max-[420px]:p-2 max-[420px]:text-base max-[420px]:font-normal flex w-fit items-center justify-center gap-1 rounded-md p-3 text-lg font-light underline decoration-2 underline-offset-8 hover:text-gray-600 dark:hover:text-gray-300">
                 <Link href="/feed/readonly">Read only</Link>
                 <HiOutlineArrowNarrowRight className="text-4xl" />
               </button>
@@ -91,14 +92,14 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex items-start justify-center max-lg:mt-5 max-[420px]:mx-auto max-[420px]:w-[98%]">
-          <div className="mt-8 w-fit overflow-hidden rounded-[89%_79%_88%_67%_/_66%_45%_22%_10%] bg-gray-200 dark:bg-gray-800 max-[500px]:rounded-md">
+        <div className="max-[420px]:mx-auto max-[420px]:w-[98%] flex items-start justify-center max-lg:mt-5">
+          <div className="max-[500px]:rounded-md mt-8 w-fit overflow-hidden rounded-[89%_79%_88%_67%_/_66%_45%_22%_10%] bg-gray-200 dark:bg-gray-800">
             <Image
               priority
               src="/svgs/readingman.svg"
               width={2624}
               height={2102}
-              className="relative top-10 z-0 h-[400px] w-[400px] max-[500px]:top-12 max-[400px]:top-14 max-[380px]:top-16"
+              className="max-[500px]:top-12 max-[400px]:top-14 max-[380px]:top-16 relative top-10 z-0 h-[400px] w-[400px]"
               alt="Illustration of man reading"
             />
           </div>
@@ -107,11 +108,11 @@ export default function Home() {
 
       <section className="relative mt-28">
         <section className="relative pb-4">
-          <h3 className="mx-auto w-fit rounded bg-gray-800 p-1 text-center text-4xl text-gray-100 dark:bg-gray-100 dark:text-gray-800 max-[420px]:text-3xl">
+          <h3 className="max-[420px]:text-3xl mx-auto w-fit rounded bg-gray-800 p-1 text-center text-4xl text-gray-100 dark:bg-gray-100 dark:text-gray-800">
             Who is eChatter for?
           </h3>
 
-          <div className="mt-10 grid grid-cols-[repeat(auto-fit,_minmax(350px,_1fr))] gap-6 px-4 text-gray-800 max-[420px]:mx-auto max-[420px]:w-[98%] max-[420px]:px-0 max-[375px]:flex max-[375px]:flex-col">
+          <div className="max-[420px]:mx-auto max-[420px]:w-[98%] max-[420px]:px-0 max-[375px]:flex max-[375px]:flex-col mt-10 grid grid-cols-[repeat(auto-fit,_minmax(350px,_1fr))] gap-6 px-4 text-gray-800">
             <article className="flex flex-col items-center rounded-md border border-gray-800 bg-maingreen-300 p-3 text-center text-gray-950">
               <div className="w-[80px]">
                 <Image
@@ -201,9 +202,8 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      <Footer />
     </>
   );
 }
-
-// re-export the reusable `getServerSideProps` function
-export { getServerSideProps } from "@/components/global_layout";

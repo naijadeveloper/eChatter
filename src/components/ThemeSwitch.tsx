@@ -3,20 +3,16 @@ import { FaSun } from "react-icons/fa";
 
 import { useTheme } from "next-themes";
 
-import { cookieStorage } from "@/utilities/cookie_storage";
-
 export default function ThemeSwitch() {
   const { resolvedTheme, setTheme } = useTheme();
 
   function handleThemeChange() {
     if (resolvedTheme == "dark") {
       setTheme("light");
-      cookieStorage.setItem("theme", "light");
       return;
     }
 
     setTheme("dark");
-    cookieStorage.setItem("theme", "dark");
   }
 
   return (

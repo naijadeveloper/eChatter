@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function userFeeds() {
   const [openSearchDropDown, setOpenSearchDropDown] = useState<boolean>(false);
@@ -47,6 +48,8 @@ export default function userFeeds() {
       >
         welcome to your {!searchedPhrase ? "feeds" : searchedPhrase}
       </section>
+
+      <Footer />
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function notificationsPage() {
   const [searchedPhrase, setSearchedPhrase] = useState<string>("");
@@ -30,10 +31,12 @@ export default function notificationsPage() {
         onClick={() => {
           setOpenDashboardDropDown(false);
         }}
-        className="min-h-[500px] py-5 px-2"
+        className="min-h-[500px] px-2 py-5"
       >
         Welcome to {!searchedPhrase ? "notifications" : searchedPhrase}
       </section>
+
+      <Footer />
     </>
   );
 }

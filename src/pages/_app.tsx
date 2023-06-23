@@ -8,7 +8,7 @@ import "@/styles/globals.css";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <GlobalLayout cookies={pageProps.cookies}>
+      <GlobalLayout>
         <Component {...pageProps} />
       </GlobalLayout>
     </Provider>

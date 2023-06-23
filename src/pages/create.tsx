@@ -49,6 +49,7 @@ export default function createPage() {
     "Religion",
   ];
 
+  //states...............................................................
   const [importDraftPopup, setImportDraftPopup] = useState<boolean>(false);
   const [draftSearchLoading, setDraftSearchLoading] = useState<boolean>(false);
   const [contributeDropDown, setContributeDropDown] = useState<boolean>(false);
@@ -62,7 +63,10 @@ export default function createPage() {
   const [visiblityChoice, setVisibilityChoice] = useState<string>(
     visibilityOptions.ALL
   );
+  const [openMobileOptionsBar, setOpenMobileOptionsBar] =
+    useState<boolean>(false);
 
+  /// functions......................................
   function handleVisibilitySetup(choice: string) {
     setVisibilityChoice(choice);
   }
@@ -75,7 +79,11 @@ export default function createPage() {
       if (tag.length > 1) {
         tag.split(",").forEach((tag) => {
           // tag isn't already in eChatTags
-          if (!tags.includes(tag) && tags.length < 8) {
+          if (
+            !tags.includes(tag) &&
+            tags.length < 8 &&
+            tag.replace(/\s+/g, "")
+          ) {
             tags.push(tag);
           }
         });
@@ -122,13 +130,13 @@ export default function createPage() {
   }
 
   return (
-    <>
+    <div className="fixed left-0 top-0 z-50 flex h-screen w-full flex-col overflow-y-auto overscroll-contain bg-gray-100 dark:bg-gray-900">
       <header
         onClick={() => {
           setContributeDropDown(false);
           setOpenCategoryDropDown(false);
         }}
-        className="sticky top-0 z-20 mx-auto flex items-center bg-gray-100 px-2 py-4 dark:bg-gray-900"
+        className="fixed top-0 z-20 mx-auto flex w-full items-center bg-gray-100 px-2 py-4 dark:bg-gray-900"
       >
         <div className="max-[1050px]:justify-between flex w-full items-center">
           <div className="min-[1051px]:w-1/5 min-[1051px]:justify-start flex items-center justify-center">
@@ -147,9 +155,12 @@ export default function createPage() {
             </h1>
           </div>
 
-          <p className="min-[1051px]:hidden flex items-center justify-center">
+          <button
+            onClick={() => setOpenMobileOptionsBar(true)}
+            className="min-[1051px]:hidden flex items-center justify-center text-xl"
+          >
             <GiHamburgerMenu />
-          </p>
+          </button>
         </div>
       </header>
 
@@ -158,15 +169,26 @@ export default function createPage() {
           setContributeDropDown(false);
           setOpenCategoryDropDown(false);
         }}
-        className="max-[1050px]:h-screen flex min-h-[500px] py-5"
+        className="flex h-full pt-[5%]"
       >
         {/* Aside bar for eChat options */}
         <aside
-          className={`relative h-screen min-h-[100px] w-[30%] overflow-x-hidden ${
+          className={`${
+            !openMobileOptionsBar && "max-[1050px]:hidden"
+          } relative block h-full w-[30%] overflow-x-hidden pb-[5%] ${
             importDraftPopup ? "overflow-y-hidden" : "overflow-y-auto"
-          } max-[1254px]:w-[33%] max-[1140px]:w-[35%] max-[1050px]:fixed max-[1050px]:top-0 max-[1050px]:right-0 max-[1050px]:h-full max-[1050px]:max-h-full max-[1050px]:z-30 max-[1050px]:bg-gray-100 max-[1050px]:bg-gray-900`}
+          } max-[1254px]:w-[33%] max-[1200px]:pt-[3%] max-[1140px]:w-[35%] min-[1051px]:block max-[1050px]:w-[38%] max-[1050px]:fixed max-[1050px]:top-0 max-[1050px]:right-0 max-[1050px]:z-30 max-[1050px]:py-[0%] max-[1050px]:bg-gray-100 max-[1050px]:dark:bg-gray-900 max-[1050px]:drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] max-[1050px]:dark:drop-shadow-[0px_1px_2px_#030712] max-[960px]:w-[42%] max-[870px]:w-[46%] max-[790px]:w-[50%] max-[725px]:w-[60%] max-[605px]:w-[75%] max-[485px]:w-[90%] max-[405px]:w-full`}
         >
-          <div className="px-3">
+          {/* mobile options bar close button */}
+          <button
+            onClick={() => setOpenMobileOptionsBar(false)}
+            className="min-[1051px]:hidden sticky left-4 top-2 z-[4] flex h-[35px] w-[35px] items-center justify-center rounded border-2 border-maingreen-300 bg-gray-400 p-1 px-2 text-lg font-semibold dark:border-maingreen-200 dark:bg-gray-700"
+          >
+            <MdClose />
+          </button>
+
+          {/* options contents */}
+          <div className="max-[1050px]:pb-[10px] max-[1050px]:pt-[2px] max-[365px]:px-[6px] px-3">
             <div className="border-b border-gray-500 pb-2">
               <h2 className="text-center text-xl">Create a new eChat</h2>
               <p className="text-gray-700 dark:text-gray-300">
@@ -182,7 +204,7 @@ export default function createPage() {
 
             <div>
               <p className="text-sm italic text-gray-700 dark:text-gray-300">
-                Important fields are marked with an asterisk(*)
+                Required fields are marked with an asterisk(*)
               </p>
 
               <div className="mt-3 flex items-center justify-between">
@@ -214,7 +236,10 @@ export default function createPage() {
                     }}
                     className="flex items-center justify-between rounded bg-gray-400/80 p-1 px-2 text-sm font-semibold hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-700/80"
                   >
-                    <span>0 out of 10 chosen</span>
+                    <span>
+                      0 out of 10{" "}
+                      <span className="max-[350px]:hidden">chosen</span>
+                    </span>
                     {contributeDropDown ? (
                       <MdArrowDropUp />
                     ) : (
@@ -369,7 +394,7 @@ export default function createPage() {
                         //
                         setContributeDropDown(false);
                       }}
-                      className="flex w-full items-center justify-evenly rounded bg-gray-400/80 p-1 px-2 font-semibold hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-700/80"
+                      className="flex w-full items-center justify-center rounded bg-gray-400/80 p-1 px-2 font-semibold hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-700/80"
                     >
                       <span>{category}</span>
                     </button>
@@ -478,22 +503,6 @@ export default function createPage() {
               {/* end of visibility settings div */}
             </div>
           </div>
-          <div className="sticky bottom-0 left-0 z-[3] mt-2 border-gray-500 bg-gray-300 py-2 dark:bg-gray-800">
-            <div className="flex w-full items-center justify-center gap-6">
-              <p
-                className={`relative flex w-[90px] cursor-not-allowed items-center justify-center rounded bg-gray-500 p-1 px-3 font-semibold text-gray-100 dark:text-gray-800 ${
-                  eChatTitle &&
-                  eChatTags.length > 0 &&
-                  "cursor-pointer bg-maingreen-300 dark:bg-maingreen-200"
-                }`}
-              >
-                Post
-              </p>
-              <button className="hover:underline hover:underline-offset-2">
-                Save as draft
-              </button>
-            </div>
-          </div>
 
           {importDraftPopup && (
             <div
@@ -535,8 +544,32 @@ export default function createPage() {
         </aside>
 
         {/* Section for text editor */}
-        <section className="max-[1254px]:w-[67%] max-[1140px]:w-[65%] max-[1050px]:w-full max-[1050px]:h-full h-screen min-h-[100px] w-[70%] border"></section>
+        <section className="max-[1254px]:w-[67%] max-[1140px]:w-[65%] max-[1050px]:w-full h-full w-[70%] pb-[5%]"></section>
+
+        {/* post or save as draft fixed div at bottom */}
+        <div className="fixed bottom-0 left-0 z-[3] w-full border-gray-500 bg-gray-300 py-2 dark:bg-gray-800">
+          <div className="flex w-full items-center justify-center gap-6">
+            <p
+              className={`relative flex w-[90px] cursor-not-allowed items-center justify-center rounded bg-gray-500 p-1 px-3 font-semibold text-gray-100 dark:text-gray-800 ${
+                eChatTitle &&
+                eChatTags.length > 0 &&
+                "cursor-pointer bg-maingreen-300 dark:bg-maingreen-200"
+              }`}
+            >
+              Post
+            </p>
+            <button
+              className={`cursor-not-allowed ${
+                eChatTitle &&
+                eChatTags.length > 0 &&
+                "cursor-pointer hover:underline hover:underline-offset-2"
+              }`}
+            >
+              Save as draft
+            </button>
+          </div>
+        </div>
       </section>
-    </>
+    </div>
   );
 }

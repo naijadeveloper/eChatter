@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function explorePage() {
   const [openSearchDropDown, setOpenSearchDropDown] = useState<boolean>(false);
@@ -43,10 +44,12 @@ export default function explorePage() {
           setOpenSearchDropDown(false);
           setOpenDashboardDropDown(false);
         }}
-        className="min-h-[500px] py-5 px-2"
+        className="min-h-[500px] px-2 py-5"
       >
         Welcome to {!searchedPhrase ? "explore" : searchedPhrase}
       </section>
+
+      <Footer />
     </>
   );
 }
