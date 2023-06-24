@@ -130,7 +130,7 @@ export default function createPage() {
   }
 
   return (
-    <div className="fixed left-0 top-0 z-50 flex h-screen w-full flex-col overflow-y-auto overscroll-contain bg-gray-100 dark:bg-gray-900">
+    <div className="fixed left-0 top-0 z-50 flex h-screen w-full flex-col bg-gray-100 dark:bg-gray-900">
       <header
         onClick={() => {
           setContributeDropDown(false);
@@ -547,10 +547,10 @@ export default function createPage() {
         <section className="max-[1254px]:w-[67%] max-[1140px]:w-[65%] max-[1050px]:w-full h-full w-[70%] pb-[5%]"></section>
 
         {/* post or save as draft fixed div at bottom */}
-        <div className="fixed bottom-0 left-0 z-[3] w-full border-gray-500 bg-gray-300 py-2 dark:bg-gray-800">
+        <div className="fixed bottom-0 left-0 z-[3] w-full border-gray-500 bg-gray-300 py-3 dark:bg-gray-800">
           <div className="flex w-full items-center justify-center gap-6">
             <p
-              className={`relative flex w-[90px] cursor-not-allowed items-center justify-center rounded bg-gray-500 p-1 px-3 font-semibold text-gray-100 dark:text-gray-800 ${
+              className={`relative flex w-[90px] cursor-not-allowed items-center justify-center rounded bg-gray-500 p-2 px-3 font-semibold text-gray-100 dark:text-gray-800 ${
                 eChatTitle &&
                 eChatTags.length > 0 &&
                 "cursor-pointer bg-maingreen-300 dark:bg-maingreen-200"
