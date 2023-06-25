@@ -145,7 +145,7 @@ export default function createPage() {
               className="flex items-center justify-center gap-2 rounded p-1 text-xl hover:bg-gray-500/30"
             >
               <HiOutlineArrowNarrowLeft />
-              <span>Go Back</span>
+              <span className="max-[1050px]:hidden">Go Back</span>
             </button>
           </div>
 
@@ -177,7 +177,7 @@ export default function createPage() {
             !openMobileOptionsBar && "max-[1050px]:hidden"
           } relative block h-full w-[30%] overflow-x-hidden pb-[5%] ${
             importDraftPopup ? "overflow-y-hidden" : "overflow-y-auto"
-          } max-[1254px]:w-[33%] max-[1200px]:pt-[3%] max-[1140px]:w-[35%] min-[1051px]:block max-[1050px]:w-[38%] max-[1050px]:fixed max-[1050px]:top-0 max-[1050px]:right-0 max-[1050px]:z-30 max-[1050px]:py-[0%] max-[1050px]:bg-gray-100 max-[1050px]:dark:bg-gray-900 max-[1050px]:drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] max-[1050px]:dark:drop-shadow-[0px_1px_2px_#030712] max-[960px]:w-[42%] max-[870px]:w-[46%] max-[790px]:w-[50%] max-[725px]:w-[60%] max-[605px]:w-[75%] max-[485px]:w-[90%] max-[405px]:w-full`}
+          } max-[1254px]:w-[33%] max-[1200px]:pt-[3%] max-[1140px]:w-[35%] min-[1051px]:block max-[1050px]:w-[38%] max-[1050px]:fixed max-[1050px]:top-0 max-[1050px]:right-0 max-[1050px]:z-30 max-[1050px]:py-[0%] max-[1050px]:bg-gray-100 max-[1050px]:dark:border-l max-[1050px]:dark:border-gray-500 max-[1050px]:dark:bg-gray-900 max-[1050px]:drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] max-[1050px]:dark:drop-shadow-[0px_1px_2px_#030712] max-[960px]:w-[42%] max-[870px]:w-[46%] max-[790px]:w-[50%] max-[725px]:w-[60%] max-[605px]:w-[75%] max-[485px]:w-[90%] max-[405px]:w-full`}
         >
           {/* mobile options bar close button */}
           <button
