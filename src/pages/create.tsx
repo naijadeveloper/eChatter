@@ -1,5 +1,5 @@
-import { useRouter } from "next/router";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 import { HiOutlineArrowNarrowLeft, HiUser, HiUserGroup } from "react-icons/hi";
 import {
@@ -16,7 +16,10 @@ import { AiFillTags, AiFillCloseCircle } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 import LoadingSpinner from "@/components/LoadingSpinner";
+import Monaco from "@/components/Monaco";
+import MdPreview from "@/components/MdPreview";
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
 export default function createPage() {
   const router = useRouter();
 
@@ -65,8 +68,14 @@ export default function createPage() {
   );
   const [openMobileOptionsBar, setOpenMobileOptionsBar] =
     useState<boolean>(false);
+  const [eChatContent, seteChatContent] = useState<string>("");
+  const [previewOrEditor, setPreviewOrEditor] = useState<string>("Editor");
 
   /// functions......................................
+  function setContent(content: string) {
+    seteChatContent(content);
+  }
+
   function handleVisibilitySetup(choice: string) {
     setVisibilityChoice(choice);
   }
@@ -136,10 +145,10 @@ export default function createPage() {
           setContributeDropDown(false);
           setOpenCategoryDropDown(false);
         }}
-        className="fixed top-0 z-20 mx-auto flex w-full items-center bg-gray-100 px-2 py-4 dark:bg-gray-900"
+        className="fixed top-0 z-20 mx-auto flex w-full items-center border-b border-gray-500 bg-gray-100 px-2 py-4 dark:bg-gray-900"
       >
-        <div className="max-[1050px]:justify-between flex w-full items-center">
-          <div className="min-[1051px]:w-1/5 min-[1051px]:justify-start flex items-center justify-center">
+        <div className="flex w-full items-center max-[1050px]:justify-between">
+          <div className="flex items-center justify-center min-[1051px]:w-1/5 min-[1051px]:justify-start">
             <button
               onClick={() => router.back()}
               className="flex items-center justify-center gap-2 rounded p-1 text-xl hover:bg-gray-500/30"
@@ -149,7 +158,7 @@ export default function createPage() {
             </button>
           </div>
 
-          <div className="min-[1051px]:w-4/5 flex items-center justify-center">
+          <div className="flex items-center justify-center min-[1051px]:w-4/5">
             <h1 className="rounded bg-gray-800 p-1 text-xl text-gray-100 dark:bg-gray-100 dark:text-gray-800">
               eChatter
             </h1>
@@ -157,7 +166,7 @@ export default function createPage() {
 
           <button
             onClick={() => setOpenMobileOptionsBar(true)}
-            className="min-[1051px]:hidden flex items-center justify-center text-xl"
+            className="flex items-center justify-center text-xl min-[1051px]:hidden"
           >
             <GiHamburgerMenu />
           </button>
@@ -177,18 +186,18 @@ export default function createPage() {
             !openMobileOptionsBar && "max-[1050px]:hidden"
           } relative block h-full w-[30%] overflow-x-hidden pb-[5%] ${
             importDraftPopup ? "overflow-y-hidden" : "overflow-y-auto"
-          } max-[1254px]:w-[33%] max-[1200px]:pt-[3%] max-[1140px]:w-[35%] min-[1051px]:block max-[1050px]:w-[38%] max-[1050px]:fixed max-[1050px]:top-0 max-[1050px]:right-0 max-[1050px]:z-30 max-[1050px]:py-[0%] max-[1050px]:bg-gray-100 max-[1050px]:dark:border-l max-[1050px]:dark:border-gray-500 max-[1050px]:dark:bg-gray-900 max-[1050px]:drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] max-[1050px]:dark:drop-shadow-[0px_1px_2px_#030712] max-[960px]:w-[42%] max-[870px]:w-[46%] max-[790px]:w-[50%] max-[725px]:w-[60%] max-[605px]:w-[75%] max-[485px]:w-[90%] max-[405px]:w-full`}
+          } max-[1254px]:w-[33%] max-[1200px]:pt-[3%] max-[1140px]:w-[35%] max-[1050px]:fixed max-[1050px]:right-0 max-[1050px]:top-0 max-[1050px]:z-30 max-[1050px]:w-[38%] max-[1050px]:bg-gray-100 max-[1050px]:py-[0%] max-[1050px]:drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] max-[1050px]:dark:border-l max-[1050px]:dark:border-gray-500 max-[1050px]:dark:bg-gray-900 max-[1050px]:dark:drop-shadow-[0px_1px_2px_#030712] max-[960px]:w-[42%] max-[870px]:w-[46%] max-[790px]:w-[50%] max-[725px]:w-[60%] max-[605px]:w-[75%] max-[485px]:w-[90%] max-[405px]:w-full min-[1051px]:block`}
         >
           {/* mobile options bar close button */}
           <button
             onClick={() => setOpenMobileOptionsBar(false)}
-            className="min-[1051px]:hidden sticky left-4 top-2 z-[4] flex h-[35px] w-[35px] items-center justify-center rounded border-2 border-maingreen-300 bg-gray-400 p-1 px-2 text-lg font-semibold dark:border-maingreen-200 dark:bg-gray-700"
+            className="sticky left-4 top-2 z-[4] flex h-[35px] w-[35px] items-center justify-center rounded border-2 border-maingreen-300 bg-gray-400 p-1 px-2 text-lg font-semibold dark:border-maingreen-200 dark:bg-gray-700 min-[1051px]:hidden"
           >
             <MdClose />
           </button>
 
           {/* options contents */}
-          <div className="max-[1050px]:pb-[10px] max-[1050px]:pt-[2px] max-[365px]:px-[6px] px-3">
+          <div className="px-3 max-[1050px]:pb-[10px] max-[1050px]:pt-[2px] max-[365px]:px-[6px]">
             <div className="border-b border-gray-500 pb-2">
               <h2 className="text-center text-xl">Create a new eChat</h2>
               <p className="text-gray-700 dark:text-gray-300">
@@ -544,7 +553,36 @@ export default function createPage() {
         </aside>
 
         {/* Section for text editor */}
-        <section className="max-[1254px]:w-[67%] max-[1140px]:w-[65%] max-[1050px]:w-full h-full w-[70%] pb-[5%]"></section>
+        <section className="h-full w-[70%] pb-[5%] max-[1390px]:pt-[30px] max-[1254px]:w-[67%] max-[1140px]:w-[65%] max-[1050px]:w-full max-[810px]:pt-[50px] max-[390px]:pt-[70px]">
+          <div className="flex items-center justify-end">
+            <button
+              onClick={() => setPreviewOrEditor("Editor")}
+              className={`flex items-center justify-center p-1 px-2 font-semibold hover:underline hover:underline-offset-2 ${
+                previewOrEditor === "Editor" &&
+                "rounded-tl rounded-tr bg-gray-400/80 hover:bg-gray-400 hover:no-underline dark:bg-gray-700 hover:dark:bg-gray-700/80"
+              }`}
+            >
+              Editor
+            </button>
+            <button
+              onClick={() => setPreviewOrEditor("Preview")}
+              className={`flex items-center justify-center p-1 px-2 font-semibold hover:underline hover:underline-offset-2 ${
+                previewOrEditor === "Preview" &&
+                "rounded-tl rounded-tr bg-gray-400/80 hover:bg-gray-400 hover:no-underline dark:bg-gray-800 hover:dark:bg-gray-700/80"
+              }`}
+            >
+              Preview
+            </button>
+          </div>
+          {/* editor and preview section */}
+          <section className="h-full w-full">
+            {previewOrEditor === "Editor" && (
+              <Monaco content={eChatContent} setContent={setContent} />
+            )}
+
+            {previewOrEditor === "Preview" && <MdPreview />}
+          </section>
+        </section>
 
         {/* post or save as draft fixed div at bottom */}
         <div className="fixed bottom-0 left-0 z-[3] w-full border-gray-500 bg-gray-300 py-3 dark:bg-gray-800">

@@ -31,7 +31,7 @@
 
   /* */
   [data-theme="dark"] *::-webkit-scrollbar-track {
-    background: #111827;
+    @apply bg-gray-900 py-1;
   }
   [data-theme="dark"] *::-webkit-scrollbar-thumb {
     border: 1px solid #111827;
