@@ -40,7 +40,9 @@ export default function Monaco({ content, setContent }: editorProps) {
             enabled: false,
           },
           wordWrap: "on",
-          lineNumbers: "off",
+          folding: false,
+          fontSize: 16,
+          scrollBeyondLastLine: false,
         }}
         value={content}
         onChange={setContent}
