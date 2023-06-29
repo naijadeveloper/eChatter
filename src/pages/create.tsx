@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 import { HiOutlineArrowNarrowLeft, HiUser, HiUserGroup } from "react-icons/hi";
 import {
@@ -16,8 +17,10 @@ import { AiFillTags, AiFillCloseCircle } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 import LoadingSpinner from "@/components/LoadingSpinner";
-import Monaco from "@/components/Monaco";
-import MdPreview from "@/components/MdPreview";
+import MarkdownEditor from "@/components/MarkdownEditor";
+const MdPreview = dynamic(import("@/components/MdPreview"), {
+  ssr: false,
+});
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 export default function createPage() {
@@ -145,7 +148,7 @@ export default function createPage() {
           setContributeDropDown(false);
           setOpenCategoryDropDown(false);
         }}
-        className="fixed top-0 z-20 mx-auto flex w-full items-center border-b border-gray-500 bg-gray-100 px-2 py-4 dark:bg-gray-900"
+        className="fixed top-0 z-20 mx-auto flex w-full items-center bg-gray-100 px-2 py-4 dark:bg-gray-900"
       >
         <div className="flex w-full items-center max-[1050px]:justify-between">
           <div className="flex items-center justify-center min-[1051px]:w-1/5 min-[1051px]:justify-start">
@@ -553,34 +556,36 @@ export default function createPage() {
         </aside>
 
         {/* Section for text editor */}
-        <section className="h-full w-[70%] pb-[5%] max-[1390px]:pt-[30px] max-[1254px]:w-[67%] max-[1140px]:w-[65%] max-[1050px]:w-full max-[810px]:pt-[50px] max-[390px]:pt-[70px]">
-          <div className="flex items-center justify-end">
+        <section className="h-full w-[70%] pb-[5%] max-[1390px]:pt-[30px] max-[1254px]:w-[67%] max-[1140px]:w-[65%] max-[1050px]:w-full max-[1050px]:pb-[5.5%] max-[925px]:pb-[6%] max-[840px]:pb-[7%] max-[810px]:pt-[50px] max-[740px]:pb-[8%] max-[640px]:pb-[9%] max-[565px]:pb-[14%] max-[390px]:pt-[70px] max-[375px]:pb-[18%]">
+          <div className="mx-auto flex w-[90%] items-center justify-end max-[925px]:w-[95%] max-[840px]:w-[98%]">
             <button
               onClick={() => setPreviewOrEditor("Editor")}
-              className={`flex items-center justify-center p-1 px-2 font-semibold hover:underline hover:underline-offset-2 ${
+              className={`flex items-center justify-center p-1 px-2 text-lg font-semibold hover:underline hover:underline-offset-2 ${
                 previewOrEditor === "Editor" &&
-                "rounded-tl rounded-tr bg-gray-400/80 hover:bg-gray-400 hover:no-underline dark:bg-gray-700 hover:dark:bg-gray-700/80"
+                "rounded-tl rounded-tr bg-gray-300 hover:bg-gray-400 hover:no-underline dark:bg-gray-800 hover:dark:bg-gray-700"
               }`}
             >
               Editor
             </button>
             <button
               onClick={() => setPreviewOrEditor("Preview")}
-              className={`flex items-center justify-center p-1 px-2 font-semibold hover:underline hover:underline-offset-2 ${
+              className={`flex items-center justify-center p-1 px-2 text-lg font-semibold hover:underline hover:underline-offset-2 ${
                 previewOrEditor === "Preview" &&
-                "rounded-tl rounded-tr bg-gray-400/80 hover:bg-gray-400 hover:no-underline dark:bg-gray-800 hover:dark:bg-gray-700/80"
+                "rounded-tl rounded-tr bg-gray-300 hover:bg-gray-400 hover:no-underline dark:bg-gray-800 hover:dark:bg-gray-700"
               }`}
             >
               Preview
             </button>
           </div>
           {/* editor and preview section */}
-          <section className="h-full w-full">
+          <section className="mx-auto flex h-[90%] w-[90%] justify-center rounded max-[925px]:w-[95%] max-[840px]:w-[98%]">
             {previewOrEditor === "Editor" && (
-              <Monaco content={eChatContent} setContent={setContent} />
+              <MarkdownEditor content={eChatContent} setContent={setContent} />
             )}
 
-            {previewOrEditor === "Preview" && <MdPreview />}
+            {previewOrEditor === "Preview" && (
+              <MdPreview content={eChatContent} />
+            )}
           </section>
         </section>
 
