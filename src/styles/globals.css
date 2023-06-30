@@ -61,6 +61,24 @@
   [data-theme="light"] *::selection {
     @apply bg-maingreen-300 text-gray-100;
   }
+
+  /* */
+  .mdstyleAll pre::-webkit-scrollbar-track {
+    @apply bg-gray-900;
+  }
+
+  .mdstyleAll pre::-webkit-scrollbar-thumb {
+    @apply border-[1px] border-gray-900;
+  }
+
+  .mdstyleAll h1, 
+  .mdstyleAll h2, 
+  .mdstyleAll h3, 
+  .mdstyleAll h4, 
+  .mdstyleAll h5,
+  .mdstyleAll h6 {
+    @apply text-gray-800 dark:text-gray-100
+  }
 }
 
 @layer components {

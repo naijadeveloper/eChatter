@@ -556,7 +556,7 @@ export default function createPage() {
         </aside>
 
         {/* Section for text editor */}
-        <section className="h-full w-[70%] pb-[5%] max-[1390px]:pt-[30px] max-[1254px]:w-[67%] max-[1140px]:w-[65%] max-[1050px]:w-full max-[1050px]:pb-[5.5%] max-[925px]:pb-[6%] max-[840px]:pb-[7%] max-[810px]:pt-[50px] max-[740px]:pb-[8%] max-[640px]:pb-[9%] max-[565px]:pb-[14%] max-[390px]:pt-[70px] max-[375px]:pb-[18%]">
+        <section className="h-full w-[70%] pb-[6%] max-[1390px]:pt-[30px] max-[1254px]:w-[67%] max-[1140px]:w-[65%] max-[1050px]:w-full max-[1050px]:pb-[7%] max-[925px]:pb-[8%] max-[840px]:pb-[9%] max-[810px]:pt-[50px] max-[740px]:pb-[10%] max-[640px]:pb-[11%] max-[565px]:pb-[14%] max-[390px]:pt-[70px] max-[375px]:pb-[18%]">
           <div className="mx-auto flex w-[90%] items-center justify-end max-[925px]:w-[95%] max-[840px]:w-[98%]">
             <button
               onClick={() => setPreviewOrEditor("Editor")}
@@ -578,13 +578,13 @@ export default function createPage() {
             </button>
           </div>
           {/* editor and preview section */}
-          <section className="mx-auto flex h-[90%] w-[90%] justify-center rounded max-[925px]:w-[95%] max-[840px]:w-[98%]">
+          <section className="mx-auto flex flex-col h-[90%] w-[90%] justify-center rounded max-[925px]:w-[95%] max-[840px]:w-[98%]">
             {previewOrEditor === "Editor" && (
               <MarkdownEditor content={eChatContent} setContent={setContent} />
             )}
 
             {previewOrEditor === "Preview" && (
-              <MdPreview content={eChatContent} />
+              <MdPreview content={eChatContent} image={coverImage} title={eChatTitle} tags={eChatTags} />
             )}
           </section>
         </section>

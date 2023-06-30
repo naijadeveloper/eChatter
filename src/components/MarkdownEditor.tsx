@@ -8,15 +8,15 @@ type editorProps = {
 export default function MarkdownEditor({ content, setContent }: editorProps) {
   const textSize = useMemo(() => {
     if (content.length > 50 && content.length <= 100) {
-      return "text-2xl";
-    } else if (content.length > 100 && content.length <= 200) {
-      return "text-xl";
-    } else if (content.length > 200 && content.length <= 300) {
-      return "text-lg";
-    } else if (content.length > 300) {
-      return "text-base";
-    } else {
       return "text-3xl";
+    } else if (content.length > 100 && content.length <= 200) {
+      return "text-2xl";
+    } else if (content.length > 200 && content.length <= 300) {
+      return "text-xl";
+    } else if (content.length > 300) {
+      return "text-lg";
+    } else {
+      return "text-4xl";
     }
   }, [content]);
 
