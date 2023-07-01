@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
@@ -73,6 +73,10 @@ export default function createPage() {
     useState<boolean>(false);
   const [eChatContent, seteChatContent] = useState<string>("");
   const [previewOrEditor, setPreviewOrEditor] = useState<string>("Editor");
+  const [savedAsDraftOnce, setSavedAsDraftOnce] = useState<boolean>(false);
+  const [currentlySaving, setCurrentlySaving] = useState<boolean>(false);
+
+
 
   /// functions......................................
   function setContent(content: string) {
@@ -141,6 +145,24 @@ export default function createPage() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
   }
 
+
+  function handlePostingOfeChat() {
+
+  }
+
+  function handleSavingAsDraft() {
+    if(eChatTitle && eChatTags.length > 0 && !currentlySaving) {
+      setSavedAsDraftOnce(true)
+      setCurrentlySaving(true);
+
+      // perform fetch post here
+      setTimeout(() => {
+        setCurrentlySaving(false);
+      }, 5000);
+
+    }
+  }
+
   return (
     <div className="fixed left-0 top-0 z-50 flex h-screen w-full flex-col bg-gray-100 dark:bg-gray-900">
       <header
@@ -187,20 +209,21 @@ export default function createPage() {
         <aside
           className={`${
             !openMobileOptionsBar && "max-[1050px]:hidden"
-          } relative block h-full w-[30%] overflow-x-hidden pb-[5%] ${
-            importDraftPopup ? "overflow-y-hidden" : "overflow-y-auto"
-          } max-[1254px]:w-[33%] max-[1200px]:pt-[3%] max-[1140px]:w-[35%] max-[1050px]:fixed max-[1050px]:right-0 max-[1050px]:top-0 max-[1050px]:z-30 max-[1050px]:w-[38%] max-[1050px]:bg-gray-100 max-[1050px]:py-[0%] max-[1050px]:drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] max-[1050px]:dark:border-l max-[1050px]:dark:border-gray-500 max-[1050px]:dark:bg-gray-900 max-[1050px]:dark:drop-shadow-[0px_1px_2px_#030712] max-[960px]:w-[42%] max-[870px]:w-[46%] max-[790px]:w-[50%] max-[725px]:w-[60%] max-[605px]:w-[75%] max-[485px]:w-[90%] max-[405px]:w-full min-[1051px]:block`}
+          } relative block h-full w-[30%] overflow-x-hidden ${
+            importDraftPopup ? "overflow-y-clip" : "overflow-y-auto"
+          } max-[1254px]:w-[33%] max-[1140px]:w-[35%] max-[1050px]:fixed max-[1050px]:right-0 max-[1050px]:top-0 max-[1050px]:z-30 max-[1050px]:w-[38%] max-[1050px]:bg-gray-100 max-[1050px]:drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] max-[1050px]:dark:border-l max-[1050px]:dark:border-gray-500 max-[1050px]:dark:bg-gray-900 max-[1050px]:dark:drop-shadow-[0px_1px_2px_#030712] max-[960px]:w-[42%] max-[870px]:w-[46%] max-[790px]:w-[50%] max-[725px]:w-[60%] max-[605px]:w-[75%] max-[485px]:w-[90%] max-[405px]:w-full min-[1051px]:block`}
         >
-          {/* mobile options bar close button */}
-          <button
-            onClick={() => setOpenMobileOptionsBar(false)}
-            className="sticky left-4 top-2 z-[4] flex h-[35px] w-[35px] items-center justify-center rounded border-2 border-maingreen-300 bg-gray-400 p-1 px-2 text-lg font-semibold dark:border-maingreen-200 dark:bg-gray-700 min-[1051px]:hidden"
-          >
-            <MdClose />
-          </button>
 
           {/* options contents */}
-          <div className="px-3 max-[1050px]:pb-[10px] max-[1050px]:pt-[2px] max-[365px]:px-[6px]">
+          <div className="px-3 pt-[6%] pb-[22%] min-h-full w-full max-[365px]:px-[6px] max-[1050px]:py-[10px]">
+            {/* mobile options bar close button */}
+            <button
+              onClick={() => setOpenMobileOptionsBar(false)}
+              className="sticky left-4 top-2 z-[4] flex h-[35px] w-[35px] items-center justify-center rounded border-2 border-maingreen-300 bg-gray-400 p-1 px-2 text-lg font-semibold dark:border-maingreen-200 dark:bg-gray-700 min-[1051px]:hidden"
+            >
+              <MdClose />
+            </button>
+
             <div className="border-b border-gray-500 pb-2">
               <h2 className="text-center text-xl">Create a new eChat</h2>
               <p className="text-gray-700 dark:text-gray-300">
@@ -308,7 +331,7 @@ export default function createPage() {
                   <span>
                     <BsImage />
                   </span>
-                  <span>Add cover image</span>
+                  <span>Add cover image (2:1)</span>
                 </label>
                 {!coverImage && !coverImageError && (
                   <p className="mt-1 flex flex-wrap items-center text-sm text-gray-700 dark:text-gray-300">
@@ -519,38 +542,43 @@ export default function createPage() {
           {importDraftPopup && (
             <div
               onClick={() => setImportDraftPopup(false)}
-              className="sticky bottom-0 left-0 right-0 top-0 z-[5] flex h-full w-full items-center justify-center bg-gray-100/70 dark:bg-gray-900/70"
+              className="sticky bottom-0 top-0 z-[5] flex h-full w-full items-center justify-center bg-gray-100/70 dark:bg-gray-900/70"
             >
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="dropdown-scroll relative flex max-h-[300px] min-h-[150px] w-4/5 flex-col gap-y-2 overflow-auto rounded bg-gray-300 px-2 pb-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
-              >
-                <div className="sticky left-0 top-0 flex w-full flex-col gap-y-2 bg-gray-300 pb-1 pt-1 dark:bg-gray-800">
-                  <p className="mt-1 flex items-center justify-end">
-                    <button
-                      onClick={() => setImportDraftPopup(false)}
-                      className="text-lg"
-                    >
-                      <MdClose />
-                    </button>
-                  </p>
-                  <input
-                    type="text"
-                    placeholder="Search for the draft"
-                    className="flex flex-1 rounded border-0 bg-gray-100 p-1 outline-none dark:bg-gray-900"
-                  />
-                </div>
-                <div>
-                  <p className="p-1 text-center">Recent drafts</p>
-                  {/* <p className="flex cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700">
-                    
-                  </p> */}
-                </div>
+              {(savedAsDraftOnce || !(eChatTitle &&
+                eChatTags.length > 0))? (
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="dropdown-scroll relative flex max-h-[300px] min-h-[150px] w-4/5 flex-col gap-y-2 overflow-auto rounded bg-gray-300 px-2 pb-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
+                >
+                  <div className="sticky left-0 top-0 flex w-full flex-col gap-y-2 bg-gray-300 pb-1 pt-1 dark:bg-gray-800">
+                    <p className="mt-1 flex items-center justify-end">
+                      <button
+                        onClick={() => setImportDraftPopup(false)}
+                        className="text-lg"
+                      >
+                        <MdClose />
+                      </button>
+                    </p>
+                    <input
+                      type="text"
+                      placeholder="Search for the draft"
+                      className="flex flex-1 rounded border-0 bg-gray-100 p-1 outline-none dark:bg-gray-900"
+                    />
+                  </div>
+                  <div>
+                    <p className="p-1 text-center">Recent drafts</p>
+                    {/* <p className="flex cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700">
+                      
+                    </p> */}
+                  </div>
 
-                {draftSearchLoading && (
-                  <LoadingSpinner position="absolute" size="text-6xl" />
-                )}
-              </div>
+                  {draftSearchLoading && (
+                    <LoadingSpinner position="absolute" size="text-6xl" />
+                  )}
+                </div>
+              ) : (
+                <p className="text-center w-[98%] text-lg font-semibold">Please save the current eChat first before you switch to another</p>
+              )}
             </div>
           )}
         </aside>
@@ -584,15 +612,16 @@ export default function createPage() {
             )}
 
             {previewOrEditor === "Preview" && (
-              <MdPreview content={eChatContent} image={coverImage} title={eChatTitle} tags={eChatTags} />
+              <MdPreview content={eChatContent} image={coverImage} title={eChatTitle} tags={eChatTags} category={category} />
             )}
           </section>
         </section>
 
         {/* post or save as draft fixed div at bottom */}
-        <div className="fixed bottom-0 left-0 z-[3] w-full border-gray-500 bg-gray-300 py-3 dark:bg-gray-800">
+        <div className="fixed bottom-0 left-0 z-[6] w-full border-gray-500 bg-gray-300 py-3 dark:bg-gray-800">
           <div className="flex w-full items-center justify-center gap-6">
-            <p
+            <button
+              onClick={handlePostingOfeChat}
               className={`relative flex w-[90px] cursor-not-allowed items-center justify-center rounded bg-gray-500 p-2 px-3 font-semibold text-gray-100 dark:text-gray-800 ${
                 eChatTitle &&
                 eChatTags.length > 0 &&
@@ -600,15 +629,17 @@ export default function createPage() {
               }`}
             >
               Post
-            </p>
+            </button>
+
             <button
+              onClick={handleSavingAsDraft}
               className={`cursor-not-allowed ${
                 eChatTitle &&
                 eChatTags.length > 0 &&
                 "cursor-pointer hover:underline hover:underline-offset-2"
               }`}
             >
-              Save as draft
+              {currentlySaving? "Saving" : "Save as draft"}
             </button>
           </div>
         </div>
