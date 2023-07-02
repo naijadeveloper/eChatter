@@ -50,7 +50,7 @@ export default function MdPreview({
 
         {tags.length > 0 && (<ul className={`w-full ${title? "mt-3" : "mt-12"} flex items-center justify-center gap-3 p-2 flex-wrap`}>
           {tags.map((tag, index) => (
-            <li key={index} className="rounded min-w-[70px] flex items-center justify-center font-semibold bg-gray-400 dark:bg-gray-600 p-2 dark:bg-gray-800">{tag}</li>
+            <li key={index} className="rounded min-w-[70px] flex items-center justify-center text-sm font-semibold bg-gray-400 dark:bg-gray-700 p-2">{tag}</li>
           ))}
         </ul>)}
 

@@ -104,6 +104,30 @@ export default function createPage() {
           }
         });
       }
+
+      tags = tags.map((tag) => {
+        let tagArry = tag.split(" ");
+        let firstVal = tagArry.shift();
+        if(tagArry.length == 0) {
+          if(firstVal.includes("#")) return firstVal;
+
+          return "#"+firstVal;
+        }
+
+        tagArry = tagArry.map((eachTag) => {
+          let eachTagSplit = eachTag.split("");
+          eachTagSplit[0] = eachTagSplit[0].toUpperCase();
+          eachTag = eachTagSplit.join("");
+          return eachTag;
+        });
+
+        firstVal = firstVal.toLowerCase();
+        tagArry.unshift(firstVal);
+        tag = tagArry.join("");
+        if(tag.includes("#")) return tag;
+
+        return "#"+tag;
+      });
       seteChatTags([...tags]);
       e.currentTarget.value = "";
     }
@@ -365,7 +389,7 @@ export default function createPage() {
                     <span>Tags*</span>
                   </p>
                   <p className="text-sm">
-                    Press enter or add a comma after each tag then enter
+                    Press enter or add a comma after each tag then press enter
                   </p>
 
                   <div className="mt-1">
