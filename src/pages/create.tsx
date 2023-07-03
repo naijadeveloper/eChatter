@@ -113,8 +113,8 @@ export default function createPage() {
 
   function createHash(tag: string) {
     // create the hash tag
-    let tagArry: any = tag.trim().split(" ");
-    let firstVal: any = tagArry.shift();
+    let tagArry: string[] = tag.trim().split(" ");
+    let firstVal: string = tagArry.shift();
     if(tagArry.length == 0) {
       if(firstVal.includes("#")) return firstVal.toLowerCase();
 
