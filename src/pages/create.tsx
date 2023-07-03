@@ -90,47 +90,50 @@ export default function createPage() {
   function handleTagsAddition(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter" && eChatTags.length < 8) {
       let tags: string[] = [...eChatTags];
-      let tag = e.currentTarget.value.replace(/\s+/g, " "); // remove unwanted spaces
+      let tag = e.currentTarget.value.replace(/\s+/g, " ").trim(); // remove unwanted spaces
       // Not an empty value entered
-      if (tag.length > 1) {
-        tag.split(",").forEach((tag) => {
+      if (tag.trim().length > 1) {
+        tag.split(",").forEach((eachtag) => {
+          //create hash from tag
+          eachtag = createHash(eachtag);
           // tag isn't already in eChatTags
           if (
-            !tags.includes(tag) &&
+            !tags.includes(eachtag) &&
             tags.length < 8 &&
-            tag.replace(/\s+/g, "")
+            eachtag.replace(/\s+/g, "")
           ) {
-            tags.push(tag);
+            tags.push(eachtag);
           }
         });
       }
-
-      tags = tags.map((tag) => {
-        let tagArry = tag.split(" ");
-        let firstVal = tagArry.shift();
-        if(tagArry.length == 0) {
-          if(firstVal.includes("#")) return firstVal;
-
-          return "#"+firstVal;
-        }
-
-        tagArry = tagArry.map((eachTag) => {
-          let eachTagSplit = eachTag.split("");
-          eachTagSplit[0] = eachTagSplit[0].toUpperCase();
-          eachTag = eachTagSplit.join("");
-          return eachTag;
-        });
-
-        firstVal = firstVal.toLowerCase();
-        tagArry.unshift(firstVal);
-        tag = tagArry.join("");
-        if(tag.includes("#")) return tag;
-
-        return "#"+tag;
-      });
       seteChatTags([...tags]);
       e.currentTarget.value = "";
     }
+  }
+
+  function createHash(tag: string) {
+    // create the hash tag
+    let tagArry = tag.trim().split(" ");
+    let firstVal = tagArry.shift();
+    if(tagArry.length == 0) {
+      if(firstVal.includes("#")) return firstVal.toLowerCase();
+
+      return "#"+firstVal.toLowerCase();
+    }
+
+    tagArry = tagArry.map((eachTag) => {
+      let eachTagSplit = eachTag.toLowerCase().split("");
+      eachTagSplit[0] = eachTagSplit[0].toUpperCase();
+      eachTag = eachTagSplit.join("");
+      return eachTag;
+    });
+
+    firstVal = firstVal.toLowerCase();
+    tagArry.unshift(firstVal);
+    tag = tagArry.join("");
+    if(tag.includes("#")) return tag;
+
+    return "#"+tag;
   }
 
   function handleImageVerification(e: React.ChangeEvent<HTMLInputElement>) {
