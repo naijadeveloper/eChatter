@@ -76,8 +76,6 @@ export default function createPage() {
   const [savedAsDraftOnce, setSavedAsDraftOnce] = useState<boolean>(false);
   const [currentlySaving, setCurrentlySaving] = useState<boolean>(false);
 
-
-
   /// functions......................................
   function setContent(content: string) {
     seteChatContent(content);
@@ -113,12 +111,12 @@ export default function createPage() {
 
   function createHash(tag: string) {
     // create the hash tag
-    let tagArry: string[] = tag.trim().split(" ");
-    let firstVal: string = tagArry.shift();
-    if(tagArry.length == 0) {
-      if(firstVal.includes("#")) return firstVal.toLowerCase();
+    let tagArry = tag.trim().split(" ");
+    let firstVal = tagArry.shift();
+    if (tagArry.length == 0) {
+      if (firstVal?.includes("#")) return firstVal?.toLowerCase();
 
-      return "#"+firstVal.toLowerCase();
+      return "#" + firstVal?.toLowerCase();
     }
 
     tagArry = tagArry.map((eachTag) => {
@@ -128,12 +126,12 @@ export default function createPage() {
       return eachTag;
     });
 
-    firstVal = firstVal.toLowerCase();
-    tagArry.unshift(firstVal);
+    firstVal = firstVal?.toLowerCase();
+    tagArry.unshift(firstVal as string);
     tag = tagArry.join("");
-    if(tag.includes("#")) return tag;
+    if (tag.includes("#")) return tag;
 
-    return "#"+tag;
+    return "#" + tag;
   }
 
   function handleImageVerification(e: React.ChangeEvent<HTMLInputElement>) {
@@ -172,21 +170,17 @@ export default function createPage() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
   }
 
-
-  function handlePostingOfeChat() {
-
-  }
+  function handlePostingOfeChat() {}
 
   function handleSavingAsDraft() {
-    if(eChatTitle && eChatTags.length > 0 && !currentlySaving) {
-      setSavedAsDraftOnce(true)
+    if (eChatTitle && eChatTags.length > 0 && !currentlySaving) {
+      setSavedAsDraftOnce(true);
       setCurrentlySaving(true);
 
       // perform fetch post here
       setTimeout(() => {
         setCurrentlySaving(false);
       }, 5000);
-
     }
   }
 
@@ -240,9 +234,8 @@ export default function createPage() {
             importDraftPopup ? "overflow-y-clip" : "overflow-y-auto"
           } max-[1254px]:w-[33%] max-[1140px]:w-[35%] max-[1050px]:fixed max-[1050px]:right-0 max-[1050px]:top-0 max-[1050px]:z-30 max-[1050px]:w-[38%] max-[1050px]:bg-gray-100 max-[1050px]:drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] max-[1050px]:dark:border-l max-[1050px]:dark:border-gray-500 max-[1050px]:dark:bg-gray-900 max-[1050px]:dark:drop-shadow-[0px_1px_2px_#030712] max-[960px]:w-[42%] max-[870px]:w-[46%] max-[790px]:w-[50%] max-[725px]:w-[60%] max-[605px]:w-[75%] max-[485px]:w-[90%] max-[405px]:w-full min-[1051px]:block`}
         >
-
           {/* options contents */}
-          <div className="px-3 pt-[6%] pb-[22%] min-h-full w-full max-[365px]:px-[6px] max-[1050px]:py-[10px]">
+          <div className="min-h-full w-full px-3 pb-[22%] pt-[6%] max-[1050px]:py-[10px] max-[365px]:px-[6px]">
             {/* mobile options bar close button */}
             <button
               onClick={() => setOpenMobileOptionsBar(false)}
@@ -571,8 +564,7 @@ export default function createPage() {
               onClick={() => setImportDraftPopup(false)}
               className="sticky bottom-0 top-0 z-[5] flex h-full w-full items-center justify-center bg-gray-100/70 dark:bg-gray-900/70"
             >
-              {(savedAsDraftOnce || !(eChatTitle &&
-                eChatTags.length > 0))? (
+              {savedAsDraftOnce || !(eChatTitle && eChatTags.length > 0) ? (
                 <div
                   onClick={(e) => e.stopPropagation()}
                   className="dropdown-scroll relative flex max-h-[300px] min-h-[150px] w-4/5 flex-col gap-y-2 overflow-auto rounded bg-gray-300 px-2 pb-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
@@ -604,7 +596,10 @@ export default function createPage() {
                   )}
                 </div>
               ) : (
-                <p className="text-center w-[98%] text-lg font-semibold">Please save the current eChat first before you switch to another</p>
+                <p className="w-[98%] text-center text-lg font-semibold">
+                  Please save the current eChat first before you switch to
+                  another
+                </p>
               )}
             </div>
           )}
@@ -633,13 +628,19 @@ export default function createPage() {
             </button>
           </div>
           {/* editor and preview section */}
-          <section className="mx-auto flex flex-col h-[90%] w-[90%] justify-center rounded max-[925px]:w-[95%] max-[840px]:w-[98%]">
+          <section className="mx-auto flex h-[90%] w-[90%] flex-col justify-center rounded max-[925px]:w-[95%] max-[840px]:w-[98%]">
             {previewOrEditor === "Editor" && (
               <MarkdownEditor content={eChatContent} setContent={setContent} />
             )}
 
             {previewOrEditor === "Preview" && (
-              <MdPreview content={eChatContent} image={coverImage} title={eChatTitle} tags={eChatTags} category={category} />
+              <MdPreview
+                content={eChatContent}
+                image={coverImage}
+                title={eChatTitle}
+                tags={eChatTags}
+                category={category}
+              />
             )}
           </section>
         </section>
@@ -666,7 +667,7 @@ export default function createPage() {
                 "cursor-pointer hover:underline hover:underline-offset-2"
               }`}
             >
-              {currentlySaving? "Saving" : "Save as draft"}
+              {currentlySaving ? "Saving" : "Save as draft"}
             </button>
           </div>
         </div>
