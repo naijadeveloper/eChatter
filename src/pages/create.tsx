@@ -393,7 +393,7 @@ export default function createPage() {
                       {eChatTags.map((tag, index) => (
                         <li
                           key={index}
-                          className="flex items-center gap-2 rounded bg-gray-400/50 p-1 px-2 dark:bg-gray-700/50"
+                          className="flex items-center gap-2 break-all rounded bg-gray-400/50 p-1 px-2 dark:bg-gray-700/50"
                         >
                           <span>{tag}</span>
                           <button
@@ -409,6 +409,7 @@ export default function createPage() {
                         </li>
                       ))}
                       <input
+                        maxLength={90}
                         type="text"
                         placeholder="Add a tag"
                         onKeyUp={handleTagsAddition}
