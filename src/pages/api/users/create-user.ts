@@ -4,11 +4,11 @@ import { usersCollection } from "@/database/databaseModels";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  connectMongo().catch(() => {
-    res.status(500).json({error: "Couldn't connect to server"})
-  });
+  connectMongo()
   
+  // check method
   if(req.method === "POST") {
+    //insert new user to users collection
 
   }else {
     res.setHeader("Allow", ["POST"]);
