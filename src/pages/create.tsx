@@ -247,7 +247,7 @@ export default function createPage() {
             <div className="border-b border-gray-500 pb-2">
               <h2 className="text-center text-xl">Create a new eChat</h2>
               <p className="text-gray-700 dark:text-gray-300">
-                You have a drafted eChat and would like to continue editing?
+                You would like to continue editing an existing echat?
               </p>
               <button
                 onClick={handleImportDraftPopup}

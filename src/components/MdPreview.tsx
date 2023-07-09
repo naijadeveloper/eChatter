@@ -46,7 +46,7 @@ export default function MdPreview({
           <p
             className={`mx-auto ${
               image ? "mt-3" : "mt-12"
-            } flex w-[96%] items-center justify-center break-all text-center text-5xl font-bold capitalize underline decoration-gray-500 underline-offset-2 max-md:text-4xl`}
+            } flex w-[96%] items-center justify-center break-words text-center text-5xl font-bold capitalize underline decoration-gray-500 underline-offset-2 max-md:text-4xl`}
           >
             {title}
           </p>
