@@ -19,7 +19,7 @@ const userSchema = new Schema({
     type: String,
     default: "dark"
   },
-  createdAt: {type: Date, default: () => Date.now()}
+  createdAt: {type: Number, default: () => Date.now()}
 });
 
 type users = InferSchemaType<typeof userSchema>;
@@ -30,8 +30,8 @@ export const usersCollection = model<users>("users", userSchema);
 const otpSchema = new Schema({
   userId: {type: String, required: true},
   otpCode: {type: String, required: true},
-  createdAt: {type: Date, default: () => Date.now()}
+  createdAt: {type: Number, default: () => Date.now()}
 });
 
 type otpVerification = InferSchemaType<typeof otpSchema>;
-export const otpCollection = model<otpVerification>("otpVerification", otpSchema);
+export const otpCollection = model<otpVerification>("otp", otpSchema);
