@@ -10,10 +10,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try{
       // get info from user
       const { userId, inputOtpCode } = req.body;
+      if(!userId || !inputOtpCode) return res.status(400).json({error: "empty field"});
   
+      // check if user exist and if user is verified already
+      const user = await usersCollection.findById(userId).exec();
+      if(!user) return res.status(404).json({error: "user not found"});
+
+      if(user?.verified) return res.status(404).json({error: "user verified"});
+
       // get otp doc from otpCollection
       const otpDoc = await otpCollection.findOne({userId}).exec();
-      if(!otpDoc) return res.status(404).json({error: "user not found"})
+      if(!otpDoc) return res.status(404).json({error: "otp not found"});
+
       // check if time as expired
       const currentTime = Date.now();
       const otpDatePlusOneHour = otpDoc?.createdAt! + 3600000;
@@ -21,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if(currentTime >= otpDatePlusOneHour){
         // remove otp doc from collection
         await otpCollection.deleteOne({userId}).exec();
-        return res.status(404).json({error: "otp code has expired"})
+        return res.status(404).json({error: "otp expired"});
       }
   
       // check if otp is valid
@@ -31,25 +39,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // if match is false
       if(!match) return res.status(404).json({error: "wrong otp code"});
   
-      // if match is true, find user
-      const user = await usersCollection.findById(userId).exec();
-  
-      if(user) {
-        // change user's verification to true
-        user.verified = true;
-        await user.save();
-  
-        // delete otp doc
-        await otpCollection.deleteOne({userId}).exec();
+      // change user's verification to true
+      user.verified = true;
+      await user.save();
 
-        // send to user necessary info
-        const {_id, username, email, theme} = user;
-        return res.status(200).json({_id, username, email, theme});
-      }else {
-        return res.status(404).json({error: "user not found"});
-      }
+      // delete otp doc
+      await otpCollection.deleteOne({userId}).exec();
+
+      // send to user necessary info
+      const {_id, username, email, theme} = user;
+      return res.status(200).json({_id, username, email, theme, success: "success"});
     }catch(error) {
-      return res.status(500).json({error});
+      return res.status(500).json({error: "couldn't save or verify"});
     }
   } else {
     res.setHeader("Allow", ["PUT"]);

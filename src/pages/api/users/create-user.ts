@@ -20,22 +20,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
   // check method
   if(req.method === "POST") {
-    const { email, username, password, fullname } = req.body;
-    if(!email || !username || !password) {
-      return res.status(400).json({error: "empty field"});
-    }
-
-    // check if user already exist
-    const user = await usersCollection.find({email}).count().exec();
-    if(user) return res.status(404).json({error: "user exists"});
-
-    // encrypt password before inserting
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
-    //***when you want to check user later ... const match = await bcrypt.compare(passwordReceivedFromUser, hashedPasswordSavedInDB) ... if(match) //user exists...
-
-    // insert new user to users collection
     try {
+      const { email, username, password, fullname } = req.body;
+      if(!email || !username || !password) {
+        return res.status(400).json({error: "empty field"});
+      }
+
+      // check if user already exist
+      const user = await usersCollection.find({email}).count().exec();
+      if(user) return res.status(404).json({error: "user found"});
+
+      // encrypt password before inserting
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(String(password), salt);
+      //***when you want to check user later ... const match = await bcrypt.compare(passwordReceivedFromUser, hashedPasswordSavedInDB) ... if(match) //user exists...
+
+      // insert new user to users collection
       const createdUser = await usersCollection.create({
         email,
         username,
@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await otpGeneration(createdUser._id.toString(), email);
 
       const { _id } = createdUser;
-      return res.status(200).json({ _id, email });
+      return res.status(200).json({ _id, email, success: "success" });
 
     }catch(error) {return res.status(500).json({error: "couldn't save or verify"})}
 
