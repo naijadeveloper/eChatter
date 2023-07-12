@@ -18,6 +18,8 @@ const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
 
+import environment_url from "@/utilities/check_env";
+
 type formData = {
   email: string;
   password: string;
@@ -69,16 +71,49 @@ export default function Signup() {
     return schema.safeParse(data);
   }, [data]);
 
-  function submitForm(data: formData) {
+  async function submitForm(data: formData) {
     if (signupValues.success == false) return;
-    // check database if email already exist
+
+    // shows the user the loading process.
     setLoading(true);
 
+    // create username from email
+    let first_split = data.email.split("@");
+    let firstVal = first_split[0];
+
+    let second_split = first_split[1].split(".");
+    let secondVal = second_split.join("-");
+
+    // check database if email already exist
     // Generate `otp` send `otp` to email and push to the otp route
-    setTimeout(() => {
-      setLoading(false);
-      router.push("/account/otp");
-    }, 2000);
+    // router.push("/account/otp");
+    const email = data.email;
+    const password = data.password;
+    const username = firstVal + "-" + secondVal;
+
+    const res = await fetch(`${environment_url}/api/create-user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        username,
+        password,
+      }),
+    });
+
+    const objectData = await res.json();
+    if (res.ok) {
+      const { _id, email } = objectData;
+      // save to redux and cookies
+    } else {
+      // handle errors
+      console.log(objectData.error);
+    }
+
+    // loading done.
+    setLoading(false);
   }
 
   return (
