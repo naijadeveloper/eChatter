@@ -20,6 +20,10 @@ import Footer from "@/components/Footer";
 
 import environment_url from "@/utilities/check_env";
 
+import { useAppDispatch } from "@/store/store_hooks";
+import { saveUserInfo } from "@/store/user_slice";
+import { cookieStorage } from "@/utilities/cookie_storage";
+
 type formData = {
   email: string;
   password: string;
@@ -50,6 +54,7 @@ const schema: ZodType<formData> = z
 /////////////////////////////////////////////////////////////////////////////////////////
 export default function Signup() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPass, setShowPass] = useState(false);
@@ -91,7 +96,7 @@ export default function Signup() {
     const password = data.password;
     const username = firstVal + "-" + secondVal;
 
-    const res = await fetch(`${environment_url}/api/create-user`, {
+    const res = await fetch(`${environment_url}/api/users/create-user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -105,8 +110,11 @@ export default function Signup() {
 
     const objectData = await res.json();
     if (res.ok) {
-      const { _id, email } = objectData;
+      const { _id, email, username } = objectData;
       // save to redux and cookies
+      dispatch(saveUserInfo({ _id, email, username }));
+      cookieStorage.setItem("user", JSON.stringify({ _id, email, username }));
+      router.push("/account/otp");
     } else {
       // handle errors
       console.log(objectData.error);

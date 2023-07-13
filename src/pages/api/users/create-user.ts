@@ -46,13 +46,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await otpGeneration(createdUser._id.toString(), email);
 
       const { _id } = createdUser;
-      return res.status(200).json({ _id, email, success: "success" });
+      return res.status(200).json({ _id, email, username, success: "success" });
 
     }catch(error) {return res.status(500).json({error: "couldn't save or verify"})}
 
   }else {
     res.setHeader("Allow", ["POST"]);
-    res.status(405).end("method not allowed");
+    res.status(405).json({error: "method not allowed"});
   }
 }
 
