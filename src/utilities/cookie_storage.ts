@@ -1,5 +1,5 @@
 export const cookieStorage = {
-  getFromString(str: string, key: string) {
+  getFromString(str: string, key: string): string | undefined {
     if(typeof str == "undefined") return undefined;
     const cookies = str 
       .split(";")
@@ -9,11 +9,11 @@ export const cookieStorage = {
      return cookies[key as keyof typeof cookies];
   },
 
-  getItem(key: string) {
+  getItem(key: string): string | undefined {
     const cookies = document.cookie
       .split(";")
       .map(cookie => cookie.split("="))
-      .reduce((acc, [key, value]) => ({...acc, [key.trim()]: value}), {});
+      .reduce((acc, [key, value]) => ({...acc, [key.trim()]: value.trim()}), {});
 
     return cookies[key as keyof typeof cookies];
   },

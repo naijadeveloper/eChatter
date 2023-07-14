@@ -16,19 +16,19 @@ const transporter = nodemailer.createTransport({
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  connectMongo().catch(() => res.status(500).json({error: "server error"}));
+  connectMongo().catch(() => res.status(500).json({error: "Failed to connect to server"}));
   
   // check method
   if(req.method === "POST") {
     try {
       const { email, username, password, fullname } = req.body;
       if(!email || !username || !password) {
-        return res.status(400).json({error: "empty field"});
+        return res.status(400).json({error: "A field is empty"});
       }
 
       // check if user already exist
       const user = await usersCollection.find({email}).count().exec();
-      if(user) return res.status(404).json({error: "user found"});
+      if(user) return res.status(404).json({error: "A user was found with the same email. Try login instead"});
 
       // encrypt password before inserting
       const salt = await bcrypt.genSalt();
@@ -45,14 +45,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // run function to generate otp and save in otp collection
       await otpGeneration(createdUser._id.toString(), email);
 
-      const { _id } = createdUser;
-      return res.status(200).json({ _id, email, username, success: "success" });
+      const { _id, theme, verified } = createdUser;
+      return res.status(200).json({ _id, email, username, verified, theme });
 
-    }catch(error) {return res.status(500).json({error: "couldn't save or verify"})}
+    }catch(error) {return res.status(500).json({error: "Couldn't save or verify your account"})}
 
   }else {
     res.setHeader("Allow", ["POST"]);
-    res.status(405).json({error: "method not allowed"});
+    res.status(405).json({error: "Method not allowed"});
   }
 }
 

@@ -15,6 +15,10 @@ const userSchema = new Schema({
   bio: String,
   following: [{type: Schema.Types.ObjectId, ref: "users"}],
   followers: [{type: Schema.Types.ObjectId, ref: "users"}],
+  eChats: [{type: Schema.Types.ObjectId, ref: "echats"}],
+  bookmarked: [{type: Schema.Types.ObjectId, ref: "echats"}],
+  liked: [{type: Schema.Types.ObjectId, ref: "echats"}],
+  notifications: [{type: Schema.Types.ObjectId, ref: "notifications"}],
   theme: {
     type: String,
     default: "dark"

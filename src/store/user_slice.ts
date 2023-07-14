@@ -3,17 +3,29 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface initialStateType {
   value: {
-    _id: string;
-    email: string;
-    username: string;
+    _id?: string;
+    email?: string;
+    username?: string;
+    verified?: boolean;
+    theme?: string;
   }
+}
+
+type payloadType = {
+  _id?: string;
+  email?: string;
+  username?: string;
+  verified?: boolean;
+  theme?: string;
 }
 
 const initialState: initialStateType = {
   value: {
     _id: "",
     email: "",
-    username: ""
+    username: "",
+    verified: false,
+    theme: ""
   }
 }
 
@@ -21,8 +33,8 @@ const userSlice = createSlice({
   name: "userSlice",
   initialState,
   reducers: {
-    saveUserInfo(state, action: PayloadAction<{_id: string, email: string, username: string}>) {
-      state.value = action.payload;
+    saveUserInfo(state, action: PayloadAction<payloadType>) {
+      state.value = {...state.value, ...action.payload};
     }
   }
 });

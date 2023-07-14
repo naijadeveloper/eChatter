@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { MdClose } from "react-icons/md";
 
 import dynamic from "next/dynamic";
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
@@ -58,7 +59,9 @@ export default function Signup() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPass, setShowPass] = useState(false);
-  const [dbError, setDbError] = useState<string>("");
+  const [dbError, setDbError] = useState<string>(
+    "A user was found with the same email. Try log in instead"
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
@@ -76,6 +79,7 @@ export default function Signup() {
     return schema.safeParse(data);
   }, [data]);
 
+  /////////////////////////////////////////////////////////////////
   async function submitForm(data: formData) {
     if (signupValues.success == false) return;
 
@@ -109,19 +113,27 @@ export default function Signup() {
     });
 
     const objectData = await res.json();
-    if (res.ok) {
-      const { _id, email, username } = objectData;
-      // save to redux and cookies
-      dispatch(saveUserInfo({ _id, email, username }));
-      cookieStorage.setItem("user", JSON.stringify({ _id, email, username }));
-      router.push("/account/otp");
-    } else {
-      // handle errors
-      console.log(objectData.error);
-    }
 
     // loading done.
     setLoading(false);
+
+    // check if result is ok i.e if status code is within the 200 range
+    // otherwise throw error
+    try {
+      if (res.ok) {
+        const { _id, email, username, verified, theme } = objectData;
+        // save to redux and cookies
+        dispatch(saveUserInfo({ _id, email, username, verified, theme }));
+        cookieStorage.setItem("user", JSON.stringify({ _id, username, theme }));
+        router.push("/account/otp");
+      } else {
+        // throw error;
+        throw new Error(objectData?.error);
+      }
+    } catch (error: any) {
+      // show ui here to notify user that something went wrong
+      setDbError(error?.message);
+    }
   }
 
   return (
@@ -131,17 +143,37 @@ export default function Signup() {
           <ThemeSwitch />
         </div>
 
-        <div className="mt-8 w-[98%] max-w-[430px] rounded-md bg-gray-900 p-7 text-gray-100 dark:bg-gray-100 dark:text-gray-800">
-          <div>
+        <div className={`mt-8 w-[98%] max-w-[430px] rounded-md`}>
+          {dbError && (
+            <div className="relative mx-auto flex w-[90%] flex-col items-center justify-center rounded-tl-md rounded-tr-md bg-red-700 p-2 text-sm text-gray-100">
+              <span className="w-[90%] text-center text-lg font-semibold">
+                {dbError}
+              </span>
+              <span
+                onClick={() => setDbError("")}
+                className="absolute right-1 top-1 cursor-pointer font-bold"
+              >
+                <MdClose size={24} />
+              </span>
+              {dbError.includes("A user was found") && (
+                <div className="mt-2">
+                  <Link
+                    href="/account/login"
+                    className="flex items-center justify-center rounded-md border-2 border-gray-900 bg-maingreen-200 p-2 px-4 text-gray-800"
+                  >
+                    Log in
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div
+            className={`rounded-md bg-gray-900 p-7 text-gray-100 dark:bg-gray-100 dark:text-gray-800`}
+          >
             <header className="text-center text-3xl font-semibold">
               Sign Up
             </header>
-
-            {dbError && (
-              <span className="mt-1 flex w-full items-center justify-center text-sm text-red-700">
-                A user with the same email already exists
-              </span>
-            )}
 
             <form className="mt-7" onSubmit={handleSubmit(submitForm)}>
               <div className="min-h-14 mt-5 w-full">

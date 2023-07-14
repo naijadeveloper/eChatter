@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { useState, useMemo } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import { useState, useMemo } from "react";
+import { useAppSelector } from "@/store/store_hooks";
 
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
@@ -10,8 +11,13 @@ import OtpInput from "@/components/OtpInput";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
 
+import { cookieStorage } from "@/utilities/cookie_storage";
+
 export default function Otp() {
   const router = useRouter();
+
+  const userInfo = useAppSelector((state) => state.user.value);
+
   const [otp, setOtp] = useState("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -31,11 +37,16 @@ export default function Otp() {
 
   function handleOtpSubmit() {
     // Validate otp from database
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      router.push("/feed");
-    }, 2000);
+    // setLoading(true);
+    const otpCode = otp.trim();
+
+    let cookieUserId = cookieStorage.getItem("user")
+      ? JSON.parse(cookieStorage.getItem("user")!)?._id
+      : "";
+    const userId = userInfo?._id || cookieUserId;
+    // get user _id
+    setLoading(false);
+    // router.push("/feed");
   }
 
   return (
