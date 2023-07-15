@@ -16,11 +16,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const user = await usersCollection.findById(userId).exec();
       if(!user) return res.status(404).json({error: "You are not a registered user"});
 
-      if(user?.verified) return res.status(404).json({error: "You are already verified"});
+      if(user.verified) {
+        return res.status(404).json({error: "You are already verified"});
+      }
 
       // get otp doc from otpCollection
       const otpDoc = await otpCollection.findOne({userId}).exec();
-      if(!otpDoc) return res.status(404).json({error: "otp not found"});
+      if(!otpDoc) return res.status(404).json({error: "The otp has expired. Please try again"});
 
       // check if time as expired
       const currentTime = Date.now();
@@ -50,10 +52,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const {_id, email, username, verified, theme} = user;
       return res.status(200).json({ _id, email, username, verified, theme });
     }catch(error) {
-      return res.status(500).json({error: "Couldn't save or verify your account"});
+      return res.status(500).json({error: "Couldn't save or verify your account. Please try again."});
     }
   } else {
     res.setHeader("Allow", ["PUT"]);
-    res.status(405).end("method not allowed");
+    res.status(405).end("Method not allowed");
   }
 }

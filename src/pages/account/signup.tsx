@@ -122,7 +122,7 @@ export default function Signup() {
     try {
       if (res.ok) {
         const { _id, email, username, verified, theme } = objectData;
-        // save to redux and cookies
+        // save to redux and cookies and push to otp page
         dispatch(saveUserInfo({ _id, email, username, verified, theme }));
         cookieStorage.setItem("user", JSON.stringify({ _id, username, theme }));
         router.push("/account/otp");
@@ -151,7 +151,7 @@ export default function Signup() {
               </span>
               <span
                 onClick={() => setDbError("")}
-                className="absolute right-1 top-1 cursor-pointer font-bold"
+                className="absolute right-[2px] top-1 cursor-pointer font-bold"
               >
                 <MdClose size={24} />
               </span>

@@ -16,22 +16,21 @@ const transporter = nodemailer.createTransport({
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  connectMongo().catch(() => res.status(500).json({error: "server error"}));
+  connectMongo().catch(() => res.status(500).json({error: "Failed to connect to server"}));
 
   
   if(req.method === "POST") {
     try {
-      const { userId, email } = req.body;
-      if(!userId || !email) return res.status(400).json({error: "empty field"});
+      let { userId } = req.body;
+      if(!userId) return res.status(400).json({error: "Email field is empty"});
   
       // check user exist
       const user = await usersCollection.findById(userId).exec();
-      if(!user) return res.status(404).json({error: "user not found"});
+      if(!user) return res.status(404).json({error: "You are not a registered user"});
   
       // check verification
       if(user.verified) {
-        const {_id, username, email, theme} = user;
-        return res.status(200).json({_id, username, email, theme, info: "verified"});
+        return res.status(404).json({error: "You are already verified"});
       }
   
       // generate new hash code, check if otp doc exists
@@ -56,16 +55,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       //use nodemailer to send to user the email
       await transporter.sendMail({
         from: "noreply@echatter.com",
-        to: email,
+        to: user.email,
         subject: "Account verification",
         html: `<p>A new one-time-password was generated and sent to your email again to verify your eChatter account, please enter this code in order to verify your account. This code will expire an hour from now <br /><br /> <strong style="font-size: 24px">${otpNumber}</strong>
         </p>`
       });
+      res.status(200).json({success: `Otp code resent to ${user?.email}`});
     }catch(error) {
-      res.status(500).json({error: "couldn't not save or verify"});
+      res.status(500).json({error: "Couldn't save or verify your account. Please try again."});
     }
   }else {
     res.setHeader("Allow", ["POST"]);
-    res.status(405).end("method not allowed");
+    res.status(405).end("Method not allowed");
   }
 }
