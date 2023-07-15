@@ -28,9 +28,7 @@ export default function Otp() {
 
   const [otp, setOtp] = useState("");
   const [error, setError] = useState<string>("");
-  const [dbError, setDbError] = useState<string>(
-    "The otp has expired. Please try again"
-  );
+  const [dbError, setDbError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const onError = (message: string) => setError(message);
