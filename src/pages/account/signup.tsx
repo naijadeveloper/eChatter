@@ -59,9 +59,7 @@ export default function Signup() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPass, setShowPass] = useState(false);
-  const [dbError, setDbError] = useState<string>(
-    "A user was found with the same email. Try log in instead"
-  );
+  const [dbError, setDbError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const {
     register,

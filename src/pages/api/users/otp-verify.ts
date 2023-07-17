@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try{
       // get info from user
       const { userId, inputOtpCode } = req.body;
-      if(!userId || !inputOtpCode) return res.status(400).json({error: "A field is empty"});
+      if(!userId || !inputOtpCode) return res.status(400).json({error: "Please log in or sign up first, before account verification"});
   
       // check if user exist and if user is verified already
       const user = await usersCollection.findById(userId).exec();

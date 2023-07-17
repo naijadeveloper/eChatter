@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if(req.method === "POST") {
     try {
       let { userId } = req.body;
-      if(!userId) return res.status(400).json({error: "Email field is empty"});
+      if(!userId) return res.status(400).json({error: "Please log in or sign up first, before account verification"});
   
       // check user exist
       const user = await usersCollection.findById(userId).exec();

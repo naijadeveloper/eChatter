@@ -44,6 +44,7 @@ export default function Otp() {
     [otp]
   );
 
+  /////////////////////////////function
   async function handleOtpSubmit() {
     // loading
     setLoading(true);
@@ -94,7 +95,7 @@ export default function Otp() {
     }
   }
 
-  //////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////function
   async function handleOtpResend() {
     setDbError("");
     // loading
@@ -250,12 +251,12 @@ export default function Otp() {
 
             <small className="mt-4 flex w-full justify-center">
               Did not receive a code?{" "}
-              <Link
-                href="#"
+              <button
+                onClick={handleOtpResend}
                 className="px-1 text-gray-500 underline decoration-2 underline-offset-2 hover:text-maingreen-100 dark:hover:text-maingreen-400"
               >
                 RESEND!!
-              </Link>
+              </button>
             </small>
           </div>
         </div>

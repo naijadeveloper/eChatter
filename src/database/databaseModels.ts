@@ -1,4 +1,4 @@
-import { InferSchemaType, model, Schema} from "mongoose";
+import { InferSchemaType, model, models, Schema} from "mongoose";
 
 // User schema and model
 const userSchema = new Schema({
@@ -27,7 +27,7 @@ const userSchema = new Schema({
 });
 
 type users = InferSchemaType<typeof userSchema>;
-export const usersCollection = model<users>("users", userSchema);
+export const usersCollection = models.users || model<users>("users", userSchema);
 
 
 //otp schema and model
@@ -38,4 +38,4 @@ const otpSchema = new Schema({
 });
 
 type otpVerification = InferSchemaType<typeof otpSchema>;
-export const otpCollection = model<otpVerification>("otp", otpSchema);
+export const otpCollection = models.otp || model<otpVerification>("otp", otpSchema);
