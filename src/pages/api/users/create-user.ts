@@ -47,9 +47,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const { _id, theme, verified } = createdUser;
       return res.status(200).json({ _id, email, username, verified, theme });
-
-    }catch(error) {return res.status(500).json({error: "Couldn't save or verify your account. Please try again."})}
-
+    }catch(error) {
+      return res.status(500).json({error: "Couldn't save or verify your account. Please try again."});
+    }
   }else {
     res.setHeader("Allow", ["POST"]);
     res.status(405).json({error: "Method not allowed"});
