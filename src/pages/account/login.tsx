@@ -11,12 +11,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { MdClose } from "react-icons/md";
 
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
 });
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
+
+import environment_url from "@/utilities/check_env";
+import { cookieStorage } from "@/utilities/cookie_storage";
+
+import { useAppDispatch } from "@/store/store_hooks";
+import { saveUserInfo } from "@/store/user_slice";
 
 type formData = {
   email: string;
@@ -36,6 +43,8 @@ const schema: ZodType<formData> = z.object({
 /////////////////////////////////////////////////////////////////////////////////////////
 export default function Login() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const [showPassword, setShowPassword] = useState(false);
   const [dbError, setDbError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -55,15 +64,57 @@ export default function Login() {
     return schema.safeParse(data);
   }, [data]);
 
-  function submitForm(data: formData) {
+  ///////////////////////////////////////////////////
+  async function submitForm(data: formData) {
     if (signupValues.success == false) return;
-    // check database if email exist and if password is valid under said email
+
+    // loading
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-      router.push("/feed");
-    }, 2000);
+    // user email and password
+    const email = data.email;
+    const password = data.password;
+
+    // check database if email exist and if password is valid under said email
+    const res = await fetch(`${environment_url}/api/users/create-user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const objectData = await res.json();
+
+    // loading done.
+    setLoading(false);
+
+    // check if result is ok i.e if status code is within the 200 range
+    // otherwise throw error
+    try {
+      if (res.ok) {
+        const { _id, email, username, verified, theme } = objectData;
+        // save to redux and cookies and push to otp page
+        dispatch(saveUserInfo({ _id, email, username, verified, theme }));
+        cookieStorage.setItem("user", JSON.stringify({ _id, username, theme }));
+
+        // if verified is false, ask the user if he/she would like to verify or just continue to home page
+        if (verified) return router.push("/feed");
+
+        setDbError(
+          "Your account isn't verified. You can get verified now or just continue to your feed page."
+        );
+      } else {
+        // throw error;
+        throw new Error(objectData?.error);
+      }
+    } catch (error: any) {
+      // show ui here to notify user that something went wrong
+      setDbError(error?.message);
+    }
   }
 
   return (
@@ -73,17 +124,43 @@ export default function Login() {
           <ThemeSwitch />
         </div>
 
-        <div className="mt-8 w-[98%] max-w-[430px] rounded-md bg-gray-900 p-7 text-gray-100 dark:bg-gray-100 dark:text-gray-800">
-          <div>
+        <div className="mt-8 w-[98%] max-w-[430px] rounded-md">
+          {dbError && (
+            <div className="relative mx-auto flex w-[90%] flex-col items-center justify-center rounded-tl-md rounded-tr-md bg-red-700 p-2 text-sm text-gray-100">
+              <span className="w-[90%] text-center text-lg font-semibold">
+                {dbError}
+              </span>
+              <span
+                onClick={() => setDbError("")}
+                className="absolute right-[2px] top-1 cursor-pointer font-bold"
+              >
+                <MdClose size={24} />
+              </span>
+              {dbError.includes("Your account isn't verified") && (
+                <div className="mt-2 flex items-center justify-center gap-4">
+                  <Link
+                    href="/account/otp"
+                    className="flex items-center justify-center rounded-md border-2 border-gray-900 bg-maingreen-200 p-2 px-4 text-gray-800"
+                  >
+                    Verify
+                  </Link>
+
+                  <Link
+                    href="/feed"
+                    className="flex items-center justify-center rounded-md border-2 border-gray-900 bg-maingreen-200 p-2 px-4 text-gray-800"
+                  >
+                    Feed
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="rounded-md bg-gray-900 p-7 text-gray-100 dark:bg-gray-100 dark:text-gray-800">
             <header className="text-center text-3xl font-semibold">
               Log In
             </header>
 
-            {dbError && (
-              <span className="mt-1 flex w-full items-center justify-center text-sm text-red-700">
-                Either the email or the password is incorrect
-              </span>
-            )}
             <form className="mt-7" onSubmit={handleSubmit(submitForm)}>
               <div className="min-h-14 mt-5 w-full">
                 <input

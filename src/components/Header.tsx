@@ -1,6 +1,9 @@
+import { useRouter } from "next/router";
+import Link from "next/link";
 import { useState } from "react";
 
-import Link from "next/link";
+import { useAppDispatch } from "@/store/store_hooks";
+import { saveUserInfo } from "@/store/user_slice";
 
 import { GiHamburgerMenu } from "react-icons/gi";
 import {
@@ -12,6 +15,7 @@ import {
 } from "react-icons/md";
 import { HiHome } from "react-icons/hi";
 import { SiAddthis } from "react-icons/si";
+import { cookieStorage } from "@/utilities/cookie_storage";
 
 type headerProps = {
   page: string;
@@ -40,12 +44,28 @@ export default function Header({
   openDashboardDD,
   setOpenDashboardDD,
 }: headerProps) {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const [openMobileMenu, setOpenMobileMenu] = useState<boolean>(false);
 
   function handleCloseAll() {
     setOpenSearchDD?.(false);
     setOpenDashboardDD(false);
     setOpenMobileMenu(false);
+  }
+
+  function logOut() {
+    dispatch(
+      saveUserInfo({
+        _id: "",
+        email: "",
+        username: "",
+        verified: false,
+        theme: "",
+      })
+    );
+    cookieStorage.setItem("user", "");
+    router.push("/account/login");
   }
 
   return (
@@ -339,9 +359,12 @@ export default function Header({
             </p>
 
             <div className="mt-2 border-t border-gray-500">
-              <p className="my-2 flex cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700">
+              <button
+                onClick={logOut}
+                className="my-2 flex w-full cursor-pointer rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
+              >
                 Log out
-              </p>
+              </button>
             </div>
           </div>
         </div>
@@ -449,11 +472,12 @@ export default function Header({
                 Settings
               </p>
 
-              <p
-                className={`cursor-pointer rounded p-1 py-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
+              <button
+                onClick={logOut}
+                className={`flex w-full items-center rounded p-1 py-2 hover:bg-gray-400 dark:hover:bg-gray-700`}
               >
                 Log out
-              </p>
+              </button>
             </div>
           </div>
 

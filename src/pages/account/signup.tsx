@@ -20,10 +20,10 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
 
 import environment_url from "@/utilities/check_env";
+import { cookieStorage } from "@/utilities/cookie_storage";
 
 import { useAppDispatch } from "@/store/store_hooks";
 import { saveUserInfo } from "@/store/user_slice";
-import { cookieStorage } from "@/utilities/cookie_storage";
 
 type formData = {
   email: string;
