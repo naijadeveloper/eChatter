@@ -76,7 +76,7 @@ export default function Login() {
     const password = data.password;
 
     // check database if email exist and if password is valid under said email
-    const res = await fetch(`${environment_url}/api/users/create-user`, {
+    const res = await fetch(`${environment_url}/api/users/login-user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
