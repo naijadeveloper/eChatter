@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
+import { useSession, signIn, signOut } from "next-auth/react";
+
 import { useForm } from "react-hook-form";
 
 import { z, ZodType } from "zod";
@@ -116,6 +118,8 @@ export default function Login() {
       setDbError(error?.message);
     }
   }
+
+  function handleGoogleLogin() {}
 
   return (
     <>
@@ -252,8 +256,8 @@ export default function Login() {
             </div>
 
             <div className="mt-5 h-14 w-full">
-              <a
-                href="#"
+              <button
+                onClick={handleGoogleLogin}
                 className="flex h-full w-full items-center rounded-md bg-gray-100 px-2 text-gray-800 hover:opacity-95 dark:border dark:border-gray-800"
               >
                 <span className="flex h-[28px] w-[28px] items-center justify-center text-2xl">
@@ -262,7 +266,7 @@ export default function Login() {
                 <span className="flex grow items-center justify-center">
                   Log in with Google
                 </span>
-              </a>
+              </button>
             </div>
           </div>
         </div>
