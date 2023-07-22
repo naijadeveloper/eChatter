@@ -7,6 +7,7 @@ tools:
     "Tailwindcss",
     "MongoDb",
     "MongoDb Atlas",
+    "Redux",
     "NextAuth",
   ]
 description: "A social media network, where users can create blog posts, read blog posts, collaborate on a post, interact with a post through emojis or in comments and more."
