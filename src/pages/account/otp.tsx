@@ -14,15 +14,11 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
 
 import environment_url from "@/utilities/check_env";
-
-import { useAppDispatch } from "@/store/store_hooks";
-import { saveUserInfo } from "@/store/user_slice";
 import { cookieStorage } from "@/utilities/cookie_storage";
 
 /////////////////////////////////////////////////
 export default function Otp() {
   const router = useRouter();
-  const dispatch = useAppDispatch();
 
   const userInfo = useAppSelector((state) => state.user.value);
 
@@ -50,10 +46,11 @@ export default function Otp() {
     setLoading(true);
     const inputOtpCode = otp.trim();
 
+    // get _id of user from cookie or session
     let cookieUserId = cookieStorage.getItem("user")
       ? JSON.parse(cookieStorage.getItem("user")!)?._id
       : "";
-    const userId = userInfo?._id || cookieUserId;
+    const userId = cookieUserId;
 
     // if userId is still empty
     if (!userId) {
@@ -80,11 +77,11 @@ export default function Otp() {
 
     try {
       if (res.ok) {
-        const { _id, email, username, verified, theme } = objectData;
-        // save to redux and cookies and push to otp page
-        dispatch(saveUserInfo({ _id, email, username, verified, theme }));
-        cookieStorage.setItem("user", JSON.stringify({ _id, username, theme }));
-        router.push("/feed");
+        cookieStorage.deleteItem("user");
+        // let user know that the validation was successfull
+        setDbError(
+          "Account validation was a success. You can login with your account credentials now!"
+        );
       } else {
         // throw error;
         throw new Error(objectData?.error);

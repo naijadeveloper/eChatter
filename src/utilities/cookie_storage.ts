@@ -13,7 +13,7 @@ export const cookieStorage = {
     const cookies = document.cookie
       .split(";")
       .map(cookie => cookie.split("="))
-      .reduce((acc, [key, value]) => ({...acc, [key.trim()]: value.trim()}), {});
+      .reduce((acc, [key, value]) => ({...acc, [key.trim()]: value}), {});
 
     return cookies[key as keyof typeof cookies];
   },
@@ -22,5 +22,9 @@ export const cookieStorage = {
     const date = new Date();
     date.setDate(date.getDate() + 30);
     document.cookie = `${key}=${value};expires=${date.toUTCString()};path=/`;
+  },
+
+  deleteItem(key: string) {
+    document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   }
 }

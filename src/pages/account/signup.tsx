@@ -12,6 +12,8 @@ import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdClose } from "react-icons/md";
 
+import toast from "react-hot-toast";
+
 import dynamic from "next/dynamic";
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
@@ -21,9 +23,6 @@ import Footer from "@/components/Footer";
 
 import environment_url from "@/utilities/check_env";
 import { cookieStorage } from "@/utilities/cookie_storage";
-
-import { useAppDispatch } from "@/store/store_hooks";
-import { saveUserInfo } from "@/store/user_slice";
 
 type formData = {
   email: string;
@@ -55,7 +54,6 @@ const schema: ZodType<formData> = z
 /////////////////////////////////////////////////////////////////////////////////////////
 export default function Signup() {
   const router = useRouter();
-  const dispatch = useAppDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPass, setShowPass] = useState(false);
@@ -117,20 +115,16 @@ export default function Signup() {
 
     // check if result is ok i.e if status code is within the 200 range
     // otherwise throw error
-    try {
-      if (res.ok) {
-        const { _id, email, username, verified, theme } = objectData;
-        // save to redux and cookies and push to otp page
-        dispatch(saveUserInfo({ _id, email, username, verified, theme }));
-        cookieStorage.setItem("user", JSON.stringify({ _id, username, theme }));
-        router.push("/account/otp");
-      } else {
-        // throw error;
-        throw new Error(objectData?.error);
-      }
-    } catch (error: any) {
-      // show ui here to notify user that something went wrong
-      setDbError(error?.message);
+    if (res.ok) {
+      const { _id } = objectData;
+      // save to redux and cookies and push to otp page
+      cookieStorage.setItem("user", JSON.stringify({ _id }));
+      router.push("/account/otp");
+    } else {
+      // show error toast
+      toast.error(objectData?.error, {
+        className: "text-center bg-gray-600",
+      });
     }
   }
 

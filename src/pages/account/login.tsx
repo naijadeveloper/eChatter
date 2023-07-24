@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
-import { useSession, signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 import { useForm } from "react-hook-form";
 
@@ -15,17 +15,13 @@ import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdClose } from "react-icons/md";
 
+import toast from "react-hot-toast";
+
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
 });
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
-
-import environment_url from "@/utilities/check_env";
-import { cookieStorage } from "@/utilities/cookie_storage";
-
-import { useAppDispatch } from "@/store/store_hooks";
-import { saveUserInfo } from "@/store/user_slice";
 
 type formData = {
   email: string;
@@ -45,7 +41,6 @@ const schema: ZodType<formData> = z.object({
 /////////////////////////////////////////////////////////////////////////////////////////
 export default function Login() {
   const router = useRouter();
-  const dispatch = useAppDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
   const [dbError, setDbError] = useState<string>("");
@@ -77,46 +72,17 @@ export default function Login() {
     const email = data.email;
     const password = data.password;
 
-    // check database if email exist and if password is valid under said email
-    const res = await fetch(`${environment_url}/api/users/login-user`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+    // sigin with next auth
+    const info = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
     });
-
-    const objectData = await res.json();
 
     // loading done.
     setLoading(false);
 
-    // check if result is ok i.e if status code is within the 200 range
-    // otherwise throw error
-    try {
-      if (res.ok) {
-        const { _id, email, username, verified, theme } = objectData;
-        // save to redux and cookies and push to otp page
-        dispatch(saveUserInfo({ _id, email, username, verified, theme }));
-        cookieStorage.setItem("user", JSON.stringify({ _id, username, theme }));
-
-        // if verified is false, ask the user if he/she would like to verify or just continue to home page
-        if (verified) return router.push("/feed");
-
-        setDbError(
-          "Your account isn't verified. You can get verified now or just continue to your feed page."
-        );
-      } else {
-        // throw error;
-        throw new Error(objectData?.error);
-      }
-    } catch (error: any) {
-      // show ui here to notify user that something went wrong
-      setDbError(error?.message);
-    }
+    if (!info?.ok) return toast.error(info?.error!);
   }
 
   function handleGoogleLogin() {}

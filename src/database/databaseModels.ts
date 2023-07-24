@@ -8,7 +8,7 @@ const userSchema = new Schema({
   },
   username: {type: String, required: true, unique: true, lowercase: true},
   email: {type: String, required: true, unique: true, lowercase: true},
-  password: {type: String, required: true},
+  password: {type: String},
   verified: {type: Boolean, default: false},
   image: Buffer,
   dateOfBirth: Date,
@@ -19,6 +19,7 @@ const userSchema = new Schema({
   bookmarked: [{type: Schema.Types.ObjectId, ref: "echats"}],
   liked: [{type: Schema.Types.ObjectId, ref: "echats"}],
   notifications: [{type: Schema.Types.ObjectId, ref: "notifications"}],
+  categoryInterests: [{type: String}],
   theme: {
     type: String,
     default: "dark"
