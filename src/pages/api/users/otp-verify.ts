@@ -4,7 +4,11 @@ import { usersCollection, otpCollection } from "@/database/databaseModels";
 import bcrypt from "bcrypt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  connectMongo().catch(() => res.status(500).json({error: "Failed to connect to server"}));
+  try{
+    await connectMongo();
+  }catch(error){
+    return res.status(500).json({error: "Failed to connect to server"})
+  }
 
   if(req.method == "PUT") {
     try{

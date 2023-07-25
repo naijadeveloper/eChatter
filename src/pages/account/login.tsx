@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 import { useForm } from "react-hook-form";
 
@@ -41,6 +41,7 @@ const schema: ZodType<formData> = z.object({
 /////////////////////////////////////////////////////////////////////////////////////////
 export default function Login() {
   const router = useRouter();
+  const { data: session, status: sessionStatus } = useSession();
 
   const [showPassword, setShowPassword] = useState(false);
   const [dbError, setDbError] = useState<string>("");
@@ -83,6 +84,11 @@ export default function Login() {
     setLoading(false);
 
     if (!info?.ok) return toast.error(info?.error!);
+
+    setTimeout(() => {
+      toast.success(`Successfully logged in`);
+      console.log(session, ":::", sessionStatus);
+    }, 3000);
   }
 
   function handleGoogleLogin() {}

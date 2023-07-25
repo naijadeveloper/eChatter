@@ -25,6 +25,6 @@ export const cookieStorage = {
   },
 
   deleteItem(key: string) {
-    document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    document.cookie = `${key}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
   }
 }

@@ -16,37 +16,39 @@ const transporter = nodemailer.createTransport({
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  connectMongo().catch(() => res.status(500).json({error: "Failed to connect to server"}));
-  
-  // check method
+  try{
+    await connectMongo();
+  }catch(error){
+    return res.status(500).json({error: "Failed to connect to server"})
+  }
+
   if(req.method === "POST") {
     try {
-      const { email, username, password, fullname } = req.body;
+      const { email, username, password } = req.body;
       if(!email || !username || !password) {
         return res.status(400).json({error: "A field is empty"});
       }
 
       // check if user already exist
       const user = await usersCollection.find({email}).count().exec();
-      if(user) return res.status(404).json({error: "A user was found with the same email. Try login instead"});
+      if(user) return res.status(403).json({error: "A user was found with the same email. Try login instead"});
 
       // encrypt password before inserting
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(String(password), salt);
-      //***when you want to check user later ... const match = await bcrypt.compare(passwordReceivedFromUser, hashedPasswordSavedInDB) ... if(match) //user exists...
+      // when you want to check user later ... const match = await bcrypt.compare(passwordReceivedFromUser, hashedPasswordSavedInDB) ... if(match) //user exists...
 
       // insert new user to users collection
       const createdUser = await usersCollection.create({
         email,
         username,
-        password: hashedPassword,
-        fullname
+        password: hashedPassword
       })
       // run function to generate otp and save in otp collection
       await otpGeneration(createdUser._id.toString(), email);
 
-      const { _id, theme, verified } = createdUser;
-      return res.status(200).json({ _id, email, username, verified, theme });
+      const { _id } = createdUser;
+      return res.status(200).json({ _id });
     }catch(error) {
       return res.status(500).json({error: "Couldn't save or verify your account. Please try again."});
     }

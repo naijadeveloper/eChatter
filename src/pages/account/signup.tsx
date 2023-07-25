@@ -122,9 +122,7 @@ export default function Signup() {
       router.push("/account/otp");
     } else {
       // show error toast
-      toast.error(objectData?.error, {
-        className: "text-center bg-gray-600",
-      });
+      toast.error(objectData?.error);
     }
   }
 
@@ -136,30 +134,6 @@ export default function Signup() {
         </div>
 
         <div className={`mt-8 w-[98%] max-w-[430px] rounded-md`}>
-          {dbError && (
-            <div className="relative mx-auto flex w-[90%] flex-col items-center justify-center rounded-tl-md rounded-tr-md bg-red-700 p-2 text-sm text-gray-100">
-              <span className="w-[90%] text-center text-lg font-semibold">
-                {dbError}
-              </span>
-              <span
-                onClick={() => setDbError("")}
-                className="absolute right-[2px] top-1 cursor-pointer font-bold"
-              >
-                <MdClose size={24} />
-              </span>
-              {dbError.includes("A user was found") && (
-                <div className="mt-2">
-                  <Link
-                    href="/account/login"
-                    className="flex items-center justify-center rounded-md border-2 border-gray-900 bg-maingreen-200 p-2 px-4 text-gray-800"
-                  >
-                    Log in
-                  </Link>
-                </div>
-              )}
-            </div>
-          )}
-
           <div
             className={`rounded-md bg-gray-900 p-7 text-gray-100 dark:bg-gray-100 dark:text-gray-800`}
           >
