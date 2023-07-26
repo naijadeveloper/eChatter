@@ -63,7 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         html: `<p>A new one-time-password was generated and sent to your email again to verify your eChatter account, please enter this code in order to verify your account. This code will expire an hour from now <br /><br /> <strong style="font-size: 24px">${otpNumber}</strong>
         </p>`
       });
-      return res.status(200).json({success: `Successfully sent otp code resent to ${user?.email}`});
+      return res.status(200).json({success: `Successfully resent otp code to ${user?.email}`});
     }catch(error) {
       return res.status(500).json({error: "Couldn't save or verify your account. Please try again."});
     }

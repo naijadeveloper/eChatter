@@ -1,9 +1,8 @@
-import Link from "next/link";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { useState, useMemo } from "react";
 
-import { MdClose } from "react-icons/md";
+import { useSession } from "next-auth/react";
 
 import toast from "react-hot-toast";
 
@@ -15,11 +14,11 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
 
 import environment_url from "@/utilities/check_env";
-import { cookieStorage } from "@/utilities/cookie_storage";
 
 /////////////////////////////////////////////////
 export default function Otp() {
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   const [otp, setOtp] = useState("");
   const [error, setError] = useState<string>("");
@@ -45,10 +44,7 @@ export default function Otp() {
     const inputOtpCode = otp.trim();
 
     // get _id of user from cookie or session
-    let cookieUserId = cookieStorage.getItem("user")
-      ? JSON.parse(cookieStorage.getItem("user")!)?._id
-      : "";
-    const userId = cookieUserId;
+    const userId = session?.user?.id;
 
     // if userId is still empty
     if (!userId) {
@@ -77,12 +73,8 @@ export default function Otp() {
     setLoading(false);
 
     if (res.ok) {
-      // delete the user cookie. it saves the _id of the user
-      cookieStorage.deleteItem("user");
-      // show success toast
-      toast.success(
-        "Account validation was a success. You can login with your account credentials now!"
-      );
+      // user is verified push to feed page
+      router.push("/feed");
     } else {
       // show error toast
       toast.error(objectData?.error);
@@ -94,10 +86,7 @@ export default function Otp() {
     // loading
     setLoading(true);
 
-    let cookieUserId = cookieStorage.getItem("user")
-      ? JSON.parse(cookieStorage.getItem("user")!)?._id
-      : "";
-    const userId = cookieUserId;
+    const userId = session?.user?.id;
 
     // if userId is still empty
     if (!userId) {
@@ -109,7 +98,7 @@ export default function Otp() {
       return;
     }
 
-    // otherwise fetch api
+    // fetch api
     const res = await fetch(`${environment_url}/api/users/otp-resend`, {
       method: "POST",
       headers: {

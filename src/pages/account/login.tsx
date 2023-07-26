@@ -13,7 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { MdClose } from "react-icons/md";
 
 import toast from "react-hot-toast";
 
@@ -41,10 +40,9 @@ const schema: ZodType<formData> = z.object({
 /////////////////////////////////////////////////////////////////////////////////////////
 export default function Login() {
   const router = useRouter();
-  const { data: session, status: sessionStatus } = useSession();
+  const { status } = useSession();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [dbError, setDbError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
@@ -69,14 +67,15 @@ export default function Login() {
     // loading
     setLoading(true);
 
-    // user email and password
+    // email and password needed
     const email = data.email;
     const password = data.password;
 
-    // sigin with next auth
+    // login with next auth
     const info = await signIn("credentials", {
       email,
       password,
+      type: "login",
       redirect: false,
     });
 
@@ -85,13 +84,13 @@ export default function Login() {
 
     if (!info?.ok) return toast.error(info?.error!);
 
-    setTimeout(() => {
-      toast.success(`Successfully logged in`);
-      console.log(session, ":::", sessionStatus);
-    }, 3000);
+    // if ok is true then push to feed for user
+    router.push("/feed");
   }
 
-  function handleGoogleLogin() {}
+  async function handleGoogleLogin() {}
+
+  async function handleFacebookLogin() {}
 
   return (
     <>
@@ -101,37 +100,6 @@ export default function Login() {
         </div>
 
         <div className="mt-8 w-[98%] max-w-[430px] rounded-md">
-          {dbError && (
-            <div className="relative mx-auto flex w-[90%] flex-col items-center justify-center rounded-tl-md rounded-tr-md bg-red-700 p-2 text-sm text-gray-100">
-              <span className="w-[90%] text-center text-lg font-semibold">
-                {dbError}
-              </span>
-              <span
-                onClick={() => setDbError("")}
-                className="absolute right-[2px] top-1 cursor-pointer font-bold"
-              >
-                <MdClose size={24} />
-              </span>
-              {dbError.includes("Your account isn't verified") && (
-                <div className="mt-2 flex items-center justify-center gap-4">
-                  <Link
-                    href="/account/otp"
-                    className="flex items-center justify-center rounded-md border-2 border-gray-900 bg-maingreen-200 p-2 px-4 text-gray-800"
-                  >
-                    Verify
-                  </Link>
-
-                  <Link
-                    href="/feed"
-                    className="flex items-center justify-center rounded-md border-2 border-gray-900 bg-maingreen-200 p-2 px-4 text-gray-800"
-                  >
-                    Feed
-                  </Link>
-                </div>
-              )}
-            </div>
-          )}
-
           <div className="rounded-md bg-gray-900 p-7 text-gray-100 dark:bg-gray-100 dark:text-gray-800">
             <header className="text-center text-3xl font-semibold">
               Log In

@@ -1,20 +1,21 @@
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState, useMemo } from "react";
+import dynamic from "next/dynamic";
+
+import { signIn } from "next-auth/react";
+
+import { useForm } from "react-hook-form";
 
 import { z, ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useForm } from "react-hook-form";
-
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { MdClose } from "react-icons/md";
 
 import toast from "react-hot-toast";
 
-import dynamic from "next/dynamic";
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
 });
@@ -57,7 +58,6 @@ export default function Signup() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPass, setShowPass] = useState(false);
-  const [dbError, setDbError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
@@ -89,42 +89,32 @@ export default function Signup() {
     let second_split = first_split[1].split(".");
     let secondVal = second_split.join("-");
 
-    // check database if email already exist
-    // Generate `otp` send `otp` to email and push to the otp route
-    // router.push("/account/otp");
+    // email, password and username needed
     const email = data.email;
     const password = data.password;
     const username = firstVal + "-" + secondVal;
 
-    const res = await fetch(`${environment_url}/api/users/create-user`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        username,
-        password,
-      }),
+    // sigup with next auth
+    const info = await signIn("credentials", {
+      email,
+      password,
+      username,
+      type: "signup",
+      redirect: false,
     });
-
-    const objectData = await res.json();
 
     // loading done.
     setLoading(false);
 
-    // check if result is ok i.e if status code is within the 200 range
-    // otherwise throw error
-    if (res.ok) {
-      const { _id } = objectData;
-      // save to redux and cookies and push to otp page
-      cookieStorage.setItem("user", JSON.stringify({ _id }));
-      router.push("/account/otp");
-    } else {
-      // show error toast
-      toast.error(objectData?.error);
-    }
+    if (!info?.ok) return toast.error(info?.error!);
+
+    // if ok is true then push to otp page for email verification
+    router.push("/otp");
   }
+
+  async function handleGoogleSignup() {}
+
+  async function handleFacebookSignup() {}
 
   return (
     <>

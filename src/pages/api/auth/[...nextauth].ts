@@ -1,7 +1,8 @@
 import NextAuth, {NextAuthOptions} from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials"
-import environment_url from "@/utilities/check_env";
+import { auth_signUp } from "@/utilities/auth_functions";
+import { auth_logIn } from "@/utilities/auth_functions";
 
 export const authOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === "development",
@@ -20,28 +21,43 @@ export const authOptions: NextAuthOptions = {
       name: "credentials",
       credentials: {},
       async authorize(credentials) {
-          const {email, password} = credentials as {email: string, password: string};
+          const {email, password, username, type} = credentials as {email: string, password: string, username: string, type: string};
+
           // mongodb authorization
-          // if authorized return user with all the user values from mongodb
-          if(!email && !password) {
-            throw new Error("Empty field");
-          }
+          // handle `SIGN UP` if `type` is `signup`
+          // handle `LOG IN` if `type` is `login`
 
-          const res = await fetch(`${environment_url}/api/users/login-user`, {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email,
-              password
-            }),
-          });
+          /////////////////////////////////////////////////////////////////////////////
+          if(type && type === "signup") {
+            if(!email || !password || !username) {
+              throw new Error("Empty field");
+            }
 
-          const user = await res.json();
+            // call auth_signUp function here
+            try{
+              const user = await auth_signUp(email, password, username);
+              return user;
+            }catch(error: any) {
+              throw new Error(error?.message)
+            }
 
-          if (res.ok && user) {
-            return {id: user?._id, name: user?.username, email: user?.email, verified: user?.verified, theme: user?.theme};
+          //////////////////////////////////////////////////////////////////////////////
+          }else if(type && type === "login"){
+            if(!email || !password) {
+              throw new Error("Empty field");
+            }
+
+            // call auth_logIn function here
+            try{
+              const user = await auth_logIn(email, password);
+              return user;
+            }catch(error: any) {
+              throw new Error(error?.message);
+            }
+
+          //////////////////////////////////////////////////////////////////////////////
           }else {
-            throw new Error(user?.error);
+            throw new Error("Missing type");
           }    
       },
     }),
@@ -50,7 +66,10 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt(params: any) {
       if(params.user?.id) {params.token.id = params.user.id;}
+      //
       if(params.user?.verified) {params.token.verified = params.user.verified;}
+      else {params.token.verified = false;}
+      //
       if(params.user?.theme) {params.token.theme = params.user.theme;}
       // return modified token
       return params.token;
