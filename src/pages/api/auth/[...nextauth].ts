@@ -1,8 +1,9 @@
 import NextAuth, {NextAuthOptions} from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials"
-import { auth_signUp } from "@/utilities/auth_functions";
-import { auth_logIn } from "@/utilities/auth_functions";
+import { auth_cred_signUp } from "@/utilities/auth_functions";
+import { auth_cred_logIn } from "@/utilities/auth_functions";
+import { auth_google_logIn } from "@/utilities/auth_functions";
 
 export const authOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === "development",
@@ -35,7 +36,7 @@ export const authOptions: NextAuthOptions = {
 
             // call auth_signUp function here
             try{
-              const user = await auth_signUp(email, password, username);
+              const user = await auth_cred_signUp(email, password, username);
               return user;
             }catch(error: any) {
               throw new Error(error?.message)
@@ -49,7 +50,7 @@ export const authOptions: NextAuthOptions = {
 
             // call auth_logIn function here
             try{
-              const user = await auth_logIn(email, password);
+              const user = await auth_cred_logIn(email, password);
               return user;
             }catch(error: any) {
               throw new Error(error?.message);
@@ -64,6 +65,24 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
+    async signIn({ user, account, profile }) {
+      // write info about the above arguments
+      // user object id: string, name: string, email: string, image: urlString
+      // account object provider: string
+      // profile object email: string, email_verified: true, name: 'Enoch Enujiugha', picture: urlString, given_name: 'Enoch', family_name: 'Enujiugha',
+
+      if(account?.provider === "google") {
+        let given_name = (profile as {given_name: string})?.given_name;
+        let family_name = (profile as {family_name: string})?.family_name;
+        let email_verified = (profile as {email_verified: boolean})?.email_verified;
+        const neededValues = { email: user?.email, name: user?.name, given_name, family_name, image: user?.image, email_verified };
+
+        // pass all that to the auth_google_login function and await its results
+        const res = await auth_google_logIn(neededValues);
+      }
+      return true;
+    },
+
     jwt(params: any) {
       if(params.user?.id) {params.token.id = params.user.id;}
       //

@@ -182,17 +182,17 @@ export default function Login() {
             <div className="relative mt-9 h-[1px] w-full bg-gray-500 before:absolute before:left-2/4 before:top-2/4 before:-translate-x-2/4 before:-translate-y-2/4 before:bg-gray-900 before:px-2 before:text-gray-500 before:content-['OR'] dark:before:bg-gray-100"></div>
 
             <div className="mt-5 h-14 w-full">
-              <a
-                href="#"
+              <button
+                onClick={handleFacebookLogin}
                 className="flex h-full w-full items-center rounded-md bg-blue-700 px-2 text-gray-100 hover:opacity-95 dark:border dark:border-gray-800"
               >
                 <span className="flex h-[28px] w-[28px] items-center justify-center rounded-[100%] bg-gray-100 text-blue-700">
                   <FaFacebookF />
                 </span>
                 <span className="flex grow items-center justify-center">
-                  Log in with Facebook
+                  Authorize with Facebook
                 </span>
-              </a>
+              </button>
             </div>
 
             <div className="mt-5 h-14 w-full">
@@ -204,7 +204,7 @@ export default function Login() {
                   <FcGoogle />
                 </span>
                 <span className="flex grow items-center justify-center">
-                  Log in with Google
+                  Authorize with Google
                 </span>
               </button>
             </div>
