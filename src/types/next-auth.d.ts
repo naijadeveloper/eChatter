@@ -1,4 +1,7 @@
 import NextAuth, { DefaultSession } from "next-auth"
+import { AdapterUser } from "next-auth/adapters";
+import { User } from "next-auth";
+import { DefaultUser } from "next-auth";
 
 declare module "next-auth" {
   /**
@@ -12,4 +15,9 @@ declare module "next-auth" {
       theme: string | null | undefined;
     } & DefaultSession["user"]
   }
+
+  interface User extends DefaultUser {
+    theme?: string,
+    verified?: boolean,
+  };
 }

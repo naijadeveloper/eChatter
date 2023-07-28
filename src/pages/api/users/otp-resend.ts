@@ -24,11 +24,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
  
   if(req.method === "POST") {
     try {
-      let { userId } = req.body;
-      if(!userId) return res.status(400).json({error: "Please log in or sign up first, before account verification"});
+      let { userId: user_id } = req.body;
+      if(!user_id) return res.status(400).json({error: "Please log in or sign up first, before account verification"});
   
       // check user exist
-      const user = await usersCollection.findById(userId).exec();
+      const user = await usersCollection.findById(user_id).exec();
       if(!user) return res.status(404).json({error: "You are not a registered user"});
   
       // check verification
@@ -43,16 +43,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const salt = await bcrypt.genSalt();
       const hashedOtp = await bcrypt.hash(otpNumber, salt);
   
-      let otpDoc = await otpCollection.findOne({userId}).exec();
+      let otpDoc = await otpCollection.findOne({user_id}).exec();
       if(otpDoc) {
-        otpDoc.otpCode = hashedOtp;
-        otpDoc.createdAt = Date.now();
+        otpDoc.otp_code = hashedOtp;
+        otpDoc.created_at = Date.now();
   
         await otpDoc.save();
       }else {
         otpDoc = await otpCollection.create({
-          userId,
-          otpCode: hashedOtp
+          user_id,
+          otp_code: hashedOtp
         });
       }
       //use nodemailer to send to user the email

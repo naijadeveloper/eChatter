@@ -13,11 +13,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if(req.method == "PUT") {
     try{
       // get info from user
-      const { userId, inputOtpCode } = req.body;
-      if(!userId || !inputOtpCode) return res.status(400).json({error: "Please log in or sign up first, before account verification"});
+      const { userId: user_id, inputOtpCode } = req.body;
+      if(!user_id || !inputOtpCode) return res.status(400).json({error: "Please log in or sign up first, before account verification"});
   
       // check if user exist and if user is verified already
-      const user = await usersCollection.findById(userId).exec();
+      const user = await usersCollection.findById(user_id).exec();
       if(!user) return res.status(404).json({error: "You are not a registered user"});
 
       if(user.verified) {
@@ -25,21 +25,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       // get otp doc from otpCollection
-      const otpDoc = await otpCollection.findOne({userId}).exec();
+      const otpDoc = await otpCollection.findOne({user_id}).exec();
       if(!otpDoc) return res.status(404).json({error: "The otp has expired. Please try again"});
 
-      // check if time as expired
+      // check if time has expired
       const currentTime = Date.now();
-      const otpDatePlusOneHour = otpDoc?.createdAt! + 3600000;
+      const otpDatePlusOneHour = otpDoc?.created_at! + 3600000;
   
       if(currentTime >= otpDatePlusOneHour){
         // remove otp doc from collection
-        await otpCollection.deleteOne({userId}).exec();
+        await otpCollection.deleteOne({user_id}).exec();
         return res.status(404).json({error: "The otp has expired. Please try again"});
       }
   
       // check if otp is valid
-      const hash = otpDoc?.otpCode!;
+      const hash = otpDoc?.otp_code!;
       const match = await bcrypt.compare(inputOtpCode, hash);
   
       // if match is false
@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await user.save();
 
       // delete otp doc
-      await otpCollection.deleteOne({userId}).exec();
+      await otpCollection.deleteOne({user_id}).exec();
 
       // send to user necessary info
       const {_id, email, username, verified, theme} = user;

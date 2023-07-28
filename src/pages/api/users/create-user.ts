@@ -66,8 +66,8 @@ async function otpGeneration(_id: string, email: string) {
   const hashedOtp = await bcrypt.hash(otpNumber, salt);
   // create otp document and save the _id of user created and the generated otp code
   await otpCollection.create({
-    userId: _id,
-    otpCode: hashedOtp
+    user_id: _id,
+    otp_code: hashedOtp
   });
   //use nodemailer to send to user the email
   await transporter.sendMail({

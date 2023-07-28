@@ -7,15 +7,14 @@ const userSchema = new Schema({
     lastname: String,
   },
   username: {type: String, required: true, unique: true, lowercase: true},
+  username_update: {type: Number, default: () => Date.now()},
   email: {type: String, required: true, unique: true, lowercase: true},
   password: {type: String},
-  provider: {type: String, lowercase: true},
+  provider: Boolean,
   verified: {type: Boolean, default: false},
-  image: {
-    fileType: Buffer,
-    urlType: String
-  },
-  dateOfBirth: Date,
+  image_file: Buffer,
+  image_url: String,
+  date_of_birth: Date,
   bio: String,
   following: [{type: Schema.Types.ObjectId, ref: "users"}],
   followers: [{type: Schema.Types.ObjectId, ref: "users"}],
@@ -23,12 +22,12 @@ const userSchema = new Schema({
   bookmarked: [{type: Schema.Types.ObjectId, ref: "echats"}],
   liked: [{type: Schema.Types.ObjectId, ref: "echats"}],
   notifications: [{type: Schema.Types.ObjectId, ref: "notifications"}],
-  categoryInterests: [{type: String}],
+  category_interests: [{type: String}],
   theme: {
     type: String,
     default: "dark"
   },
-  createdAt: {type: Number, default: () => Date.now()}
+  created_at: {type: Number, default: () => Date.now()}
 });
 
 type users = InferSchemaType<typeof userSchema>;
@@ -37,9 +36,9 @@ export const usersCollection = models.users || model<users>("users", userSchema)
 
 //otp schema and model
 const otpSchema = new Schema({
-  userId: {type: String, required: true},
-  otpCode: {type: String, required: true},
-  createdAt: {type: Number, default: () => Date.now()}
+  user_id: {type: String, required: true},
+  otp_code: {type: String, required: true},
+  created_at: {type: Number, default: () => Date.now()}
 });
 
 type otpVerification = InferSchemaType<typeof otpSchema>;
