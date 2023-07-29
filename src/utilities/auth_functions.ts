@@ -107,7 +107,8 @@ export async function auth_google_logIn(authArgs: googleAuthLoginArgs) {
         lastname: authArgs?.family_name
       },
       image_url: authArgs?.image,
-      provider: true
+      provider: true,
+      verified: authArgs?.email_verified
     });
 
     return {id: createdUser?._id, username: createdUser?.username, verified: createdUser?.verified, theme: createdUser?.theme};

@@ -72,15 +72,15 @@ export const authOptions: NextAuthOptions = {
       // profile object email: string, email_verified: true, name: 'Enoch Enujiugha', picture: urlString, given_name: 'Enoch', family_name: 'Enujiugha',
 
       if(account?.provider === "google") {
-        let email = (user as {email: string})?.email;
-        let name = (user as {name: string})?.name;
-        let given_name = (profile as {given_name: string})?.given_name;
-        let family_name = (profile as {family_name: string})?.family_name;
-        let email_verified = (profile as {email_verified: boolean})?.email_verified;
-        const neededValues = { email, name, given_name, family_name, image: user?.image, email_verified };
-
-        // pass all that to the auth_google_login function and await its results
         try{
+          let email = (user as {email: string})?.email;
+          let name = (user as {name: string})?.name;
+          let given_name = (profile as {given_name: string})?.given_name;
+          let family_name = (profile as {family_name: string})?.family_name;
+          let email_verified = (profile as {email_verified: boolean})?.email_verified;
+          const neededValues = { email, name, given_name, family_name, image: user?.image, email_verified };
+
+          // pass all that to the auth_google_login function and await its results
           const returnedUser = await auth_google_logIn(neededValues);
           user.id = returnedUser?.id;
           user.name = returnedUser?.username;
@@ -88,7 +88,7 @@ export const authOptions: NextAuthOptions = {
           user.theme = returnedUser?.theme;
           return true;
         }catch(error) {
-          return false;
+          return "/account/error";
         }
       }
       return true;
@@ -117,8 +117,8 @@ export const authOptions: NextAuthOptions = {
   },
 
   pages: {
-    signIn: '/account/login',
-    error: '/account/error'
+    signIn: "/account/login",
+    error: "/account/error"
   }
 }
 

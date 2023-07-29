@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 import { useForm } from "react-hook-form";
 
@@ -21,9 +21,6 @@ const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
 });
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
-
-import environment_url from "@/utilities/check_env";
-import { cookieStorage } from "@/utilities/cookie_storage";
 
 type formData = {
   email: string;
@@ -55,6 +52,12 @@ const schema: ZodType<formData> = z
 /////////////////////////////////////////////////////////////////////////////////////////
 export default function Signup() {
   const router = useRouter();
+  const { data: session, status } = useSession();
+
+  setTimeout(() => {
+    console.log(session);
+    console.log(status);
+  }, 5000);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPass, setShowPass] = useState(false);
