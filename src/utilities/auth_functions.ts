@@ -50,7 +50,6 @@ interface googleAuthLoginArgs {
   given_name?: string;
   family_name?: string;
   image: string | null | undefined;
-  email_verified: boolean;
 }
 export async function auth_google_logIn(authArgs: googleAuthLoginArgs) {
   // connect to db
@@ -108,7 +107,7 @@ export async function auth_google_logIn(authArgs: googleAuthLoginArgs) {
       },
       image_url: authArgs?.image,
       provider: true,
-      verified: authArgs?.email_verified
+      verified: true
     });
 
     return {id: createdUser?._id, username: createdUser?.username, verified: createdUser?.verified, theme: createdUser?.theme};

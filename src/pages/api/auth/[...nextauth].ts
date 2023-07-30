@@ -77,8 +77,8 @@ export const authOptions: NextAuthOptions = {
           let name = (user as {name: string})?.name;
           let given_name = (profile as {given_name: string})?.given_name;
           let family_name = (profile as {family_name: string})?.family_name;
-          let email_verified = (profile as {email_verified: boolean})?.email_verified;
-          const neededValues = { email, name, given_name, family_name, image: user?.image, email_verified };
+          let image = user?.image || (profile as {picture: string})?.picture;
+          const neededValues = { email, name, given_name, family_name, image };
 
           // pass all that to the auth_google_login function and await its results
           const returnedUser = await auth_google_logIn(neededValues);
