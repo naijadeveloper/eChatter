@@ -45,6 +45,7 @@ export async function auth_cred_logIn(email: string, password: string) {
 }
 
 interface googleAuthLoginArgs {
+  id: string;
   email: string;
   name: string;
   given_name?: string;
@@ -107,7 +108,8 @@ export async function auth_google_logIn(authArgs: googleAuthLoginArgs) {
       },
       image_url: authArgs?.image,
       provider: true,
-      verified: true
+      verified: true,
+      provider_id: authArgs?.id
     });
 
     return {id: createdUser?._id, username: createdUser?.username, verified: createdUser?.verified, theme: createdUser?.theme};

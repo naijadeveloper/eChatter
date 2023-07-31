@@ -66,19 +66,19 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async signIn({ user, account, profile }) {
-      // write info about the above arguments
-      // user object id: string, name: string, email: string, image: urlString
-      // account object provider: string
-      // profile object email: string, email_verified: true, name: 'Enoch Enujiugha', picture: urlString, given_name: 'Enoch', family_name: 'Enujiugha',
-
+      // user object => id: string, name: string, email: string, image: urlString
+      // account object => provider: string
+      // profile object => email: string, email_verified: true, name: 'Enoch Enujiugha', picture: urlString, given_name: 'Enoch', family_name: 'Enujiugha',
       if(account?.provider === "google") {
         try{
+          let id = (profile as {sub: string})?.sub || (user as {id: string})?.id;
           let email = (user as {email: string})?.email;
           let name = (user as {name: string})?.name;
           let given_name = (profile as {given_name: string})?.given_name;
           let family_name = (profile as {family_name: string})?.family_name;
           let image = user?.image || (profile as {picture: string})?.picture;
-          const neededValues = { email, name, given_name, family_name, image };
+
+          const neededValues = { id, email, name, given_name, family_name, image };
 
           // pass all that to the auth_google_login function and await its results
           const returnedUser = await auth_google_logIn(neededValues);
@@ -90,16 +90,15 @@ export const authOptions: NextAuthOptions = {
         }catch(error) {
           return "/account/error";
         }
+      }else if(account?.provider === "facebook") {
+        //
       }
       return true;
     },
 
     jwt(params: any) {
       if(params.user?.id) {params.token.id = params.user.id;}
-      //
-      if(params.user?.verified) {params.token.verified = params.user.verified;}
-      else {params.token.verified = false;}
-      //
+      if(params.user?.verified) {params.token.verified = params.user.verified ?? false;}
       if(params.user?.theme) {params.token.theme = params.user.theme;}
       // return modified token
       return params.token;
