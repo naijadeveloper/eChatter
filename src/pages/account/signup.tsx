@@ -119,7 +119,9 @@ export default function Signup() {
     signIn("google");
   }
 
-  async function handleFacebookSignup() {}
+  async function handleFacebookSignup() {
+    signIn("facebook");
+  }
 
   return (
     <>

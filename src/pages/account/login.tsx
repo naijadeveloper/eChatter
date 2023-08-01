@@ -88,9 +88,13 @@ export default function Login() {
     router.push("/feed");
   }
 
-  async function handleGoogleLogin() {}
+  async function handleGoogleLogin() {
+    signIn("google");
+  }
 
-  async function handleFacebookLogin() {}
+  async function handleFacebookLogin() {
+    signIn("facebook");
+  }
 
   return (
     <>

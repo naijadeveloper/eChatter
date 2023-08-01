@@ -1,5 +1,6 @@
 import NextAuth, {NextAuthOptions} from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials"
 import { auth_cred_signUp } from "@/utilities/auth_functions";
 import { auth_cred_logIn } from "@/utilities/auth_functions";
@@ -16,6 +17,11 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+    }),
+
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID!,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!
     }),
 
     CredentialsProvider({
@@ -71,7 +77,7 @@ export const authOptions: NextAuthOptions = {
       // profile object => email: string, email_verified: true, name: 'Enoch Enujiugha', picture: urlString, given_name: 'Enoch', family_name: 'Enujiugha',
       if(account?.provider === "google") {
         try{
-          let id = (profile as {sub: string})?.sub || (user as {id: string})?.id;
+          let id = (user as {id: string})?.id || (profile as {sub: string})?.sub;
           let email = (user as {email: string})?.email;
           let name = (user as {name: string})?.name;
           let given_name = (profile as {given_name: string})?.given_name;
@@ -91,7 +97,8 @@ export const authOptions: NextAuthOptions = {
           return "/account/error";
         }
       }else if(account?.provider === "facebook") {
-        //
+        console.log("user object:::", user);
+        console.log("profile object:::", profile)
       }
       return true;
     },
