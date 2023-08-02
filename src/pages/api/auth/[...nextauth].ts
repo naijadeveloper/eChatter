@@ -98,7 +98,7 @@ export const authOptions: NextAuthOptions = {
         }
       }else if(account?.provider === "facebook") {
         console.log("user object:::", user);
-        console.log("profile object:::", profile)
+        console.log("profile object:::", profile);
       }
       return true;
     },
