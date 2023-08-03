@@ -63,8 +63,9 @@ export async function auth_google_logIn(authArgs: googleAuthLoginArgs) {
   // check db if email exist and if the provider is true
   const user = await usersCollection.findOne({email: authArgs?.email}).exec();
   if(user) {
-    if(!user?.provider) {
-      throw new Error("Authorization for this email requires a password");
+    if(!user?.verified) {
+      user.verified = true;
+      await user.save();
     }
     return {id: user?._id, username: user?.username, verified: user?.verified, theme: user?.theme};
   }else {

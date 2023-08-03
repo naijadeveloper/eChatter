@@ -3,6 +3,7 @@ import connectMongo from "@/database/connectMongo";
 import { usersCollection, otpCollection } from "@/database/databaseModels";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
+import { genDigits } from "@/utilities/digits_only";
 
 //transporter service is Brevo(fka sendinblue)
 const transporter = nodemailer.createTransport({
@@ -24,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if(req.method === "POST") {
     try {
-      const { email, username, password } = req.body;
+      let { email, username, password } = req.body;
       if(!email || !username || !password) {
         return res.status(400).json({error: "A field is empty"});
       }
@@ -32,6 +33,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // check if user already exist
       const user = await usersCollection.find({email}).count().exec();
       if(user) return res.status(403).json({error: "A user was found with the same email. Try login instead"});
+
+      // check if username already exist, if it does
+      // let's generate a new username
+      let digits = ""
+      let num_of_digits = 1;
+      let validUsername = false;
+      do{
+        // attach
+        let new_username = username + digits;
+        // check db
+        const num_of_user = await usersCollection.find({username: new_username}).count().exec();
+        if(num_of_user) {
+          validUsername = false;
+        }else {
+          validUsername = true;
+          username = new_username;
+        }
+        // generate a new set of digits based on num_of_digits
+        digits = genDigits(num_of_digits);
+        // increment num_of_digits by 1;
+        num_of_digits++;
+      }while(!validUsername);
 
       // encrypt password before inserting
       const salt = await bcrypt.genSalt();

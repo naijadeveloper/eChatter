@@ -1,6 +1,6 @@
 import NextAuth, {NextAuthOptions} from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import FacebookProvider from "next-auth/providers/facebook";
+// import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials"
 import { auth_cred_signUp } from "@/utilities/auth_functions";
 import { auth_cred_logIn } from "@/utilities/auth_functions";
@@ -19,10 +19,10 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!
     }),
 
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID!,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!
-    }),
+    // FacebookProvider({
+    //   clientId: process.env.FACEBOOK_CLIENT_ID!,
+    //   clientSecret: process.env.FACEBOOK_CLIENT_SECRET!
+    // }),
 
     CredentialsProvider({
       name: "credentials",
@@ -94,11 +94,8 @@ export const authOptions: NextAuthOptions = {
           user.theme = returnedUser?.theme;
           return true;
         }catch(error) {
-          return "/account/error";
+          return false;
         }
-      }else if(account?.provider === "facebook") {
-        console.log("user object:::", user);
-        console.log("profile object:::", profile);
       }
       return true;
     },

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -11,7 +11,7 @@ import { z, ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
-import { FaFacebookF } from "react-icons/fa";
+// import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
 import toast from "react-hot-toast";
@@ -41,6 +41,13 @@ const schema: ZodType<formData> = z.object({
 export default function Login() {
   const router = useRouter();
   const { status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      // push back to where its coming from
+      // router.push("");
+    }
+  }, [status]);
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -92,9 +99,9 @@ export default function Login() {
     signIn("google");
   }
 
-  async function handleFacebookLogin() {
-    signIn("facebook");
-  }
+  // async function handleFacebookLogin() {
+  //   signIn("facebook");
+  // }
 
   return (
     <>
@@ -185,7 +192,7 @@ export default function Login() {
 
             <div className="relative mt-9 h-[1px] w-full bg-gray-500 before:absolute before:left-2/4 before:top-2/4 before:-translate-x-2/4 before:-translate-y-2/4 before:bg-gray-900 before:px-2 before:text-gray-500 before:content-['OR'] dark:before:bg-gray-100"></div>
 
-            <div className="mt-5 h-14 w-full">
+            {/* <div className="mt-5 h-14 w-full">
               <button
                 onClick={handleFacebookLogin}
                 className="flex h-full w-full items-center rounded-md bg-blue-700 px-2 text-gray-100 hover:opacity-95 dark:border dark:border-gray-800"
@@ -197,7 +204,7 @@ export default function Login() {
                   Authorize with Facebook
                 </span>
               </button>
-            </div>
+            </div> */}
 
             <div className="mt-5 h-14 w-full">
               <button
