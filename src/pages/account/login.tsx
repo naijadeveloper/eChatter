@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -22,6 +22,8 @@ const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
 
+import environment_url from "@/utilities/check_env";
+
 type formData = {
   email: string;
   password: string;
@@ -40,14 +42,7 @@ const schema: ZodType<formData> = z.object({
 /////////////////////////////////////////////////////////////////////////////////////////
 export default function Login() {
   const router = useRouter();
-  const { status } = useSession();
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      // push back to where its coming from
-      // router.push("");
-    }
-  }, [status]);
+  const { data: session, status } = useSession();
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -69,6 +64,11 @@ export default function Login() {
 
   ///////////////////////////////////////////////////
   async function submitForm(data: formData) {
+    // if you are logged in...logout first
+    if (status === "authenticated") {
+      return router.push("/account/logout");
+    }
+
     if (signupValues.success == false) return;
 
     // loading
@@ -96,7 +96,11 @@ export default function Login() {
   }
 
   async function handleGoogleLogin() {
-    signIn("google");
+    // if you are login...logout first
+    if (status === "authenticated") {
+      return router.push("/account/logout");
+    }
+    signIn("google", { callbackUrl: `${environment_url}/feed` });
   }
 
   // async function handleFacebookLogin() {

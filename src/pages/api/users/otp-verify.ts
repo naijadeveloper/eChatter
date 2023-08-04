@@ -52,9 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // delete otp doc
       await otpCollection.deleteOne({user_id}).exec();
 
-      // send to user necessary info
-      const {_id, email, username, verified, theme} = user;
-      return res.status(200).json({ _id, email, username, verified, theme });
+      return res.status(200).json({ success: "successfull" });
     }catch(error) {
       return res.status(500).json({error: "Couldn't save or verify your account. Please try again."});
     }

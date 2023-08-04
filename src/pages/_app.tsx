@@ -31,6 +31,9 @@ export default function App({ Component, pageProps }: CustomAppProps) {
   );
 }
 
+
+
+// Authentication wrapper
 function Auth({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { status } = useSession({

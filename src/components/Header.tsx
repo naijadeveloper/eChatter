@@ -2,9 +2,6 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useState } from "react";
 
-import { useAppDispatch } from "@/store/store_hooks";
-import { saveUserInfo } from "@/store/user_slice";
-
 import { GiHamburgerMenu } from "react-icons/gi";
 import {
   MdArrowDropDown,
@@ -15,7 +12,6 @@ import {
 } from "react-icons/md";
 import { HiHome } from "react-icons/hi";
 import { SiAddthis } from "react-icons/si";
-import { cookieStorage } from "@/utilities/cookie_storage";
 
 type headerProps = {
   page: string;
@@ -45,7 +41,6 @@ export default function Header({
   setOpenDashboardDD,
 }: headerProps) {
   const router = useRouter();
-  const dispatch = useAppDispatch();
   const [openMobileMenu, setOpenMobileMenu] = useState<boolean>(false);
 
   function handleCloseAll() {
@@ -55,17 +50,7 @@ export default function Header({
   }
 
   function logOut() {
-    dispatch(
-      saveUserInfo({
-        _id: "",
-        email: "",
-        username: "",
-        verified: false,
-        theme: "",
-      })
-    );
-    cookieStorage.setItem("user", "");
-    router.push("/account/login");
+    router.push("/account/logout");
   }
 
   return (

@@ -19,7 +19,7 @@ export async function auth_cred_signUp(email: string, password: string, username
   const user = await res.json();
 
   if (res.ok && user) {
-    return {id: user?._id, name: user?.username, email: user?.email, verified: user?.verified, theme: user?.theme};
+    return {id: user?._id, name: user?.username, email: user?.email, verified: user?.verified, theme: user?.theme, category_interests: user?.category_interests};
   }else {
     throw new Error(user?.error);
   }
@@ -38,7 +38,7 @@ export async function auth_cred_logIn(email: string, password: string) {
   const user = await res.json();
 
   if (res.ok && user) {
-    return {id: user?._id, name: user?.username, email: user?.email, verified: user?.verified, theme: user?.theme};
+    return {id: user?._id, name: user?.username, email: user?.email, verified: user?.verified, theme: user?.theme, category_interests: user?.category_interests};
   }else {
     throw new Error(user?.error);
   }
@@ -67,7 +67,7 @@ export async function auth_google_logIn(authArgs: googleAuthLoginArgs) {
       user.verified = true;
       await user.save();
     }
-    return {id: user?._id, username: user?.username, verified: user?.verified, theme: user?.theme};
+    return {id: user?._id, username: user?.username, verified: user?.verified, theme: user?.theme, category_interests: user?.category_interests};
   }else {
     // generate username from email
     let first_split = authArgs?.email.split("@");
@@ -113,6 +113,6 @@ export async function auth_google_logIn(authArgs: googleAuthLoginArgs) {
       provider_id: authArgs?.id
     });
 
-    return {id: createdUser?._id, username: createdUser?.username, verified: createdUser?.verified, theme: createdUser?.theme};
+    return {id: createdUser?._id, username: createdUser?.username, verified: createdUser?.verified, theme: createdUser?.theme, category_interests: createdUser?.category_interests};
   }
 }

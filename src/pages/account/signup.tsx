@@ -22,6 +22,8 @@ const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
 
+import environment_url from "@/utilities/check_env";
+
 type formData = {
   email: string;
   password: string;
@@ -49,11 +51,6 @@ export default function Signup() {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  setTimeout(() => {
-    console.log(session);
-    console.log(status);
-  }, 5000);
-
   const [showPassword, setShowPassword] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -75,6 +72,11 @@ export default function Signup() {
 
   /////////////////////////////////////////////////////////////////
   async function submitForm(data: formData) {
+    // if you are logged in...logout first
+    if (status === "authenticated") {
+      return router.push("/account/logout");
+    }
+
     if (signupValues.success == false) return;
 
     // shows the user the loading process.
@@ -111,7 +113,12 @@ export default function Signup() {
   }
 
   async function handleGoogleSignup() {
-    signIn("google");
+    // if you are logged in...logout first
+    if (status === "authenticated") {
+      return router.push("/account/logout");
+    }
+
+    signIn("google", { callbackUrl: `${environment_url}/feed` });
   }
 
   // async function handleFacebookSignup() {

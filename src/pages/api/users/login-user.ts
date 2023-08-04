@@ -28,8 +28,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if(!match) return res.status(404).json({error: "The email and/or password is wrong"});
 
       // send to user necessary info
-      const {_id, email, username, verified, theme} = user;
-      return res.status(200).json({ _id, email, username, verified, theme });
+      const {_id, email, username, verified, theme, category_interests} = user;
+      
+      return res.status(200).json({ _id, email, username, verified, theme, category_interests });
     }catch(error) {
       return res.status(500).json({error: "Couldn't save or verify your account. Please try again."});
     }

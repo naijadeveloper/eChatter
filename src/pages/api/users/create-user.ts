@@ -70,8 +70,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // run function to generate otp and save in otp collection
       await otpGeneration(createdUser._id.toString(), email);
 
-      const {_id, email: useremail, username: name, verified, theme} = createdUser;
-      return res.status(200).json({ _id, email: useremail, username: name, verified, theme });
+      const {_id, email: useremail, username: name, verified, theme, category_interests} = createdUser;
+      
+      return res.status(200).json({ _id, email: useremail, username: name, verified, theme, category_interests });
     }catch(error) {
       return res.status(500).json({error: "Couldn't save or verify your account. Please try again."});
     }

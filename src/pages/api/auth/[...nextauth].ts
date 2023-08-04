@@ -92,6 +92,7 @@ export const authOptions: NextAuthOptions = {
           user.name = returnedUser?.username;
           user.verified = returnedUser?.verified;
           user.theme = returnedUser?.theme;
+          user.category_interests = returnedUser?.category_interests;
           return true;
         }catch(error) {
           return false;
@@ -104,6 +105,7 @@ export const authOptions: NextAuthOptions = {
       if(params.user?.id) {params.token.id = params.user.id;}
       if(params.user?.verified) {params.token.verified = params.user.verified ?? false;}
       if(params.user?.theme) {params.token.theme = params.user.theme;}
+      if(params.user?.category_interests) {params.token.category_interests = params.user.category_interests;}
       // return modified token
       return params.token;
     },
@@ -113,6 +115,7 @@ export const authOptions: NextAuthOptions = {
         (session.user as { id: string }).id = token.id as string;
         (session.user as { verified: boolean }).verified = token.verified as boolean;
         (session.user as { theme: string }).theme = token.theme as string;
+        (session.user as {category_interests: string[]}).category_interests = token.category_interests as string[];
       }
       // return modified session
       return session;
@@ -121,6 +124,7 @@ export const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: "/account/login",
+    signOut: '/account/logout',
     error: "/account/error"
   }
 }

@@ -53,3 +53,5 @@ export default function userFeeds() {
     </>
   );
 }
+
+userFeeds.auth = true;

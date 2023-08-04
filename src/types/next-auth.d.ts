@@ -13,11 +13,13 @@ declare module "next-auth" {
       id: string | null | undefined;
       verified: boolean | null | undefined;
       theme: string | null | undefined;
+      category_interests: string[] | null | undefined;
     } & DefaultSession["user"]
   }
 
   interface User extends DefaultUser {
-    theme?: string,
-    verified?: boolean,
+    theme?: string;
+    verified?: boolean;
+    category_interests: string[];
   };
 }
