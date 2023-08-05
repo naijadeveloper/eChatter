@@ -38,7 +38,7 @@ function Auth({ children }: { children: React.ReactNode }) {
     required: true,
     onUnauthenticated() {
       // The user is not authenticated, handle it here.
-      router.replace("/account/login");
+      router.push("/account/login");
     },
   });
 
