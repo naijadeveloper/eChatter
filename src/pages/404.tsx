@@ -1,19 +1,10 @@
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
-
-import { useSession } from "next-auth/react";
 
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
 });
 
-export default function authErrorPage() {
-  const router = useRouter();
-  const { status } = useSession();
-
-  if (status === "authenticated") {
-    router.back();
-  }
+export default function custom404Page() {
   return (
     <>
       <div className="absolute right-3 top-3">
@@ -28,8 +19,9 @@ export default function authErrorPage() {
             className="w-[300px]"
           />
         </a>
+        <h1 className="flex items-center justify-center text-8xl">404</h1>
         <p className="mx-auto text-center text-4xl sm:w-[85%] md:w-[70%]">
-          AN ERROR OCCURRED WITH THE SIGNUP/LOGIN PROCESS!!
+          THE PAGE YOU ARE LOOKING FOR DOES NOT EXIST!!
         </p>
       </div>
     </>

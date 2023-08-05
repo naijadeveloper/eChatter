@@ -3,6 +3,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
+import type {
+  InferGetServerSidePropsType,
+  GetServerSidePropsContext,
+} from "next";
+
 import { signIn, useSession } from "next-auth/react";
 
 import { useForm } from "react-hook-form";
@@ -24,6 +29,8 @@ import Footer from "@/components/Footer";
 
 import environment_url from "@/utilities/check_env";
 
+import ErrorPage from "../_error";
+
 type formData = {
   email: string;
   password: string;
@@ -40,7 +47,12 @@ const schema: ZodType<formData> = z.object({
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
-export default function Login() {
+export default function Login({
+  error,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  if (error) {
+    return <ErrorPage />;
+  }
   const router = useRouter();
   const { data: session, status } = useSession();
 
@@ -232,4 +244,10 @@ export default function Login() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps({ query }: GetServerSidePropsContext) {
+  return {
+    props: { error: query.error == "OAuthSignin" ? true : false },
+  };
 }

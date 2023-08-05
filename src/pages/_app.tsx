@@ -31,8 +31,6 @@ export default function App({ Component, pageProps }: CustomAppProps) {
   );
 }
 
-
-
 // Authentication wrapper
 function Auth({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -40,7 +38,7 @@ function Auth({ children }: { children: React.ReactNode }) {
     required: true,
     onUnauthenticated() {
       // The user is not authenticated, handle it here.
-      router.push("/account/login");
+      router.replace("/account/login");
     },
   });
 
