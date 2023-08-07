@@ -19,7 +19,7 @@ export default function Footer() {
         </span>
       </div>
 
-      <div className="relative flex w-full grow items-center max-lg:top-8">
+      <div className="relative flex w-full grow flex-col items-center max-lg:top-8">
         <ul className="flex w-full flex-wrap justify-evenly gap-4 px-1 text-gray-500">
           <li className="wel-footer-links">What is eChatter?</li>
           <li className="wel-footer-links">Worktabs</li>
@@ -29,6 +29,10 @@ export default function Footer() {
           <li className="wel-footer-links">Privacy Policy</li>
           <li className="wel-footer-links">Cookie Policy</li>
         </ul>
+        <p className="mx-auto mt-2 w-[60%] rounded bg-red-800 px-2 text-center text-xs text-gray-200">
+          This website is still under development so some features might not
+          work as expected!!!
+        </p>
       </div>
     </footer>
   );
