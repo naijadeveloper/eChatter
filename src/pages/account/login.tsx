@@ -26,6 +26,7 @@ const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
 });
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
+import Notifications from "@/components/Notifications";
 
 import environment_url from "@/utilities/check_env";
 
@@ -108,6 +109,13 @@ export default function Login({
   }
 
   async function handleGoogleLogin() {
+    // Notifications({
+    //   name: "notify-success",
+    //   message:
+    //     "Congratulations! Authentication of mmejuenoch@gmail.com is a success.",
+    //   closeBtn: true,
+    // });
+    // return;
     // if you are login...logout first
     if (status === "authenticated") {
       return router.push("/account/logout");
