@@ -95,7 +95,7 @@ export const authOptions: NextAuthOptions = {
           user.category_interests = returnedUser?.category_interests;
           return true;
         }catch(error) {
-          return false;
+          return "/account/error";
         }
       }
       return true;

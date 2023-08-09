@@ -110,10 +110,12 @@ export default function Login({
 
   async function handleGoogleLogin() {
     // Notifications({
-    //   name: "notify-success",
+    //   placement: "top-center",
+    //   name: "notify-no-icon",
     //   message:
-    //     "Congratulations! Authentication of mmejuenoch@gmail.com is a success.",
+    //     "Congratulations! Authentication of mmejuenoch@gmail.com is a success. Go to the feed page",
     //   closeBtn: true,
+    //   title: "New eChats",
     // });
     // return;
     // if you are login...logout first
