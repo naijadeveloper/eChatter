@@ -1,18 +1,18 @@
 import toast from "react-hot-toast";
 import type { ToastPosition } from "react-hot-toast";
 
-import { MdClose, MdError } from "react-icons/md";
+import { MdClose, MdError, MdNotificationAdd } from "react-icons/md";
 import { BsFillCheckCircleFill, BsQuestionCircleFill } from "react-icons/bs";
 import { RiInformationFill } from "react-icons/ri";
 
 // the `name` determines the icon to be used or if no icon is preferred
 // the `message`, self explanatory and `mssgName` for times when
 // -- you want to show one notification of one user out of many
+// `placement` for where to place the toast `top-left`, `top-center`, `top-right`
+// -- `bottom-left`, `bottom-center`, `bottom-right`
 // the `title` above describe what part of the app the notification belongs to
 // -- e.g if its eConvo notification or eChat notification or notification
 // -- about some user wanting to follow you.
-// `placement` for where to place the toast `top-left`, `top-center`, `top-right`
-// -- `bottom-left`, `bottom-center`, `bottom-right`
 // if you want the presence of a `closeBtn` to exit the toast
 // `timer` for the toast, if `timer` is undefined toast will be Infinity
 // if `image` is present, icon won't be
@@ -25,7 +25,6 @@ interface btn {
 }
 
 interface notifyProps {
-  placement: ToastPosition;
   name:
     | "notify-success"
     | "notify-warning"
@@ -35,10 +34,11 @@ interface notifyProps {
     | "notify-no-icon";
   message: string;
   mssgName?: string;
+  placement?: ToastPosition;
   title?: string;
   closeBtn?: boolean;
   timer?: 2000 | 4000;
-  image?: string;
+  image?: string[];
   btns?: btn[];
   btnsFunctions?: Function[];
 }
@@ -50,16 +50,16 @@ export default function Notifications(notif: notifyProps) {
         (t) => {
           if (notif?.timer) {
             setTimeout(() => {
-              toast.remove(t.id);
+              toast.dismiss(t.id);
             }, notif?.timer);
           }
           return (
             <div
-              className={`!min-w-[300px] !max-w-[80%] rounded-md bg-gray-300 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712] sm:!max-w-[70%] md:!max-w-[50%]`}
+              className={`!min-w-[300px] !max-w-[90%] rounded-md bg-gray-300 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712] sm:!max-w-[80%] md:!max-w-[60%] lg:!max-w-[55%]`}
             >
               {notif?.title && (
                 <div className="flex items-center justify-between p-1">
-                  <p className="flex w-full items-center justify-start p-1 font-bold">
+                  <p className="flex w-full items-center justify-start p-1 font-bold text-gray-700 dark:text-gray-200">
                     {notif?.title}
                   </p>
                   {notif?.closeBtn && (
@@ -87,7 +87,7 @@ export default function Notifications(notif: notifyProps) {
               >
                 {/* for the icon if image isn't present */}
                 {!notif?.image && notif.name !== "notify-no-icon" && (
-                  <div className="flex h-full shrink-0 items-start justify-center">
+                  <div className="flex shrink-0 items-start justify-center">
                     <div
                       className={`flex h-[35px] w-[35px] items-center justify-center rounded-md border border-gray-800 text-2xl ${
                         notif.name == "notify-success" &&
@@ -122,13 +122,39 @@ export default function Notifications(notif: notifyProps) {
                   </div>
                 )}
 
+                {/* for the image if image is present */}
+                {notif?.image && (
+                  <div className="relative">
+                    <div className="flex h-[48px] w-[48px] shrink-0 overflow-hidden rounded-[100%]">
+                      <img
+                        src={notif?.image[0]}
+                        alt={notif?.mssgName ?? "image"}
+                        className="object-cover"
+                      />
+                    </div>
+
+                    {notif?.image[1] === "multiple" && (
+                      <span className="absolute -bottom-2 right-1 h-[20px] w-[20px] rounded-[100%] bg-gray-300 text-red-500 dark:bg-gray-800">
+                        <MdNotificationAdd />
+                      </span>
+                    )}
+                  </div>
+                )}
+
                 {/* for the message, message header, image and buttons if more than one */}
                 <div
                   className={`mx-2 grow-[2] ${
                     !notif?.image && notif.name !== "notify-no-icon" && "pl-1"
                   }`}
                 >
-                  {notif.message}
+                  {notif?.mssgName && (
+                    <p className="flex w-full items-center justify-start text-ellipsis font-bold text-gray-700 dark:text-gray-200">
+                      {notif?.mssgName}
+                    </p>
+                  )}
+                  <p className="flex w-full items-center justify-start">
+                    {notif.message}
+                  </p>
                 </div>
 
                 {/* close button */}
@@ -149,7 +175,7 @@ export default function Notifications(notif: notifyProps) {
         {
           // options for toast
           duration: Infinity,
-          position: notif.placement,
+          position: notif?.placement ?? "top-center",
         }
       )}
     </>

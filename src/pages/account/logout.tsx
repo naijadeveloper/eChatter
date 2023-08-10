@@ -18,9 +18,9 @@ export default function logOut() {
       </div>
 
       <div className="flex min-h-[500px] flex-col items-center justify-center">
-        <a href="#" title="https://www.flaticon.com/free-icons/cry">
+        <div title="https://www.flaticon.com/free-icons/cry">
           <img src="/pngs/baby.png" alt="cry icons" className="w-[150px]" />
-        </a>
+        </div>
 
         <p className="flex items-center justify-center">
           Please stay a little longer
