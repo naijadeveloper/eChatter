@@ -21,6 +21,7 @@ const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
 });
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
+import Notifications from "@/components/Notifications";
 
 import environment_url from "@/utilities/check_env";
 
@@ -49,7 +50,7 @@ const schema: ZodType<formData> = z
 /////////////////////////////////////////////////////////////////////////////////////////
 export default function Signup() {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPass, setShowPass] = useState(false);
@@ -106,7 +107,14 @@ export default function Signup() {
     // loading done.
     setLoading(false);
 
-    if (!info?.ok) return toast.error(info?.error!);
+    if (!info?.ok) {
+      return Notifications({
+        name: "notify-error",
+        message: info?.error as string,
+        closeBtn: true,
+        timer: 5000,
+      });
+    }
 
     // if ok is true then push to otp page for email verification
     router.push("/otp");

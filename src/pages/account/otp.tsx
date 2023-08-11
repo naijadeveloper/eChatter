@@ -12,6 +12,7 @@ const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
 import OtpInput from "@/components/OtpInput";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Footer from "@/components/Footer";
+import Notifications from "@/components/Notifications";
 
 import environment_url from "@/utilities/check_env";
 
@@ -49,11 +50,13 @@ export default function Otp() {
     // if userId is still empty
     if (!userId) {
       setLoading(false);
-      // show error toast
-      toast.error(
-        "Please log in or sign up first, before account verification"
-      );
-      return;
+      // show error notification
+      return Notifications({
+        name: "notify-error",
+        message: "Please log in or sign up first, before account verification",
+        closeBtn: true,
+        timer: 5000,
+      });
     }
 
     // otherwise fetch api
@@ -77,7 +80,12 @@ export default function Otp() {
       router.push("/feed");
     } else {
       // show error toast
-      toast.error(objectData?.error);
+      Notifications({
+        name: "notify-error",
+        message: objectData?.error as string,
+        closeBtn: true,
+        timer: 5000,
+      });
     }
   }
 
@@ -91,11 +99,13 @@ export default function Otp() {
     // if userId is still empty
     if (!userId) {
       setLoading(false);
-      // show error toast
-      toast.error(
-        "Please log in or sign up first, before account verification"
-      );
-      return;
+      // show error Notification
+      return Notifications({
+        name: "notify-error",
+        message: "Please log in or sign up first, before account verification",
+        closeBtn: true,
+        timer: 5000,
+      });
     }
 
     // fetch api
@@ -114,10 +124,20 @@ export default function Otp() {
     setLoading(false);
 
     if (res.ok) {
-      // show success toast
-      toast.success(objectData?.success);
+      // show success notification
+      Notifications({
+        name: "notify-success",
+        message: objectData?.success as string,
+        closeBtn: true,
+        timer: 3000,
+      });
     } else {
-      toast.error(objectData?.error);
+      Notifications({
+        name: "notify-error",
+        message: objectData?.error as string,
+        closeBtn: true,
+        timer: 5000,
+      });
     }
   }
 

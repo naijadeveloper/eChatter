@@ -21,7 +21,7 @@ import { RiInformationFill } from "react-icons/ri";
 
 interface btn {
   btnName: string;
-  active: boolean;
+  active?: boolean;
 }
 
 interface notifyProps {
@@ -36,14 +36,26 @@ interface notifyProps {
   mssgName?: string;
   placement?: ToastPosition;
   title?: string;
-  closeBtn?: boolean;
-  timer?: 2000 | 4000;
-  image?: string[];
+  closeBtn?: boolean | (() => void);
+  timer?: 3000 | 5000;
+  image?: [string] | [string, "multiple"];
   btns?: btn[];
   btnsFunctions?: Function[];
 }
 
+// call this component like a function when using e.g Notification({name:"" ... e.tc});
+// I don't know if this is proper but, it works, sooooo, yeah
 export default function Notifications(notif: notifyProps) {
+  function handleExit(id: string) {
+    toast.remove(id);
+    if (typeof notif?.closeBtn == "function") {
+      (notif?.closeBtn as () => void)();
+    }
+  }
+
+  function handleBtnClick(index: number) {
+    (notif?.btnsFunctions as Function[])[index]();
+  }
   return (
     <>
       {toast.custom(
@@ -51,11 +63,15 @@ export default function Notifications(notif: notifyProps) {
           if (notif?.timer) {
             setTimeout(() => {
               toast.dismiss(t.id);
+              // call the function of the close btn if present
+              if (typeof notif?.closeBtn == "function") {
+                (notif?.closeBtn as () => void)();
+              }
             }, notif?.timer);
           }
           return (
             <div
-              className={`!min-w-[300px] !max-w-[90%] rounded-md bg-gray-300 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712] sm:!max-w-[80%] md:!max-w-[60%] lg:!max-w-[55%]`}
+              className={`!min-w-[360px] !max-w-[90%] rounded-md bg-gray-300 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712] sm:!max-w-[80%] md:!max-w-[65%] lg:!max-w-[45%]`}
             >
               {notif?.title && (
                 <div className="flex items-center justify-between p-1">
@@ -65,7 +81,7 @@ export default function Notifications(notif: notifyProps) {
                   {notif?.closeBtn && (
                     <button
                       className="flex items-center justify-center rounded-md p-1 hover:bg-gray-500/30"
-                      onClick={() => toast.remove(t.id)}
+                      onClick={() => handleExit(t.id)}
                     >
                       <MdClose size={24} />
                     </button>
@@ -79,9 +95,9 @@ export default function Notifications(notif: notifyProps) {
                 } ${
                   notif?.timer &&
                   `before:absolute before:bottom-0 before:left-[1px] before:h-[3.5px] before:w-[100%] before:rounded before:bg-maingreen-300 before:content-['_'] dark:before:bg-maingreen-100 ${
-                    notif?.timer === 2000
-                      ? `before:animate-[decrease_2s_linear_both]`
-                      : `before:animate-[decrease_4s_linear_both]`
+                    notif?.timer === 3000
+                      ? `before:animate-[decrease_3s_linear_both]`
+                      : `before:animate-[decrease_5s_linear_both]`
                   }`
                 }`}
               >
@@ -143,8 +159,12 @@ export default function Notifications(notif: notifyProps) {
 
                 {/* for the message, message header, image and buttons if more than one */}
                 <div
-                  className={`mx-2 grow-[2] ${
-                    !notif?.image && notif.name !== "notify-no-icon" && "pl-1"
+                  className={`mx-2 flex grow-[2] flex-col justify-center ${
+                    notif?.image && "min-h-[48px]"
+                  } ${
+                    !notif?.image &&
+                    notif.name !== "notify-no-icon" &&
+                    "min-h-[35px]"
                   }`}
                 >
                   {notif?.mssgName && (
@@ -152,9 +172,30 @@ export default function Notifications(notif: notifyProps) {
                       {notif?.mssgName}
                     </p>
                   )}
-                  <p className="flex w-full items-center justify-start">
+
+                  <p className="flex h-full w-full items-center justify-start">
                     {notif.message}
                   </p>
+
+                  {notif?.btns &&
+                    notif?.btnsFunctions &&
+                    notif?.btns.length == notif?.btnsFunctions.length && (
+                      <div className="my-1 flex items-center justify-start gap-x-2">
+                        {notif?.btns.map((btn, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleBtnClick(index)}
+                            className={`rounded  p-1 px-2 text-gray-100 ${
+                              btn?.active
+                                ? "bg-maingreen-300 hover:bg-maingreen-300/90"
+                                : "bg-gray-500 hover:bg-gray-500/90"
+                            }`}
+                          >
+                            {btn.btnName}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                 </div>
 
                 {/* close button */}
@@ -162,7 +203,7 @@ export default function Notifications(notif: notifyProps) {
                   <div className="flex h-full items-start justify-center">
                     <button
                       className="rounded-md p-1 hover:bg-gray-500/30"
-                      onClick={() => toast.remove(t.id)}
+                      onClick={() => handleExit(t.id)}
                     >
                       <MdClose size={24} />
                     </button>

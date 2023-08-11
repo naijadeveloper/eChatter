@@ -1,5 +1,4 @@
 import { NextPageContext } from "next";
-import { useState, useEffect } from "react";
 
 import dynamic from "next/dynamic";
 
@@ -12,16 +11,6 @@ interface statusCodeType {
 }
 
 function ErrorPage({ statusCode }: statusCodeType) {
-  const [online, setOnline] = useState(false);
-
-  useEffect(() => {
-    if (window.navigator && window.navigator.onLine) {
-      setOnline(true);
-    } else {
-      setOnline(false);
-    }
-  }, []);
-
   return (
     <>
       <div className="absolute right-3 top-3">
@@ -38,14 +27,9 @@ function ErrorPage({ statusCode }: statusCodeType) {
         </a>
         <p className="mx-auto text-center text-4xl sm:w-[85%] md:w-[70%]">
           {statusCode
-            ? `THE ERROR ${statusCode} OCCURRED ON THE SERVER`
+            ? `AN ERROR OCCURRED ON THE SERVER`
             : `AN ERROR OCCURRED ON THE CLIENT/BROWSER`}
         </p>
-        {!statusCode && (
-          <code className="text-sm font-semibold italic">
-            {!online ? "You are not connected to the internet" : ""}
-          </code>
-        )}
       </div>
     </>
   );

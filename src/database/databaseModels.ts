@@ -10,6 +10,7 @@ const userSchema = new Schema({
   username_update: {type: Number, default: () => Date.now()},
   email: {type: String, unique: true, lowercase: true},
   password: {type: String},
+  password_change: String,
   provider: String,
   provider_id: String,
   verified: {type: Boolean, default: false},

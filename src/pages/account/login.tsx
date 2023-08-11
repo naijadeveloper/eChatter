@@ -19,8 +19,6 @@ import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 // import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
-import toast from "react-hot-toast";
-
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
 });
@@ -51,11 +49,16 @@ const schema: ZodType<formData> = z.object({
 export default function Login({
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  // In development env, I noticed that when theres an error with the signup or login page
+  // the error gets sent to the login page as a search param e.g ?error=OAuthSignin
+  // so for development, I want it to render the ErrorPage instead.
+  // but, I noticed that this is not a problem in the production env
   if (error) {
-    return <ErrorPage />;
+    return <ErrorPage statusCode={500} />;
   }
+
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -102,22 +105,20 @@ export default function Login({
     // loading done.
     setLoading(false);
 
-    if (!info?.ok) return toast.error(info?.error!);
+    if (!info?.ok) {
+      return Notifications({
+        name: "notify-error",
+        message: info?.error as string,
+        closeBtn: true,
+        timer: 5000,
+      });
+    }
 
     // if ok is true then push to feed for user
     router.push("/feed");
   }
 
   async function handleGoogleLogin() {
-    // Notifications({
-    //   name: "notify-success",
-    //   message:
-    //     "Congratulations! Authentication of mmejuenoch@gmail.com is a success. Go to the feed page",
-    //   mssgName: "Enoch Mmeju",
-    //   closeBtn: true,
-    //   title: "New eChats",
-    // });
-    // return;
     // if you are login...logout first
     if (status === "authenticated") {
       return router.push("/account/logout");
@@ -258,6 +259,6 @@ export default function Login({
 
 export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   return {
-    props: { error: query.error == "OAuthSignin" ? true : false },
+    props: { error: query.error ? true : false },
   };
 }
