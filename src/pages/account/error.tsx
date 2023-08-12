@@ -1,21 +1,12 @@
 import type { GetServerSidePropsContext } from "next";
 
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
-
-import { useSession } from "next-auth/react";
 
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
 });
 
 export default function authErrorPage() {
-  const router = useRouter();
-  const { status } = useSession();
-
-  if (status === "authenticated") {
-    router.back();
-  }
   return (
     <>
       <div className="absolute right-3 top-3">

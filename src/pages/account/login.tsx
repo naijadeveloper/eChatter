@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -27,6 +27,7 @@ import Footer from "@/components/Footer";
 import Notifications from "@/components/Notifications";
 
 import environment_url from "@/utilities/check_env";
+import sessionOrLocalStorage from "@/utilities/session_local_storage";
 
 import ErrorPage from "../_error";
 
@@ -48,6 +49,7 @@ const schema: ZodType<formData> = z.object({
 /////////////////////////////////////////////////////////////////////////////////////////
 export default function Login({
   error,
+  referer,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // In development env, I noticed that when theres an error with the signup or login page
   // the error gets sent to the login page as a search param e.g ?error=OAuthSignin
@@ -56,6 +58,17 @@ export default function Login({
   if (error) {
     return <ErrorPage statusCode={500} />;
   }
+
+  let callback_url = "";
+  if (referer) {
+    let path = referer.split(environment_url);
+    path.shift();
+    callback_url = path.join("").trim();
+  }
+  // save the callback_url to sessionStorage because the referer url is false after a refresh of page
+  useEffect(() => {
+    sessionOrLocalStorage.setItem("session", "callback_url", callback_url);
+  }, []);
 
   const router = useRouter();
   const { status } = useSession();
@@ -114,16 +127,43 @@ export default function Login({
       });
     }
 
-    // if ok is true then push to feed for user
-    router.push("/feed");
+    // if ok is true then push to callback_url if available otherwise go to the feed page
+    let callback_url_value =
+      JSON.parse(
+        sessionOrLocalStorage.getItem("session", "callback_url") as string
+      ) ||
+      callback_url ||
+      "";
+
+    if (callback_url_value) {
+      router.push(callback_url_value);
+    } else {
+      router.push("/feed");
+    }
   }
 
+  //////////////////////////////////////////
   async function handleGoogleLogin() {
     // if you are login...logout first
     if (status === "authenticated") {
       return router.push("/account/logout");
     }
-    signIn("google", { callbackUrl: `${environment_url}/feed` });
+
+    // if ok is true then push to callback_url if available otherwise go to the feed page
+    let callback_url_value =
+      JSON.parse(
+        sessionOrLocalStorage.getItem("session", "callback_url") as string
+      ) ||
+      callback_url ||
+      "";
+
+    if (callback_url_value) {
+      signIn("google", {
+        callbackUrl: `${environment_url}${callback_url_value}`,
+      });
+    } else {
+      signIn("google", { callbackUrl: `${environment_url}/feed` });
+    }
   }
 
   // async function handleFacebookLogin() {
@@ -257,8 +297,12 @@ export default function Login({
   );
 }
 
-export async function getServerSideProps({ query }: GetServerSidePropsContext) {
+export async function getServerSideProps({
+  req,
+  query,
+}: GetServerSidePropsContext) {
+  const referer = req.headers.referer || null;
   return {
-    props: { error: query.error ? true : false },
+    props: { error: query.error ? true : false, referer },
   };
 }

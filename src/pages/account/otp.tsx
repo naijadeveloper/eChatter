@@ -1,10 +1,13 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+
+import type {
+  InferGetServerSidePropsType,
+  GetServerSidePropsContext,
+} from "next";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 import { useSession } from "next-auth/react";
-
-import toast from "react-hot-toast";
 
 const ThemeSwitch = dynamic(() => import("@/components/ThemeSwitch"), {
   ssr: false,
@@ -15,11 +18,26 @@ import Footer from "@/components/Footer";
 import Notifications from "@/components/Notifications";
 
 import environment_url from "@/utilities/check_env";
+import sessionOrLocalStorage from "@/utilities/session_local_storage";
 
-/////////////////////////////////////////////////
-export default function Otp() {
+//////////////////////////////////////////////////////////////////////////
+export default function Otp({
+  referer,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  //
+  let callback_url = "";
+  if (referer) {
+    let path = referer.split(environment_url);
+    path.shift();
+    callback_url = path.join("").trim();
+  }
+  // save the callback_url to sessionStorage because the referer url is false after a refresh of page
+  useEffect(() => {
+    sessionOrLocalStorage.setItem("session", "callback_url", callback_url);
+  }, []);
+
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const [otp, setOtp] = useState("");
   const [error, setError] = useState<string>("");
@@ -76,8 +94,41 @@ export default function Otp() {
     setLoading(false);
 
     if (res.ok) {
-      // user is verified push to feed page
-      router.push("/feed");
+      // user is verified, 1) update session of user 2) push to a callback_url page
+      // if its not "/signup" or false, otherwise push to feed page
+      // if ok is true then push to callback_url if available otherwise go to the feed page
+      let callback_url_value =
+        JSON.parse(
+          sessionOrLocalStorage.getItem("session", "callback_url") as string
+        ) ||
+        callback_url ||
+        "";
+      // show a success notification for the user to proceed to the feed page
+      // or go back to whatever page they initial were at
+      Notifications({
+        name: "notify-success",
+        message: `Congratulations! Your email has been verified successfully.`,
+        closeBtn: true,
+        btns: [
+          {
+            btnName: `${
+              callback_url_value && !callback_url_value.includes("/signup")
+                ? "Go Back"
+                : "Proceed"
+            }`,
+            active: true,
+          },
+        ],
+        btnsFunctions: [
+          function () {
+            if (callback_url_value && !callback_url_value.includes("/signup")) {
+              router.push(callback_url_value);
+            } else {
+              router.push("/feed");
+            }
+          },
+        ],
+      });
     } else {
       // show error toast
       Notifications({
@@ -203,4 +254,11 @@ export default function Otp() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps({ req }: GetServerSidePropsContext) {
+  const referer = req.headers.referer || null;
+  return {
+    props: { referer },
+  };
 }
