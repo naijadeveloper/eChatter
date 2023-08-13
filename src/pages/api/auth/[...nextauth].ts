@@ -106,6 +106,11 @@ export const authOptions: NextAuthOptions = {
       if(params.user?.verified) {params.token.verified = params.user.verified ?? false;}
       if(params.user?.theme) {params.token.theme = params.user.theme;}
       if(params.user?.category_interests) {params.token.category_interests = params.user.category_interests;}
+      //
+      
+      if (params.trigger === "update" && params.session?.verified) {
+        params.token.verified = params.session?.verified;
+      }
       // return modified token
       return params.token;
     },

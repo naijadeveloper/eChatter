@@ -135,7 +135,11 @@ export default function Login({
       callback_url ||
       "";
 
-    if (callback_url_value) {
+    if (
+      callback_url_value &&
+      callback_url_value !== "/" &&
+      !callback_url_value.includes("/signup")
+    ) {
       router.push(callback_url_value);
     } else {
       router.push("/feed");
@@ -157,7 +161,11 @@ export default function Login({
       callback_url ||
       "";
 
-    if (callback_url_value) {
+    if (
+      callback_url_value &&
+      callback_url_value !== "/" &&
+      !callback_url_value.includes("/signup")
+    ) {
       signIn("google", {
         callbackUrl: `${environment_url}${callback_url_value}`,
       });

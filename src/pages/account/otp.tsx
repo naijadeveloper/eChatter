@@ -37,7 +37,7 @@ export default function Otp({
   }, []);
 
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   const [otp, setOtp] = useState("");
   const [error, setError] = useState<string>("");
@@ -90,11 +90,13 @@ export default function Otp({
     });
     const objectData = await res.json();
 
-    // done loading
-    setLoading(false);
-
     if (res.ok) {
-      // user is verified, 1) update session of user 2) push to a callback_url page
+      // user is verified
+      // 1) update session of user
+      await update({ verified: true });
+      // done loading
+      setLoading(false);
+      // 2) push to a callback_url page
       // if its not "/signup" or false, otherwise push to feed page
       // if ok is true then push to callback_url if available otherwise go to the feed page
       let callback_url_value =
@@ -112,7 +114,9 @@ export default function Otp({
         btns: [
           {
             btnName: `${
-              callback_url_value && !callback_url_value.includes("/signup")
+              callback_url_value &&
+              callback_url_value !== "/" &&
+              !callback_url_value.includes("/signup")
                 ? "Go Back"
                 : "Proceed"
             }`,
@@ -121,7 +125,11 @@ export default function Otp({
         ],
         btnsFunctions: [
           function () {
-            if (callback_url_value && !callback_url_value.includes("/signup")) {
+            if (
+              callback_url_value &&
+              callback_url_value !== "/" &&
+              !callback_url_value.includes("/signup")
+            ) {
               router.push(callback_url_value);
             } else {
               router.push("/feed");
@@ -130,6 +138,8 @@ export default function Otp({
         ],
       });
     } else {
+      // done loading
+      setLoading(false);
       // show error toast
       Notifications({
         name: "notify-error",
