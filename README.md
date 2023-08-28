@@ -17,6 +17,6 @@ githubLink: "https://github.com/naijadeveloper/eChatter"
 
 # eChatter Social Media Website
 
-Capstone social media network project for ALTSCHOOL AFRICA
+Capstone social media website project for ALTSCHOOL AFRICA
 
 ## This website was created using [nextjs 13](https://nextjs.org) pages directory, along with typescript, tailwindcss, mongodb, mongodb atlas and nextauth.
