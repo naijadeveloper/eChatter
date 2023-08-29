@@ -38,6 +38,7 @@ export default function Otp({
 
   const router = useRouter();
   const { data: session, update } = useSession();
+  console.log(session);
 
   const [otp, setOtp] = useState("");
   const [error, setError] = useState<string>("");
