@@ -97,7 +97,7 @@ async function otpGeneration(_id: string, email: string) {
   await transporter.sendMail({
     from: "noreply@echatter.com",
     to: email,
-    subject: "Account verification",
+    subject: "eChatter Account Verification",
     html: `<p>This one-time-password was generated and sent to your email to verify your eChatter account, please enter this code in order to verify your account. This code will expire an hour from now <br /><br /> <strong style="font-size: 24px">${otpNumber}</strong>
     </p>`
   });

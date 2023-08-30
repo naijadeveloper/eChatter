@@ -117,7 +117,7 @@ export default function Signup() {
     }
 
     // if ok is true then push to otp page for email verification
-    router.push("/otp");
+    router.push("/account/otp");
   }
 
   async function handleGoogleSignup() {

@@ -53,8 +53,9 @@ export default function Notifications(notif: notifyProps) {
     }
   }
 
-  function handleBtnClick(index: number) {
+  function handleBtnClick(index: number, id: string) {
     (notif?.btnsFunctions as Function[])[index]();
+    toast.remove(id);
   }
   return (
     <>
@@ -180,11 +181,11 @@ export default function Notifications(notif: notifyProps) {
                   {notif?.btns &&
                     notif?.btnsFunctions &&
                     notif?.btns.length == notif?.btnsFunctions.length && (
-                      <div className="my-1 flex items-center justify-start gap-x-2">
+                      <div className="my-2 flex items-center justify-start gap-x-2">
                         {notif?.btns.map((btn, index) => (
                           <button
                             key={index}
-                            onClick={() => handleBtnClick(index)}
+                            onClick={() => handleBtnClick(index, t.id)}
                             className={`rounded  p-1 px-2 text-gray-100 ${
                               btn?.active
                                 ? "bg-maingreen-300 hover:bg-maingreen-300/90"

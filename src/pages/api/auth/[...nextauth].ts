@@ -103,7 +103,7 @@ export const authOptions: NextAuthOptions = {
 
     jwt(params: any) {
       if(params.user?.id) {params.token.id = params.user.id;}
-      if(params.user?.verified) {params.token.verified = params.user.verified ?? false;}
+      if(params.user?.verified) {params.token.verified = params.user.verified;}
       if(params.user?.theme) {params.token.theme = params.user.theme;}
       if(params.user?.category_interests) {params.token.category_interests = params.user.category_interests;}
       //
