@@ -25,7 +25,7 @@ export default function MarkdownEditor({ content, setContent }: editorProps) {
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Write the eChat content here!"
+        placeholder="eChat content here... (Markdown supported)"
         autoFocus
         spellCheck={false}
         className={`dropdown-scroll h-full w-full resize-none rounded ${textSize} border-2 border-transparent bg-gray-300 p-2 font-semibold focus:outline-none dark:bg-gray-800`}

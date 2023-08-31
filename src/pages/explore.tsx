@@ -53,3 +53,6 @@ export default function explorePage() {
     </>
   );
 }
+
+
+explorePage.auth = true;

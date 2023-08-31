@@ -40,3 +40,5 @@ export default function dashboardPage() {
     </>
   );
 }
+
+dashboardPage.auth = true;

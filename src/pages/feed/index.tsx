@@ -1,9 +1,13 @@
 import { useState } from "react";
 
+import { useSession } from "next-auth/react";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function userFeeds() {
+  const { data: session } = useSession();
+
   const [openSearchDropDown, setOpenSearchDropDown] = useState<boolean>(false);
   const [searchDropDown, setSearchDropDown] = useState<string>("eChat");
 
