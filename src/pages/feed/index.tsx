@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import { useRouter } from "next/router";
 
 import { useSession } from "next-auth/react";
 
@@ -6,7 +8,17 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function userFeeds() {
+  const router = useRouter();
   const { data: session } = useSession();
+
+  useEffect(() => {
+    if (
+      (session?.user as { category_interest: string[] }).category_interests
+        .length === 0
+    ) {
+      router.replace("/category");
+    }
+  }, [session?.user]);
 
   const [openSearchDropDown, setOpenSearchDropDown] = useState<boolean>(false);
   const [searchDropDown, setSearchDropDown] = useState<string>("eChat");
