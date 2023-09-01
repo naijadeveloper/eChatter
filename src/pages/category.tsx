@@ -5,7 +5,9 @@ import Footer from "@/components/Footer";
 export default function categorySelectingPage() {
   return (
     <>
-      <section></section>
+      <section className="min-h-[500px] px-2 py-5">
+        Hello
+      </section>
       <Footer />
     </>
   );
