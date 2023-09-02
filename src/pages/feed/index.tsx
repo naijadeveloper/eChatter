@@ -13,8 +13,8 @@ export default function userFeeds() {
 
   useEffect(() => {
     if (
-      (session?.user as { category_interest: string[] }).category_interests
-        .length === 0
+      session?.user?.category_interests &&
+      session?.user.category_interests.length === 0
     ) {
       router.replace("/category");
     }
