@@ -1,24 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { useRouter } from "next/router";
+
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
+
+import type {
+  InferGetServerSidePropsType,
+  GetServerSidePropsContext,
+} from "next";
 
 import { useSession } from "next-auth/react";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-export default function userFeeds() {
+export default function userFeeds({
+  following,
+}: {
+  following: Record<string, unknown>[];
+}) {
   const router = useRouter();
   const { data: session } = useSession();
-
-  useEffect(() => {
-    if (
-      session?.user?.category_interests &&
-      session?.user.category_interests.length === 0
-    ) {
-      router.replace("/category");
-    }
-  }, [session?.user]);
 
   const [openSearchDropDown, setOpenSearchDropDown] = useState<boolean>(false);
   const [searchDropDown, setSearchDropDown] = useState<string>("eChat");
@@ -68,6 +71,31 @@ export default function userFeeds() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (
+    session &&
+    session.user &&
+    session.user.category_interests &&
+    session.user.category_interests.length === 0
+  ) {
+    return {
+      redirect: {
+        destination: "/category",
+        permanent: false,
+      },
+    };
+  }
+
+  // perform search through db for user's 'following list' that have new posts first and all the others
+  return {
+    props: {
+      following: [],
+    },
+  };
 }
 
 userFeeds.auth = true;
