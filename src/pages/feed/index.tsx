@@ -5,10 +5,7 @@ import { useRouter } from "next/router";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 
-import type {
-  InferGetServerSidePropsType,
-  GetServerSidePropsContext,
-} from "next";
+import type { GetServerSidePropsContext } from "next";
 
 import { useSession } from "next-auth/react";
 
