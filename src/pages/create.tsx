@@ -22,6 +22,8 @@ const MdPreview = dynamic(import("@/components/MdPreview"), {
   ssr: false,
 });
 
+import all_categories from "@/utilities/echats_categories.json";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 export default function createPage() {
   const router = useRouter();
@@ -32,28 +34,7 @@ export default function createPage() {
     PRIV2 = "Visible to only eChatters following me",
   }
 
-  const categories = [
-    "News",
-    "Sports",
-    "Music",
-    "Movie",
-    "Science",
-    "Technology",
-    "Art",
-    "Fashion",
-    "Health",
-    "Lifestyle",
-    "Travel",
-    "Food & Cooking",
-    "Business & Finance",
-    "Education",
-    "Politics",
-    "Environment",
-    "Relationship",
-    "Personal Development",
-    "DIY & Crafts",
-    "Religion",
-  ];
+  const categories = all_categories?.categories;
 
   //states...............................................................
   const [importDraftPopup, setImportDraftPopup] = useState<boolean>(false);
