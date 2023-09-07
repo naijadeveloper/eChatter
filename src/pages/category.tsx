@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer } from "react";
 
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
@@ -10,20 +10,16 @@ import { ImCheckboxChecked } from "react-icons/im";
 
 import Footer from "@/components/Footer";
 
-import all_categories from "@/utilities/echats_categories.json";
+import { all_categories } from "@/utilities/echat_variables";
+import { all_categories_icons } from "@/utilities/echat_variables";
 
 export default function categorySelectingPage({
   categories,
 }: {
   categories: string[];
 }) {
-  const echat_categories = all_categories?.categories;
-  useEffect(() => {
-    // @ts-ignore
-    window.myLib = {
-      varing: "enoch",
-    };
-  });
+  const echat_categories = all_categories;
+  const echat_categories_icons = all_categories_icons;
   return (
     <>
       <section className="min-h-[500px] px-2 py-5">
@@ -32,8 +28,8 @@ export default function categorySelectingPage({
             SELECT ALL CATEGORIES OF INTEREST
           </h1>
         </div>
-        <form className="mx-auto mt-10 flex w-[90%] flex-wrap justify-center gap-5 max-[737px]:justify-center">
-          {echat_categories.map((category) => (
+        <form className="mx-auto mt-10 flex flex-wrap justify-center gap-5">
+          {echat_categories.map((category, index) => (
             <label
               key={category}
               htmlFor={category}
@@ -41,7 +37,7 @@ export default function categorySelectingPage({
             >
               {/* image */}
               <div className="text-5xl max-[737px]:text-6xl">
-                <GiNewspaper />
+                {echat_categories_icons[index]? echat_categories_icons[index] : echat_categories_icons[echat_categories_icons.length - 1]}
               </div>
               <h1 className="text-center text-2xl max-[737px]:text-3xl max-[492px]:text-4xl">
                 {category}

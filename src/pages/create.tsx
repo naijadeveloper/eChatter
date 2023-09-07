@@ -22,7 +22,7 @@ const MdPreview = dynamic(import("@/components/MdPreview"), {
   ssr: false,
 });
 
-import all_categories from "@/utilities/echats_categories.json";
+import { all_categories } from "@/utilities/echat_variables";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 export default function createPage() {
@@ -34,7 +34,7 @@ export default function createPage() {
     PRIV2 = "Visible to only eChatters following me",
   }
 
-  const categories = all_categories?.categories;
+  const categories = all_categories;
 
   //states...............................................................
   const [importDraftPopup, setImportDraftPopup] = useState<boolean>(false);
