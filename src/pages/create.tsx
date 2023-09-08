@@ -46,7 +46,7 @@ export default function createPage() {
   const [eChatTags, seteChatTags] = useState<string[]>([]);
   const [openCategoryDropDown, setOpenCategoryDropDown] =
     useState<boolean>(false);
-  const [category, setCategory] = useState<string>(categories[0]);
+  const [category, setCategory] = useState<string>(categories[0][0] as string);
   const [visiblityChoice, setVisibilityChoice] = useState<string>(
     visibilityOptions.ALL
   );
@@ -442,16 +442,16 @@ export default function createPage() {
                         className="dropdown-scroll absolute bottom-6 z-[2] flex max-h-[240px] min-h-[120px] min-w-[260px] flex-col gap-y-[2px] overflow-auto rounded bg-gray-300 p-2 drop-shadow-[0px_1px_2px_rgb(54,_54,_54)] dark:bg-gray-800 dark:drop-shadow-[0px_1px_2px_#030712]"
                       >
                         {/* <LoadingSpinner position="absolute" size="text-6xl" /> */}
-                        {categories.map((cat, index) => (
+                        {categories.map(([cat], index) => (
                           <p
                             key={index}
-                            onClick={() => setCategory(cat)}
+                            onClick={() => setCategory(cat as string)}
                             className={`flex cursor-pointer items-center gap-1 rounded p-1 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 ${
-                              category === cat &&
+                              category === (cat as string) &&
                               "text-maingreen-300 underline underline-offset-2 dark:text-maingreen-100"
                             }`}
                           >
-                            {category === cat && <MdCheck />}
+                            {category === (cat as string) && <MdCheck />}
                             {cat}
                           </p>
                         ))}
