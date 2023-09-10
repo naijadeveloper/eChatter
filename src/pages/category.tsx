@@ -51,15 +51,15 @@ export default function categorySelectingPage({
           <div className="flex w-full items-center justify-center gap-x-5">
             <button
               onClick={() => updateSelectedCategories("All")}
-              className="w-fit rounded bg-gray-300 px-3 font-semibold decoration-gray-300 hover:bg-transparent hover:underline hover:decoration-4 hover:underline-offset-2 dark:bg-gray-800 dark:decoration-gray-800 dark:hover:bg-transparent"
+              className="w-fit rounded px-3 font-semibold decoration-gray-300 hover:underline hover:decoration-4 hover:underline-offset-2 dark:decoration-gray-800"
             >
-              Select All
+              SELECT ALL
             </button>
             <button
               onClick={() => updateSelectedCategories("")}
-              className="w-fit rounded bg-gray-300 px-3 font-semibold decoration-gray-300 hover:bg-transparent hover:underline hover:decoration-4 hover:underline-offset-2 dark:bg-gray-800 dark:decoration-gray-800 dark:hover:bg-transparent"
+              className="w-fit rounded px-3 font-semibold decoration-gray-300 hover:underline hover:decoration-4 hover:underline-offset-2 dark:decoration-gray-800"
             >
-              Unselect All
+              UNSELECT ALL
             </button>
           </div>
         </div>
@@ -92,6 +92,12 @@ export default function categorySelectingPage({
               </span>
             </label>
           ))}
+
+          <div>
+            <button className="mx-auto w-[90%] bg-maingreen-300 py-4 text-2xl font-semibold text-gray-100 dark:bg-maingreen-200">
+              Submit
+            </button>
+          </div>
         </form>
       </section>
       <Footer />
