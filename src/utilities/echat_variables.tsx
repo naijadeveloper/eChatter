@@ -50,3 +50,34 @@ export const all_categories = [
   ["DIY & Crafts", <TbNeedleThread />],
   ["Religion", <GiPrayer />],
 ];
+
+
+/// db objects
+
+// user object
+// User schema and model
+export const userSchemaProps = [
+  "fullname",
+  "username",
+  "username_update",
+  "email",
+  "password",
+  "reset_password_str",
+  "reset_password_str_expire",
+  "provider",
+  "provider_id",
+  "verified",
+  "image_file",
+  "image_url",
+  "date_of_birth",
+  "bio",
+  "following",
+  "followers",
+  "eChats",
+  "bookmarked",
+  "liked",
+  "notifications",
+  "category_interests",
+  "theme",
+  "created_at"
+];
