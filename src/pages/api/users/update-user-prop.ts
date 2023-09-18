@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if(req.method === "PUT") {
     // update a single prop
     try {
-      const { userId, propertyName, propertyValue } = req.body;
+      const { userId, propertyNames, propertyValues } = req.body;
 
       // first check if user exist
       const user = await usersCollection.findById(userId).exec();
@@ -23,11 +23,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return undefined;
       }
 
-      // update or add new property
-      user[propertyName] = propertyValue;
+      // check if all propertyNames ares in the userSchemaProps
+      for(let i = 0; i < propertyNames.length; i++) {
+        if(!userSchemaProps.includes(propertyNames[i])) {
+          res.status(404).json({error: "Invalid property name"});
+          return undefined;
+        }
+      }
+
+      // update property/ies
+      for(let i = 0; i < propertyNames.length; i++) {
+        user[propertyNames[i]] = propertyValues[i];
+      }
       await user.save();
+      res.status(200).json({success: "Successfully updated properties on database"});
     } catch(error) {
-      return res.status(500).json({error: "Couldn't update property. Please try again."});
+      return res.status(500).json({error: "Couldn't update properties. Please try again."});
     }
     //
   } else {

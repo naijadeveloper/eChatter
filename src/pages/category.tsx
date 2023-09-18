@@ -42,8 +42,10 @@ export default function categorySelectingPage({
   };
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (selectedCategories.length === 0) return;
+    event.preventDefault(); // remove form's default behaviour
+    if (selectedCategories.length === 0) {
+      return undefined;
+    }
 
     //else update database and next auth session
     console.log(selectedCategories);
