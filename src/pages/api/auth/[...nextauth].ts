@@ -103,13 +103,19 @@ export const authOptions: NextAuthOptions = {
 
     jwt(params: any) {
       if(params.user?.id) {params.token.id = params.user.id;}
-      if(params.user?.verified) {params.token.verified = params.user.verified;}
+      if(params.user?.hasOwnProperty("verified")) {params.token.verified = params.user.verified;}
       if(params.user?.theme) {params.token.theme = params.user.theme;}
       if(params.user?.category_interests) {params.token.category_interests = params.user.category_interests;}
       //
       
-      if (params.trigger === "update" && params.session?.verified) {
-        params.token.verified = params.session?.verified;
+      if (params.trigger === "update") {
+        //
+        if(params.session?.hasOwnProperty("verified")) {
+          params.token.verified = params.session?.verified;
+        } else if(params.session?.hasOwnProperty("category_interests")) {
+          params.token.category_interests = params.session?.category_interests;
+        }
+        //
       }
       // return modified token
       return params.token;

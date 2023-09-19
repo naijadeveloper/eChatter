@@ -16,6 +16,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const { userId, propertyNames, propertyValues } = req.body;
 
+      if(propertyNames.length !== propertyValues.length) {
+        throw new Error(""); // run the catch block of the try&catch block
+      }
+
       // first check if user exist
       const user = await usersCollection.findById(userId).exec();
       if(!user) {

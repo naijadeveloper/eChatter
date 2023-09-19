@@ -1,22 +1,29 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
+import { useSession } from "next-auth/react";
 
 import type { GetServerSidePropsContext } from "next";
 
 import { ImCheckboxChecked } from "react-icons/im";
 
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import Notifications from "@/components/Notifications";
 
 import { all_categories } from "@/utilities/echat_variables";
+import environment_url from "@/utilities/check_env";
 
 export default function categorySelectingPage({
   categories,
 }: {
   categories: string[];
 }) {
+  const { data: session, update } = useSession();
   const echat_categories = all_categories;
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [selectedCategories, updateSelectedCategories] = useReducer(
     (state: string[], category: string): string[] => {
@@ -41,14 +48,43 @@ export default function categorySelectingPage({
     updateSelectedCategories(event.target.value);
   };
 
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // remove form's default behaviour
     if (selectedCategories.length === 0) {
       return undefined;
     }
 
-    //else update database and next auth session
-    console.log(selectedCategories);
+    setLoading(true);
+    // update the category_interest list on db and update the session
+    const res = await fetch(`${environment_url}/api/users/update-user-prop`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: session?.user.id,
+        propertyNames: ["category_interests"],
+        propertyValues: [selectedCategories],
+      }),
+    });
+
+    const objectData = await res.json();
+    // update next auth session
+    if (res.ok) {
+      await update({ category_interests: selectedCategories });
+      setLoading(false);
+      // successfull notification
+    } else {
+      // done loading
+      setLoading(false);
+      // show error toast
+      Notifications({
+        name: "notify-error",
+        message: objectData?.error as string,
+        closeBtn: true,
+        timer: 5000,
+      });
+    }
   };
 
   return (
@@ -124,6 +160,7 @@ export default function categorySelectingPage({
         </form>
       </section>
       <Footer />
+      {loading && <LoadingSpinner />}
     </>
   );
 }
