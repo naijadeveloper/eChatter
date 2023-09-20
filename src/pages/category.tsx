@@ -4,6 +4,8 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 import { useSession } from "next-auth/react";
 
+import { useRouter } from "next/router";
+
 import type { GetServerSidePropsContext } from "next";
 
 import { ImCheckboxChecked } from "react-icons/im";
@@ -20,6 +22,8 @@ export default function categorySelectingPage({
 }: {
   categories: string[];
 }) {
+  const router = useRouter();
+
   const { data: session, update } = useSession();
   const echat_categories = all_categories;
 
@@ -72,8 +76,23 @@ export default function categorySelectingPage({
     // update next auth session
     if (res.ok) {
       await update({ category_interests: selectedCategories });
+
+      // stop loading
       setLoading(false);
+
       // successfull notification
+      Notifications({
+        name: "notify-success",
+        message: "Successfully added those categories to your list",
+        closeBtn: true,
+        timer: 5000,
+      });
+
+      // clear U.I
+      updateSelectedCategories("");
+
+      // go back to prev url
+      router.back();
     } else {
       // done loading
       setLoading(false);
