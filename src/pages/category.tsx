@@ -54,11 +54,13 @@ export default function categorySelectingPage({
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // remove form's default behaviour
+
     if (selectedCategories.length === 0) {
       return undefined;
     }
 
     setLoading(true);
+
     // update the category_interest list on db and update the session
     const res = await fetch(`${environment_url}/api/users/update-user-prop`, {
       method: "PUT",
@@ -73,6 +75,7 @@ export default function categorySelectingPage({
     });
 
     const objectData = await res.json();
+
     // update next auth session
     if (res.ok) {
       await update({ category_interests: selectedCategories });
@@ -83,19 +86,28 @@ export default function categorySelectingPage({
       // successfull notification
       Notifications({
         name: "notify-success",
-        message: "Successfully added those categories to your list",
+        message:
+          "Congratulations! Your list has been successfully updated with the selected categories. Please proceed to the Feed page",
         closeBtn: true,
-        timer: 5000,
+        btns: [
+          {
+            btnName: `To the Feed page`,
+            active: true,
+          },
+        ],
+        btnsFunctions: [
+          function () {
+            router.push("/feed");
+          },
+        ],
       });
 
       // clear U.I
       updateSelectedCategories("");
-
-      // go back to prev url
-      router.back();
     } else {
       // done loading
       setLoading(false);
+
       // show error toast
       Notifications({
         name: "notify-error",
